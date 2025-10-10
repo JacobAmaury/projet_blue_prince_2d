@@ -1,2 +1,3 @@
 items icone : https://blueprince.wiki.gg/wiki/Allowance_Token
+permanant objects icon : https://blue-prince.fandom.com/wiki/Power_Hammer
 pygame guide : https://gamedevacademy.org/pygame-background-image-tutorial-complete-guide/
