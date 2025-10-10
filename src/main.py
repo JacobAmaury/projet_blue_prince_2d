@@ -11,5 +11,6 @@ while running:
             running = False
 
     #bg_image
+    screen1.update_item()
     pygame.display.update()
 
