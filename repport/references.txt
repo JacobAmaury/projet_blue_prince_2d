@@ -1,0 +1,2 @@
+items icone : https://blueprince.wiki.gg/wiki/Allowance_Token
+pygame guide : https://gamedevacademy.org/pygame-background-image-tutorial-complete-guide/
