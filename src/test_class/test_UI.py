@@ -9,9 +9,9 @@ from UI import User_interface
 
 def main():
     consumable = {'step': 50, 'coin': 3, 'gem': 2, 'key': 1, 'dice': 0}
-    permanant_object = {'shovel': False, 'lockpick_kit': False, 'lucky_rabbit_foot': False, 'metal_detector': False, 'hammer': False}
+    permanant_object = {'shovel': True, 'lockpick_kit': False, 'lucky_rabbit_foot': True, 'metal_detector': False, 'hammer': True}
 
-    ui = User_interface((1280, 720), consumable, permanant_object)
+    ui = User_interface((1920, 1080), consumable, permanant_object)
     ui.initial_screen()
     
     clock = pygame.time.Clock()
@@ -28,6 +28,11 @@ def main():
         if t > 1000:
             ui.consumable["step"] -= 1
             ui.update_item()
+            ui.permanant_object["shovel"] = not(ui.permanant_object["shovel"])
+            ui.permanant_object["lockpick_kit"] = not(ui.permanant_object["lockpick_kit"])
+            ui.permanant_object["lucky_rabbit_foot"] = not(ui.permanant_object["lucky_rabbit_foot"])
+            ui.permanant_object["metal_detector"] = not(ui.permanant_object["metal_detector"])
+            ui.permanant_object["hammer"] = not(ui.permanant_object["hammer"])
             t = 0
 
         if ui.consumable["step"] <= 0:

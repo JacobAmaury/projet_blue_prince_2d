@@ -19,15 +19,12 @@ class User_interface:
 
     
     def initial_screen(self):
-        pygame.display.set_caption("Blue prince 2D") #window name
-
-        screen = pygame.display.set_mode(self.resolution)
 
         #back ground image
         path_bg_image = "../images/back_ground/bg_image.png"
         bg_image = pygame.image.load(path_bg_image)
         bg_image = pygame.transform.scale(bg_image,self.resolution)
-        screen.blit(bg_image, (0,0))
+        self.screen.blit(bg_image, (0,0))
 
         #initial image for consumable
         consumable_resolution = self.resolution[1]//20
@@ -61,8 +58,11 @@ class User_interface:
         # screen.blit(dice_image,  (W * 0.91, H * 0.)) #I don't kwon were it go
     
     def update_item(self):
-        W, H = self.resolution
+        self.initial_screen()
         
+        W, H = self.resolution
+        perm_reso = (self.resolution[0]//11, self.resolution[1]//11)
+        #consumable cpt 
         text_step = self.font.render(str(self.consumable["step"]), True, (255, 255, 255))
         text_key = self.font.render(str(self.consumable["key"]), True, (255, 255, 255))
         text_gem = self.font.render(str(self.consumable["gem"]), True, (255, 255, 255))
@@ -71,6 +71,38 @@ class User_interface:
         self.screen.blit(text_key, (W * 0.94, H * 0.19))
         self.screen.blit(text_gem, (W * 0.94, H * 0.24))
         self.screen.blit(text_coin, (W * 0.94, H * 0.29))
+
+        #We also can do a for loop for this
+        if self.permanant_object['shovel'] == True:
+            path_shovel = '../images/items/permanant_object/Shovel_White_Icon.png'
+            shovel_image = pygame.image.load(path_shovel)
+            shovel_image = pygame.transform.scale(shovel_image, perm_reso)
+            self.screen.blit(shovel_image, (W * 0.58, H * 0.43))
+        
+        if self.permanant_object['lockpick_kit'] == True:
+            path_lockpick_kit = '../images/items/permanant_object/Lockpick_White_Icon.png'
+            lockpick_kit_image = pygame.image.load(path_lockpick_kit)
+            lockpick_kit_image = pygame.transform.scale(lockpick_kit_image, perm_reso)
+            self.screen.blit(lockpick_kit_image, (W * 0.68, H * 0.43))
+        
+        if self.permanant_object['lucky_rabbit_foot'] == True:
+            path_lucky_rabbit_foot = '../images/items/permanant_object/Lucky_Rabbits_Foot_White_Icon.png'
+            lucky_rabbit_foot_image = pygame.image.load(path_lucky_rabbit_foot)
+            lucky_rabbit_foot_image = pygame.transform.scale(lucky_rabbit_foot_image, perm_reso)
+            self.screen.blit(lucky_rabbit_foot_image, (W * 0.78, H * 0.43))
+        
+        if self.permanant_object['metal_detector'] == True:
+            path_metal_detector = '../images/items/permanant_object/Metal_Detector_White_Icon.png'
+            metal_detector_image = pygame.image.load(path_metal_detector)
+            metal_detector_image = pygame.transform.scale(metal_detector_image, perm_reso)
+            self.screen.blit(metal_detector_image, (W * 0.86, H * 0.43))
+        
+        if self.permanant_object['hammer'] == True:
+            path_hammer = '../images/items/permanant_object/Power_Hammer_White_Icon.png'
+            hammer_image = pygame.image.load(path_hammer)
+            hammer_image = pygame.transform.scale(hammer_image, perm_reso)
+            self.screen.blit(hammer_image, (W * 0.48, H * 0.53))
+
 
 
 
