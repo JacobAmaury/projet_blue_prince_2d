@@ -56,7 +56,15 @@ class User_interface:
         self.screen.blit(gem_image,   (W * 0.91, H * 0.23))  
         self.screen.blit(coin_image,  (W * 0.91, H * 0.28)) 
         # screen.blit(dice_image,  (W * 0.91, H * 0.)) #I don't kwon were it go
-    
+
+        room_resolution = W//18.5, W//18.5
+        path_room = '../images/room/blue_room/EntranceHall.png'
+        room_image = pygame.image.load(path_room)
+        room_image = pygame.transform.scale(room_image, room_resolution)
+        self.screen.blit(room_image, (W * 0.1695, H * 0.837))
+
+
+
     def update_item(self):
         self.initial_screen()
         
@@ -103,7 +111,20 @@ class User_interface:
             hammer_image = pygame.transform.scale(hammer_image, perm_reso)
             self.screen.blit(hammer_image, (W * 0.48, H * 0.53))
 
+    def place_room_map(self, rooms):
+            W, H = self.resolution 
+            room_resolution = (W // 18.5, W // 18.5)
+            step_y = H * 0.0959
+            step_x = W * 0.054
+            base_x = W * 0.2234
+            base_y = H * 0.837
 
+            for name, positions in rooms.items():
+                for row, col in positions:
+                    path_room = f'../images/room/blue_room/{name}.png'
+                    room_image = pygame.image.load(path_room)
+                    room_image = pygame.transform.scale(room_image, room_resolution)
 
-
-        
+                    x = base_x + (col - 1) * step_x
+                    y = base_y - row * step_y  
+                    self.screen.blit(room_image, (x, y))
