@@ -1,0 +1,2 @@
+class Options:
+    window_size = (1920,1080)
