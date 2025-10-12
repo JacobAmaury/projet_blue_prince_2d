@@ -1,22 +1,19 @@
 import pygame
 
-from UI import UI
-from Dev import Dev
+from ui import UI
+from dev import Dev
 
 
-screen = UI()
-screen.initial_screen()
-
+ui = UI()
 clock = pygame.time.Clock()
+ui.load_screen()
 running = True
 while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-
+    running = ui.event_handler(pygame.event.get())
+    ui.main_screen()
     #bg_image
-    screen.update_item()
-    screen.place_room_map(Dev.rooms) #This should be in this order to avoid flickering.
+    # ui.update_item()
+    # ui.place_room_map(Dev.rooms) #This should be in this order to avoid flickering.
 
     clock.tick(60)
     pygame.display.update()

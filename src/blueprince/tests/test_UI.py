@@ -5,7 +5,7 @@ import os
 
 # Add src to Python path
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-from UI import UI
+from ui import UI
 
 def main():
     consumable = {'step': 50, 'coin': 3, 'gem': 2, 'key': 1, 'dice': 0}
