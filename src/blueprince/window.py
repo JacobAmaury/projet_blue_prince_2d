@@ -53,25 +53,28 @@ class Window:
         path = os.path.join("images", "Logo_Blue_Prince.png")
         self.image_logo = pygame.image.load(path)
 
-    def blit_load_screen(self):
+    def build_load_screen(self):
         W,H = self.W,self.H
+        #load_screen
+        self.bg_image = pygame.transform.scale(self.bg_image_load,(W, H))
+        self.bg_image_position = (0,H//2 - self.bg_image.get_height()//2)  #centre en H
+        #Logo
+        self.logo = pygame.transform.scale(self.image_logo,(W//3, H//3))
+        self.logo_position = (W//3 - self.logo.get_height()//2,H//20,)
+        #text
+        self.loading_text = self.font.render("Loading game ...", True, (255, 255, 255))
+        self.text_position = (W //2 - self.loading_text.get_width()//2, H * 0.95)
 
+
+    def blit_load_screen(self):
         #create load_screen
-        bg_image = pygame.transform.scale(self.bg_image_load,(W, H))
-        self.screen.blit(bg_image, (0,H//2 - bg_image.get_height()//2))    #centre en H
+        self.screen.blit(self.bg_image, self.bg_image_position)   
 
         #Logo
-        image = pygame.transform.scale(self.image_logo,(W//3, H//3))
-        logo_position = (W//3 - image.get_height()//2,H//20,)
-        self.screen.blit(image,logo_position )    
+        self.screen.blit(self.logo,self.logo_position )    
 
         #text
-        loading_text = self.font.render("Loading game ...", True, (255, 255, 255))
-        text_position = (W //2 - loading_text.get_width()//2, H * 0.95)
-        self.screen.blit(loading_text, text_position)
-
-        #display
-        pygame.display.flip()
+        self.screen.blit(self.loading_text, self.text_position)
 
     def load_images(self):
         #background image

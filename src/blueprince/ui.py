@@ -7,6 +7,7 @@ from window import Window
 class UI :
     #UI class must define all the Rect boxes for input management (mouse boxes)
 
+    build_current_window : lambda : None
     blit_current_window : lambda : None
 
     def __init__(self):
@@ -18,8 +19,11 @@ class UI :
     def load_screen(self):
         #create load window
         self.window.create_window()
+        self.window.build_load_screen()
         self.window.blit_load_screen()
+        pygame.display.flip()   #fast blit : cause it is the first screen
         #set as current window for blitting
+        self.build_current_window = self.window.build_load_screen
         self.blit_current_window = self.window.blit_load_screen
 
         #load game ressources
@@ -28,6 +32,7 @@ class UI :
     def main_screen(self):
         self.window.blit_bg_items_rooms()
         #set as current window for blitting
+        self.build_current_window = lambda : None
         self.blit_current_window = self.window.blit_bg_items_rooms
         
 
@@ -38,6 +43,7 @@ class UI :
             if event.type == pygame.WINDOWRESIZED or event.type == pygame.WINDOWSIZECHANGED:
                 self.window.W,self.window.H = event.x,event.y
                 Options.window_ratio_enforced = False
+                self.build_current_window()
                 self.blit_current_window()
         return True
     
