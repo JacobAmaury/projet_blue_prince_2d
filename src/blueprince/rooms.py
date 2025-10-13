@@ -4,3 +4,9 @@ class Rooms :
     "MusicRoom": [(2, 0)],
     "Security": [(2, -1)]
     }
+
+    #load all images in all_rooms (may change)
+    all_rooms = {
+    "Mechanarium": None,
+    "MusicRoom": None,
+    "Security": None}

@@ -16,7 +16,7 @@ class Window:
         #text initalisation
         #pygame.font.init()
         #set window to default window_size
-        self.screen_set_size(Options._window_size)
+        self.screen_set_size(Options.default_window_size)
         #load ressources
         self.load_ini_images()
 
@@ -28,9 +28,8 @@ class Window:
             self.maximize_window_v1(self.desk_W,self.desk_H)
         #text size
         self.font = pygame.font.Font(None, self.H // 25) 
-        #change default window_size if different
-        if Options._window_size[0] != W or Options._window_size[0] != H :
-            Options._window_size = (W,H)
+        #set window_size
+        Options.window_size = (W,H)
 
     def maximize_window_v1(self,desk_w,desk_h):
         #maximize window to biggest size inferior to current, keeping window_ratio
@@ -106,6 +105,10 @@ class Window:
         #rooms
         path = os.path.join("images","rooms","blue_room", "EntranceHall.png")
         self.entranceHall = pygame.image.load(path)
+        #Rooms : from AllRooms
+        for name in Rooms.all_rooms:
+            path = os.path.join("images","rooms","blue_room", name+'.png') #should pre-load all
+            Rooms.all_rooms[name] = pygame.image.load(path) #load image in all_rooms
 
     def blit_main_screen(self):
         W, H = self.W,self.H
@@ -179,10 +182,7 @@ class Window:
 
         for name, positions in rooms.items():
             for row, col in positions:
-                path_room = os.path.join("images","rooms","blue_room", name+'.png') #should pre-load all
-                room_image = pygame.image.load(path_room)
-                room_image = pygame.transform.scale(room_image, room_size)
-
+                room_image = pygame.transform.scale(Rooms.all_rooms[name], room_size)
                 x = base_x + (col - 1) * step_x
                 y = base_y - row * step_y  
                 self.screen.blit(room_image, (x, y))

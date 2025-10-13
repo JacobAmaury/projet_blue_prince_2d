@@ -37,6 +37,7 @@ class UI :
                 return  False
             if event.type == pygame.WINDOWRESIZED or event.type == pygame.WINDOWSIZECHANGED:
                 self.window.W,self.window.H = event.x,event.y
+                Options.window_ratio_enforced = False
                 self.blit_current_window()
         return True
     

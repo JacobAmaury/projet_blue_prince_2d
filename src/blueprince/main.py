@@ -2,6 +2,7 @@ import pygame
 
 from ui import UI
 from dev import Dev
+from options import Options
 
 
 ui = UI()
@@ -15,6 +16,6 @@ while running:
     # ui.update_item()
     # ui.place_room_map(Dev.rooms) #This should be in this order to avoid flickering.
 
-    clock.tick(60)
+    clock.tick(Options.fps)
     pygame.display.update()
 
