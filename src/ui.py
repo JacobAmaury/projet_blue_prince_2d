@@ -7,8 +7,8 @@ from display import Display
 class UI :
     #UI class must define all the Rect boxes for input management (mouse boxes)
 
-    build_current_display : lambda : None
-    blit_current_display : lambda : None
+    build_current_screen : lambda : None
+    blit_current_screen : lambda : None
 
     def __init__(self,rooms,inventory):
         #ini pygame
@@ -16,8 +16,8 @@ class UI :
         #display initialisation
         self.display = Display()
         UI.instance = self
-        self.Rooms = rooms
-        self.Inventory = inventory
+        self.Rooms = rooms  #needed to avoid circular imports
+        self.Inventory = inventory #needed to avoid circular imports
 
     def load_screen(self):
         #create load display
@@ -26,8 +26,8 @@ class UI :
         self.display.blit_load_screen()
         pygame.display.flip()   #fast blit : cause it is the first screen
         #set as current display for blitting
-        self.build_current_display = self.display.build_load_screen
-        self.blit_current_display = self.display.blit_load_screen
+        self.build_current_screen = self.display.build_load_screen
+        self.blit_current_screen = self.display.blit_load_screen
 
         #load game ressources
         self.display.load_images(self.Rooms)
@@ -45,9 +45,9 @@ class UI :
     def main_screen_load(self):
         self.build_main_screen()
         self.blit_main_screen()
-        #set as current display for blitting
-        self.build_current_display = self.build_main_screen
-        self.blit_current_display = self.blit_main_screen
+        #set as current screen for blitting
+        self.build_current_screen = self.build_main_screen
+        self.blit_current_screen = self.blit_main_screen
 
     def update_consumables(self):
         self.display.build_items(self.Inventory.consumables)
@@ -68,7 +68,7 @@ class UI :
             if event.type == pygame.WINDOWRESIZED or event.type == pygame.WINDOWSIZECHANGED:
                 self.display.W,self.display.H = event.x,event.y
                 Options.display_ratio_enforced = False
-                self.build_current_display()
-                self.blit_current_display()
+                self.build_current_screen()
+                self.blit_current_screen()
         return True
     
