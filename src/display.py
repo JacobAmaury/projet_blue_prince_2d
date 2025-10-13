@@ -2,13 +2,12 @@ import pygame
 import os
 
 from options import Options
-from inventory import Inventory
-from rooms import Rooms
 
-#Note : Transform and render should be done only on resize_event
 
-class Window:
+class Display:
     window_ratio = (16,9)
+    room_images = {}    #loaded room images
+    room = {}   #scaled room images
 
     def __init__(self):
         #import display_size
@@ -19,7 +18,6 @@ class Window:
         self.screen_set_size(Options.default_window_size)
         #load ressources
         self.load_ini_images()
-        self.room = {}
 
     def screen_set_size(self,window_size):
         W,H = window_size
@@ -75,7 +73,7 @@ class Window:
         #text
         self.screen.blit(self.loading_text, self.text_position)
 
-    def load_images(self):
+    def load_images(self,Rooms):
         #background image
         path = os.path.join("images","background", "bg_image.png")
         self.bg_image = pygame.image.load(path)
@@ -105,12 +103,13 @@ class Window:
         self.hammer_image = pygame.image.load(path)
 
         #rooms
+        #EntranceHall
         path = os.path.join("images","rooms","blue_room", "EntranceHall.png")
         self.entranceHall_image = pygame.image.load(path)
-        #Rooms : from AllRooms
-        for name in Rooms.all_rooms:
-            path = os.path.join("images","rooms","blue_room", name+'.png') #should pre-load all
-            Rooms.all_rooms[name] = pygame.image.load(path) #load image in all_rooms
+        #load all rooms in pool
+        for name in Rooms.pool:
+            path = os.path.join("images","rooms","blue_room", name+'.png')
+            self.room_images[name] = pygame.image.load(path) #load image in all_rooms
 
     def build_bg_screen(self):
         W, H = self.W,self.H
@@ -183,31 +182,23 @@ class Window:
         if permanant_objects['hammer'] == True:
             self.screen.blit(self.hammer, (W * 0.48, H * 0.53))
 
-    def build_rooms(self, rooms):
+    def build_rooms(self,Rooms):
         W, H = self.W, self.H
         room_size = (W // 18.5, W // 18.5)
-        for name, _ in rooms.items():
-            self.room[name] = pygame.transform.scale(Rooms.all_rooms[name], room_size)
+        for name, _ in Rooms.rooms.items():
+            self.room[name] = pygame.transform.scale(self.room_images[name], room_size)
 
-    def blit_rooms(self, rooms):
+    def blit_rooms(self, Rooms):
         W, H = self.W, self.H
         step_y = H * 0.0959
         step_x = W * 0.054
         base_x = W * 0.2234
         base_y = H * 0.837
 
-        for name, positions in rooms.items():
+        for name, positions in Rooms.rooms.items():
             for row, col in positions:
                 x = base_x + (col - 1) * step_x
                 y = base_y - row * step_y  
                 self.screen.blit(self.room[name], (x, y))
 
-    def build_main_screen(self):
-        self.build_bg_screen()
-        self.build_items(Inventory.consumables)
-        self.build_rooms(Rooms.rooms)
 
-    def blit_main_screen(self):
-        self.blit_bg_screen()
-        self.blit_items(Inventory.permanant_objects) 
-        self.blit_rooms(Rooms.rooms)
