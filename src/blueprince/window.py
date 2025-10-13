@@ -19,6 +19,7 @@ class Window:
         self.screen_set_size(Options.default_window_size)
         #load ressources
         self.load_ini_images()
+        self.room = {}
 
     def screen_set_size(self,window_size):
         W,H = window_size
@@ -56,8 +57,8 @@ class Window:
     def build_load_screen(self):
         W,H = self.W,self.H
         #load_screen
-        self.bg_image = pygame.transform.scale(self.bg_image_load,(W, H))
-        self.bg_image_position = (0,H//2 - self.bg_image.get_height()//2)  #centre en H
+        self.bg_load = pygame.transform.scale(self.bg_image_load,(W, H))
+        self.bg_load_position = (0,H//2 - self.bg_load.get_height()//2)  #centre en H
         #Logo
         self.logo = pygame.transform.scale(self.image_logo,(W//3, H//3))
         self.logo_position = (W//3 - self.logo.get_height()//2,H//20,)
@@ -68,11 +69,9 @@ class Window:
 
     def blit_load_screen(self):
         #create load_screen
-        self.screen.blit(self.bg_image, self.bg_image_position)   
-
+        self.screen.blit(self.bg_load, self.bg_load_position)   
         #Logo
         self.screen.blit(self.logo,self.logo_position )    
-
         #text
         self.screen.blit(self.loading_text, self.text_position)
 
@@ -107,77 +106,91 @@ class Window:
 
         #rooms
         path = os.path.join("images","rooms","blue_room", "EntranceHall.png")
-        self.entranceHall = pygame.image.load(path)
+        self.entranceHall_image = pygame.image.load(path)
         #Rooms : from AllRooms
         for name in Rooms.all_rooms:
             path = os.path.join("images","rooms","blue_room", name+'.png') #should pre-load all
             Rooms.all_rooms[name] = pygame.image.load(path) #load image in all_rooms
 
-    def blit_main_screen(self):
+    def build_bg_screen(self):
         W, H = self.W,self.H
         #back ground image
-        bg_image = pygame.transform.scale(self.bg_image,(W, H))
-        self.screen.blit(bg_image, (0,0))
-
+        self.bg = pygame.transform.scale(self.bg_image,(W, H))
         #size for consumable_images
         consumable_size = (H//20,H//20)
-
-        gem_image = pygame.transform.scale(self.gem_image,consumable_size)
-        coin_image = pygame.transform.scale(self.coin_image,consumable_size)
-        dice_image = pygame.transform.scale(self.dice_image,consumable_size)
-        key_image = pygame.transform.scale(self.key_image,consumable_size)
-        steps_image = pygame.transform.scale(self.steps_image,consumable_size)
+        self.gem = pygame.transform.scale(self.gem_image,consumable_size)
+        self.coin = pygame.transform.scale(self.coin_image,consumable_size)
+        self.dice = pygame.transform.scale(self.dice_image,consumable_size)
+        self.key = pygame.transform.scale(self.key_image,consumable_size)
+        self.steps = pygame.transform.scale(self.steps_image,consumable_size)
         
-        #responsive position
-        self.screen.blit(steps_image, (W * 0.91, H * 0.13))
-        self.screen.blit(key_image,   (W * 0.91, H * 0.18))
-        self.screen.blit(gem_image,   (W * 0.91, H * 0.23))  
-        self.screen.blit(coin_image,  (W * 0.91, H * 0.28)) 
-        # screen.blit(dice_image,  (W * 0.91, H * 0.)) #I don't kwon were it go
-
         #Room : entrance hall
         room_size = W//18.5, W//18.5
-        room_image = pygame.transform.scale(self.entranceHall, room_size)
-        self.screen.blit(room_image, (W * 0.1695, H * 0.837))
+        self.entranceHall = pygame.transform.scale(self.entranceHall_image, room_size)
 
+    def blit_bg_screen(self):
+        W, H = self.W,self.H
+        #back ground image
+        self.screen.blit(self.bg, (0,0))
+        
+        #responsive position
+        self.screen.blit(self.steps, (W * 0.91, H * 0.13))
+        self.screen.blit(self.key,   (W * 0.91, H * 0.18))
+        self.screen.blit(self.gem,   (W * 0.91, H * 0.23))  
+        self.screen.blit(self.coin,  (W * 0.91, H * 0.28)) 
+        # screen.blit(self.dice,  (W * 0.91, H * 0.)) #I don't kwon were it go
+
+        #Room : entrance hall
+        self.screen.blit(self.entranceHall, (W * 0.1695, H * 0.837))
     
-    def blit_items(self,consumables,permanant_objects):
+    def build_items(self,consumables):
         W, H = self.W,self.H
         perm_size = (W//11, H//11)
         #consumable cpt 
-        text_step = self.font.render(str(consumables["step"]), True, (255, 255, 255))
-        text_key = self.font.render(str(consumables["key"]), True, (255, 255, 255))
-        text_gem = self.font.render(str(consumables["gem"]), True, (255, 255, 255))
-        text_coin = self.font.render(str(consumables["coin"]), True, (255, 255, 255))
-        self.screen.blit(text_step, (W * 0.94, H * 0.14))
-        self.screen.blit(text_key, (W * 0.94, H * 0.19))
-        self.screen.blit(text_gem, (W * 0.94, H * 0.24))
-        self.screen.blit(text_coin, (W * 0.94, H * 0.29))
+        self.text_step = self.font.render(str(consumables["step"]), True, (255, 255, 255))
+        self.text_key = self.font.render(str(consumables["key"]), True, (255, 255, 255))
+        self.text_gem = self.font.render(str(consumables["gem"]), True, (255, 255, 255))
+        self.text_coin = self.font.render(str(consumables["coin"]), True, (255, 255, 255))
+    
+        #permanent objects
+        self.shovel = pygame.transform.scale(self.shovel_image, perm_size)
+        self.lockpick_kit = pygame.transform.scale(self.lockpick_kit_image, perm_size)
+        self.lucky_rabbit_foot = pygame.transform.scale(self.lucky_rabbit_foot_image, perm_size)
+        self.metal_detector = pygame.transform.scale(self.metal_detector_image, perm_size)
+        self.hammer = pygame.transform.scale(self.hammer_image, perm_size)
+
+    def blit_items(self,permanant_objects):
+        W, H = self.W,self.H
+        #consumable cpt 
+        self.screen.blit(self.text_step, (W * 0.94, H * 0.14))
+        self.screen.blit(self.text_key, (W * 0.94, H * 0.19))
+        self.screen.blit(self.text_gem, (W * 0.94, H * 0.24))
+        self.screen.blit(self.text_coin, (W * 0.94, H * 0.29))
 
         #We also can do a for loop for this
         if permanant_objects['shovel'] == True:
-            shovel_image = pygame.transform.scale(self.shovel_image, perm_size)
-            self.screen.blit(shovel_image, (W * 0.58, H * 0.43))
+            self.screen.blit(self.shovel, (W * 0.58, H * 0.43))
         
         if permanant_objects['lockpick_kit'] == True:
-            lockpick_kit_image = pygame.transform.scale(self.lockpick_kit_image, perm_size)
-            self.screen.blit(lockpick_kit_image, (W * 0.68, H * 0.43))
+            self.screen.blit(self.lockpick_kit, (W * 0.68, H * 0.43))
         
         if permanant_objects['lucky_rabbit_foot'] == True:
-            lucky_rabbit_foot_image = pygame.transform.scale(self.lucky_rabbit_foot_image, perm_size)
-            self.screen.blit(lucky_rabbit_foot_image, (W * 0.78, H * 0.43))
+            self.screen.blit(self.lucky_rabbit_foot, (W * 0.78, H * 0.43))
         
         if permanant_objects['metal_detector'] == True:
-            metal_detector_image = pygame.transform.scale(self.metal_detector_image, perm_size)
-            self.screen.blit(metal_detector_image, (W * 0.86, H * 0.43))
+            self.screen.blit(self.metal_detector, (W * 0.86, H * 0.43))
         
         if permanant_objects['hammer'] == True:
-            hammer_image = pygame.transform.scale(self.hammer_image, perm_size)
-            self.screen.blit(hammer_image, (W * 0.48, H * 0.53))
+            self.screen.blit(self.hammer, (W * 0.48, H * 0.53))
+
+    def build_rooms(self, rooms):
+        W, H = self.W, self.H
+        room_size = (W // 18.5, W // 18.5)
+        for name, _ in rooms.items():
+            self.room[name] = pygame.transform.scale(Rooms.all_rooms[name], room_size)
 
     def blit_rooms(self, rooms):
         W, H = self.W, self.H
-        room_size = (W // 18.5, W // 18.5)
         step_y = H * 0.0959
         step_x = W * 0.054
         base_x = W * 0.2234
@@ -185,12 +198,16 @@ class Window:
 
         for name, positions in rooms.items():
             for row, col in positions:
-                room_image = pygame.transform.scale(Rooms.all_rooms[name], room_size)
                 x = base_x + (col - 1) * step_x
                 y = base_y - row * step_y  
-                self.screen.blit(room_image, (x, y))
+                self.screen.blit(self.room[name], (x, y))
 
-    def blit_bg_items_rooms(self):
-        self.blit_main_screen()
-        self.blit_items(Inventory.consumables, Inventory.permanant_objects) 
+    def build_main_screen(self):
+        self.build_bg_screen()
+        self.build_items(Inventory.consumables)
+        self.build_rooms(Rooms.rooms)
+
+    def blit_main_screen(self):
+        self.blit_bg_screen()
+        self.blit_items(Inventory.permanant_objects) 
         self.blit_rooms(Rooms.rooms)

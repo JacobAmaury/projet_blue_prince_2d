@@ -3,6 +3,8 @@ import os
 
 from options import Options
 from window import Window
+from inventory import Inventory
+from rooms import Rooms
 
 class UI :
     #UI class must define all the Rect boxes for input management (mouse boxes)
@@ -29,12 +31,20 @@ class UI :
         #load game ressources
         self.window.load_images()
 
-    def main_screen(self):
-        self.window.blit_bg_items_rooms()
+    def main_screen_create(self):
+        self.window.build_main_screen()
+
+    def main_screen_blit(self):
+        self.window.blit_main_screen()
         #set as current window for blitting
-        self.build_current_window = lambda : None
-        self.blit_current_window = self.window.blit_bg_items_rooms
-        
+        self.build_current_window = self.window.build_main_screen
+        self.blit_current_window = self.window.blit_main_screen
+
+    def change_consumables(self):
+        self.window.build_items(Inventory.consumables)
+
+    def change_map(self):
+        self.window.build_rooms(Rooms.rooms)
 
     def event_handler(self,events):
         for event in events:
