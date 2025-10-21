@@ -10,14 +10,14 @@ class UI :
     build_current_screen : lambda : None
     blit_current_screen : lambda : None
 
-    def __init__(self,rooms,inventory):
+    def __init__(self,Rooms,Inventory):
         #ini pygame
         pygame.init() #returns (nb loaded modules, nb failed)
         #display initialisation
         self.display = Display()
-        UI.instance = self
-        self.Rooms = rooms  #needed to avoid circular imports
-        self.Inventory = inventory #needed to avoid circular imports
+        UI.instance = self  #needed to avoid circular imports
+        self.Rooms = Rooms  #needed to avoid circular imports
+        self.Inventory = Inventory #needed to avoid circular imports
 
     def load_screen(self):
         #create load display

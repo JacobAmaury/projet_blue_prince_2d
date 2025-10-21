@@ -2,20 +2,21 @@ import pygame
 import os
 
 from options import Options
+from data.rooms_db import Rooms_db
 
 
 class Display:
     window_ratio = (16,9)
     room_images = {}    #loaded room images
-    room = {}   #scaled room images
+    rooms = {}   #scaled room images
 
     def __init__(self):
         #import display_size
         self.desk_W, self.desk_H = pygame.display.get_desktop_sizes()[0]
-        #text initalisation
-        #pygame.font.init()
-        #set window to default window_size
+        #set window_size based on default_window_size
         self.screen_set_size(Options.default_window_size)
+        #text size
+        self.font = pygame.font.Font(None, self.H // 25) 
         #load ressources
         self.load_ini_images()
 
@@ -25,8 +26,6 @@ class Display:
         #if default_window_size > display_size
         if self.W > self.desk_W or self.H > self.desk_H :
             self.maximize_window_v1(self.desk_W,self.desk_H)
-        #text size
-        self.font = pygame.font.Font(None, self.H // 25) 
         #set window_size
         Options.window_size = (W,H)
 
@@ -102,14 +101,26 @@ class Display:
         path = os.path.join("images","items","permanant_objects",'Power_Hammer_White_Icon.png')
         self.hammer_image = pygame.image.load(path)
 
-        #rooms
-        #EntranceHall
-        path = os.path.join("images","rooms","blue_room", "EntranceHall.png")
-        self.entranceHall_image = pygame.image.load(path)
-        #load all rooms in pool
-        for name in Rooms.pool:
+
+        #rooms : names in data/rooms_db
+        for name in Rooms_db.blue_rooms:
             path = os.path.join("images","rooms","blue_room", name+'.png')
-            self.room_images[name] = pygame.image.load(path) #load image in all_rooms
+            self.room_images[name] = pygame.image.load(path)
+        for name in Rooms_db.yellow_rooms:
+            path = os.path.join("images","rooms","shop", name+'.png')
+            self.room_images[name] = pygame.image.load(path)
+        for name in Rooms_db.orange_rooms:
+            path = os.path.join("images","rooms","hallway", name+'.png')
+            self.room_images[name] = pygame.image.load(path)
+        for name in Rooms_db.violet_rooms:
+            path = os.path.join("images","rooms","bedroom", name+'.png')
+            self.room_images[name] = pygame.image.load(path)
+        for name in Rooms_db.green_rooms:
+            path = os.path.join("images","rooms","green_room", name+'.png')
+            self.room_images[name] = pygame.image.load(path)
+        for name in Rooms_db.red_rooms:
+            path = os.path.join("images","rooms","red_room", name+'.png')
+            self.room_images[name] = pygame.image.load(path)
 
     def build_bg_screen(self):
         W, H = self.W,self.H
@@ -123,9 +134,6 @@ class Display:
         self.key = pygame.transform.scale(self.key_image,consumable_size)
         self.steps = pygame.transform.scale(self.steps_image,consumable_size)
         
-        #Room : entrance hall
-        room_size = W//18.5, W//18.5
-        self.entranceHall = pygame.transform.scale(self.entranceHall_image, room_size)
 
     def blit_bg_screen(self):
         W, H = self.W,self.H
@@ -138,9 +146,6 @@ class Display:
         self.screen.blit(self.gem,   (W * 0.91, H * 0.23))  
         self.screen.blit(self.coin,  (W * 0.91, H * 0.28)) 
         # screen.blit(self.dice,  (W * 0.91, H * 0.)) #I don't kwon were it go
-
-        #Room : entrance hall
-        self.screen.blit(self.entranceHall, (W * 0.1695, H * 0.837))
     
     def build_items(self,consumables):
         W, H = self.W,self.H
@@ -186,7 +191,7 @@ class Display:
         W, H = self.W, self.H
         room_size = (W // 18.5, W // 18.5)
         for name, _ in Rooms.rooms.items():
-            self.room[name] = pygame.transform.scale(self.room_images[name], room_size)
+            self.rooms[name] = pygame.transform.scale(self.room_images[name], room_size)
 
     def blit_rooms(self, Rooms):
         W, H = self.W, self.H
@@ -199,6 +204,7 @@ class Display:
             for row, col in positions:
                 x = base_x + (col - 1) * step_x
                 y = base_y - row * step_y  
-                self.screen.blit(self.room[name], (x, y))
+                self.screen.blit(self.rooms[name], (x, y))
 
-
+    # #Room : entrance hall
+    # self.screen.blit(self.entranceHall, (W * 0.1695, H * 0.837))

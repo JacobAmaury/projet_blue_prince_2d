@@ -2,12 +2,12 @@
 
 A 2D rendition of the the Blue Prince game, just for fun !
 
-## Pré-requirements
+## Pre-requirements
 
 - Python 3
 - pip
 
-## Installing
+## Install
 
 1. Clone the deposit
     ```sh
@@ -30,7 +30,7 @@ In folder src/blueprince/ :
 python main.py
 ```
 
-## Debugging
+## Debugg
 
 In folder src/blueprince/tests/ :
 
@@ -45,5 +45,4 @@ Image ressources:
 - items icon : https://blueprince.wiki.gg/wiki/Allowance_Token
 - permanant objects icon : https://blue-prince.fandom.com/wiki/Power_Hammer
 - Menu background image : https://www.blueprincegame.com/
-
 - Logo : https://fr.wikipedia.org/wiki/Blue_Prince

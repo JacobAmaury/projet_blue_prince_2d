@@ -2,15 +2,13 @@ from ui import UI
 
 class Rooms :
     rooms = {
-    "Mechanarium": [(1, 0),(2,-2)],
-    "MusicRoom": [(2, 0)]
+        'EntranceHall': [(0,0)],
+        "Mechanarium": [(1, 0),(2,-2)],
+        "MusicRoom": [(2, 0)]
     }
 
-    #names of pool are used yo load the room images
-    pool = {
-    "Mechanarium",
-    "MusicRoom",
-    "Security"}
+
+    pool = {}
 
     def add_room(name,position):
         if name in Rooms.rooms :
