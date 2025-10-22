@@ -69,5 +69,5 @@ class UI :
             if event.type == pygame.WINDOWRESIZED or event.type == pygame.WINDOWSIZECHANGED:
                 self.display.W,self.display.H = event.x,event.y
                 self.refresh_current_display()
-                pygame.display.flip()   #needs to flip faster than fps for fluidity
+                pygame.display.flip()   #need to flip during loadScreen
     

@@ -21,3 +21,6 @@ class Inventory:
     def change_perm(self,name,value):
         Inventory.perm_objects[name] = value
         Inventory.ui.update_permanents()
+
+
+#consumable = {'step':50, 'coin':0, 'gem':0, 'key':0, 'dice':0 }

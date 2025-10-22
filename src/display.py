@@ -60,7 +60,7 @@ class Display:
         ##build_load_screen
         W,H = self.W,self.H
         #load_screen
-        self.bg_load = pygame.transform.scale(self.bg_image_load,(W, H))
+        self.bg_load = pygame.transform.smoothscale(self.bg_image_load,(W, H))
         self.bg_load_position = (0,0)
         #Logo
         self.logo = pygame.transform.scale(self.image_logo,(W//3, H//3))
@@ -102,7 +102,7 @@ class Display:
         #bg_screen is invariant => don't recalcul when items change
         W, H = self.W,self.H
         #back ground image
-        self.bg = pygame.transform.scale(self.bg_image,(W, H))
+        self.bg = pygame.transform.smoothscale(self.bg_image,(W, H))
 
         #build consumable images
         #size for consumable_images
@@ -158,10 +158,13 @@ class Display:
             self.screen.blit(self.permanents_scaled['Power_Hammer'], (W * 0.48, H * 0.53))
 
     def build_rooms(self):
-        W, H = self.W, self.H
+        W, _ = self.W, self.H
         room_size = (W // 18.5, W // 18.5)
-        for name, img in self.room_images.items():
-            self.rooms_scaled[name] = pygame.transform.scale(img, room_size)
+        for name, position in Map.rooms.items():
+            img_temp = pygame.transform.scale(self.room_images[name], room_size)
+            self.rooms_scaled[name] = [None]*4
+            for _, _, angle in position:
+                 self.rooms_scaled[name][angle] = pygame.transform.rotate(img_temp,90*angle)
 
     def blit_rooms(self):
         W, H = self.W, self.H
@@ -170,11 +173,11 @@ class Display:
         base_x = W * 0.2234
         base_y = H * 0.837
 
-        for name, positions in Map.rooms.items():
-            for row, col in positions:
+        for name, position in Map.rooms.items():
+            for row, col, angle in position:
                 x = base_x + (col - 1) * step_x
                 y = base_y - row * step_y  
-                self.screen.blit(self.rooms_scaled[name], (x, y))
+                self.screen.blit(self.rooms_scaled[name][angle], (x, y))
 
     # #Room : entrance hall
     # self.screen.blit(self.entranceHall, (W * 0.1695, H * 0.837))
