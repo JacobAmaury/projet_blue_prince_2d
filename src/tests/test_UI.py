@@ -4,7 +4,7 @@ import os
 
 from ui import UI
 from options import Options
-from rooms import Rooms
+from map import Map
 from inventory import Inventory
 
 # Add src to Python path
@@ -12,7 +12,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 t = 0
 
-ui = UI(Rooms,Inventory)
+ui = UI(Map,Inventory)
 clock = pygame.time.Clock()
 ui.load_screen()    #creates and blits load_screen
 ui.main_screen_load()   #creates and blits main_screen
@@ -23,7 +23,7 @@ while running:
     #test
     t += clock.get_time()
     if t > 1000:
-        Rooms.add_room("Security",(2, -1))
+        Map.add_room("Security",(2, -1))
         Inventory.change_consumable("step",-1)
         Inventory.change_permanents("shovel",not(Inventory.permanant_objects["shovel"]))
         Inventory.change_permanents("lockpick_kit",not(Inventory.permanant_objects["lockpick_kit"]))

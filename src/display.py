@@ -2,7 +2,7 @@ import pygame
 import os
 
 from options import Options
-from data.rooms_db import Rooms_db
+from rooms_db import Rooms_db
 
 
 class Display:
@@ -187,20 +187,20 @@ class Display:
         if permanant_objects['hammer'] == True:
             self.screen.blit(self.hammer, (W * 0.48, H * 0.53))
 
-    def build_rooms(self,Rooms):
+    def build_rooms(self,Map):
         W, H = self.W, self.H
         room_size = (W // 18.5, W // 18.5)
-        for name, _ in Rooms.rooms.items():
+        for name, _ in Map.rooms.items():
             self.rooms[name] = pygame.transform.scale(self.room_images[name], room_size)
 
-    def blit_rooms(self, Rooms):
+    def blit_rooms(self, Map):
         W, H = self.W, self.H
         step_y = H * 0.0959
         step_x = W * 0.054
         base_x = W * 0.2234
         base_y = H * 0.837
 
-        for name, positions in Rooms.rooms.items():
+        for name, positions in Map.rooms.items():
             for row, col in positions:
                 x = base_x + (col - 1) * step_x
                 y = base_y - row * step_y  

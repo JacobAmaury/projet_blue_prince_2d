@@ -1,11 +1,11 @@
 import pygame
 from ui import UI
 from options import Options
-from rooms import Rooms
+from map import Map
 from inventory import Inventory
 
 
-ui = UI(Rooms,Inventory)
+ui = UI(Map,Inventory)
 clock = pygame.time.Clock()
 ui.load_screen()    #creates and blits load_screen
 ui.main_screen_load()   #creates and blits main_screen
@@ -15,3 +15,6 @@ while running:
 
     clock.tick(Options.fps)
     pygame.display.update()
+
+
+#TODO : ajouter des ui.event_handler() dans ui.load_screen() => asynchrone

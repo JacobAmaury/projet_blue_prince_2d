@@ -1,6 +1,6 @@
 from ui import UI
 
-class Rooms :
+class Map :
     rooms = {
         'EntranceHall': [(0,0)],
         "Mechanarium": [(1, 0),(2,-2)],
@@ -11,8 +11,8 @@ class Rooms :
     pool = {}
 
     def add_room(name,position):
-        if name in Rooms.rooms :
-            Rooms.rooms[name] += [position]
+        if name in Map.rooms :
+            Map.rooms[name] += [position]
         else:
-            Rooms.rooms[name] = [position]
+            Map.rooms[name] = [position]
         UI.instance.update_map()
