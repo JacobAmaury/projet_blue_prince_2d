@@ -22,10 +22,9 @@ A 2D rendition of the the Blue Prince game, just for fun !
     ```
 
 
-## How to use
+## Execute
 
 From src/ :
-
 ```sh
 python main.py
 ```
@@ -33,9 +32,12 @@ python main.py
 ## Debugg
 
 From src/ :
-
 ```sh
-python tests/test_UI.py
+python ../tests/test_UI.py
+```
+From tests/ :
+```sh
+python test_UI.py
 ```
 
 ## Authors

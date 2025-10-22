@@ -2,65 +2,67 @@ import pygame
 
 from options import Options
 from display import Display
-
+from navigation import Nav
 
 class UI :
     #UI class must define all the Rect boxes for input management (mouse boxes)
 
-    build_current_screen : lambda : None
-    blit_current_screen : lambda : None
+    refresh_current_display : lambda : None     #build and blit
 
-    def __init__(self,Map,Inventory):
+    def __init__(self):
         #ini pygame
         pygame.init() #returns (nb loaded modules, nb failed)
         #display initialisation
         self.display = Display()
-        UI.instance = self  #needed to avoid circular imports
-        self.Map = Map  #needed to avoid circular imports
-        self.Inventory = Inventory #needed to avoid circular imports
 
-    def load_screen(self):
+    def load(self):
         # todo : add ui.event_handler calls for pseudo-async effect (responsive window resizing)
-        #create load display
+        #create and load display
         self.display.create_window()
-        self.display.build_load_screen()
-        self.display.blit_load_screen()
-        pygame.display.flip()   #fast blit : cause it is the first screen
+        self.display.build_and_blit_loadScreen()
+        pygame.display.flip()   #blit before loadind ressources
         #set as current display for blitting
-        self.build_current_screen = self.display.build_load_screen
-        self.blit_current_screen = self.display.blit_load_screen
+        self.refresh_current_display = self.display.build_and_blit_loadScreen
 
         #load game ressources
-        self.display.load_images(self.Map)
+        self.display.load_images()
 
-    def build_main_screen(self):
+        #initialise Navigation (=game controller)
+        self.nav = Nav(self)
+
+        #start a new game
+        self.nav.new_game()
+
+    def build_mainScreen(self):
         self.display.build_bg_screen()
-        self.display.build_items(self.Inventory.consumables)
-        self.display.build_rooms(self.Map)
+        self.display.build_items(self.nav.inventory.consumables)
+        self.display.build_rooms(self.nav.map)
 
-    def blit_main_screen(self):
+    def blit_mainScreen(self):
         self.display.blit_bg_screen()
-        self.display.blit_items(self.Inventory.permanant_objects) 
-        self.display.blit_rooms(self.Map)
+        self.display.blit_items(self.nav.inventory.permanant_objects) 
+        self.display.blit_rooms(self.nav.map)
 
-    def main_screen_load(self):
-        self.build_main_screen()
-        self.blit_main_screen()
+    def build_and_blit_mainScreen(self):
+        self.build_mainScreen()
+        self.blit_mainScreen()
+
+    def mainScreen(self):
+        self.build_and_blit_mainScreen()
         #set as current screen for blitting
-        self.build_current_screen = self.build_main_screen
-        self.blit_current_screen = self.blit_main_screen
+        self.refresh_current_display = self.build_and_blit_mainScreen
 
     def update_consumables(self):
-        self.display.build_items(self.Inventory.consumables)
-        self.blit_main_screen()
+        self.display.build_items(self.nav.inventory.consumables)
+        self.blit_mainScreen()
 
     def update_permanents(self):
-        self.display.blit_items(self.Inventory.permanant_objects)
-        self.blit_main_screen() # useless if we cannot lose a permanent object
+        self.display.blit_items(self.nav.inventory.permanant_objects)
+        self.blit_mainScreen() # useless if we cannot lose a permanent object
 
     def update_map(self):
-        self.display.build_rooms(self.Map)
-        self.display.blit_rooms(self.Map)
+        self.display.build_rooms(self.nav.map)
+        self.display.blit_rooms(self.nav.map)
 
     def event_handler(self,events):
         for event in events:
@@ -69,7 +71,6 @@ class UI :
             if event.type == pygame.WINDOWRESIZED or event.type == pygame.WINDOWSIZECHANGED:
                 self.display.W,self.display.H = event.x,event.y
                 Options.display_ratio_enforced = False
-                self.build_current_screen()
-                self.blit_current_screen()
+                self.refresh_current_display()
         return True
     

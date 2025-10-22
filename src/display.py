@@ -1,5 +1,4 @@
 import pygame
-import os
 
 from options import Options
 from rooms_db import Rooms_db
@@ -17,8 +16,8 @@ class Display:
         self.screen_set_size(Options.default_window_size)
         #text size
         self.font = pygame.font.Font(None, self.H // 25) 
-        #load ressources
-        self.load_ini_images()
+        #load ressources for loadScreen
+        self.load_loadScreen_images()
 
     def screen_set_size(self,window_size):
         W,H = window_size
@@ -43,7 +42,7 @@ class Display:
         pygame.display.set_icon(blueprince_icon)
         self.screen = pygame.display.set_mode((self.W, self.H),pygame.RESIZABLE)
 
-    def load_ini_images(self):
+    def load_loadScreen_images(self):
         #load_screen
         path = "../images/background/BluePrince_Start.jpg"
         self.bg_image_load = pygame.image.load(path)
@@ -51,7 +50,8 @@ class Display:
         path = "../images/Logo_Blue_Prince.png"
         self.image_logo = pygame.image.load(path)
 
-    def build_load_screen(self):
+    def build_and_blit_loadScreen(self):
+        ##build_load_screen
         W,H = self.W,self.H
         #load_screen
         self.bg_load = pygame.transform.scale(self.bg_image_load,(W, H))
@@ -63,8 +63,7 @@ class Display:
         self.loading_text = self.font.render("Loading game ...", True, (255, 255, 255))
         self.text_position = (W //2 - self.loading_text.get_width()//2, H * 0.95)
 
-
-    def blit_load_screen(self):
+        ##blit_load_screen
         #create load_screen
         self.screen.blit(self.bg_load, self.bg_load_position)   
         #Logo
@@ -72,7 +71,7 @@ class Display:
         #text
         self.screen.blit(self.loading_text, self.text_position)
 
-    def load_images(self,Rooms):
+    def load_images(self):
         #background image
         path = "../images/background/bg_image.png"
         self.bg_image = pygame.image.load(path)
