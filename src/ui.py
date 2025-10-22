@@ -6,12 +6,10 @@ from navigation import Nav
 
 class UI :
     #UI class must define all the Rect boxes for input management (mouse boxes)
-
+    
     refresh_current_display : lambda : None     #build and blit
 
     def __init__(self):
-        #ini pygame
-        pygame.init() #returns (nb loaded modules, nb failed)
         #display initialisation
         self.display = Display()
 
@@ -35,13 +33,13 @@ class UI :
 
     def build_mainScreen(self):
         self.display.build_bg_screen()
-        self.display.build_items(self.nav.inventory.consumables)
-        self.display.build_rooms(self.nav.map)
+        self.display.build_items()
+        self.display.build_rooms()
 
     def blit_mainScreen(self):
         self.display.blit_bg_screen()
-        self.display.blit_items(self.nav.inventory.permanant_objects) 
-        self.display.blit_rooms(self.nav.map)
+        self.display.blit_items() 
+        self.display.blit_rooms()
 
     def build_and_blit_mainScreen(self):
         self.build_mainScreen()
@@ -53,16 +51,16 @@ class UI :
         self.refresh_current_display = self.build_and_blit_mainScreen
 
     def update_consumables(self):
-        self.display.build_items(self.nav.inventory.consumables)
+        self.display.build_items()
         self.blit_mainScreen()
 
     def update_permanents(self):
-        self.display.blit_items(self.nav.inventory.permanant_objects)
+        self.display.blit_items()
         self.blit_mainScreen() # useless if we cannot lose a permanent object
 
     def update_map(self):
-        self.display.build_rooms(self.nav.map)
-        self.display.blit_rooms(self.nav.map)
+        self.display.build_rooms()
+        self.display.blit_rooms()
 
     def event_handler(self,events):
         for event in events:

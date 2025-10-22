@@ -1,15 +1,15 @@
 
 class Map :
     def __init__(self,ui):
-        self.ui = ui
-        self.rooms = { 'EntranceHall': [(0,0)] }
+        Map.ui = ui
+        Map.rooms = { 'EntranceHall': [(0,0)] }
 
     def add_room(self,name,position):
-        if name in self.rooms :
-            self.rooms[name] += [position]
+        if name in Map.rooms :
+            Map.rooms[name] += [position]
         else:
-            self.rooms[name] = [position]
-        self.ui.update_map()
+            Map.rooms[name] = [position]
+        Map.ui.update_map()
 
 
     # rooms = {

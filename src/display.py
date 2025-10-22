@@ -2,12 +2,18 @@ import pygame
 
 from options import Options
 from rooms_db import Rooms_db
+from inventory import Inventory
+from map import Map
 
 
 class Display:
     window_ratio = (16,9)
+    consumable_images = {}  #loaded consumable images
+    consumables_scaled = {}  #scaled consumable images
+    permanents_images = {}  #loaded permanent objects images
+    permanents_scaled = {}  #scaled permanent objects images
     room_images = {}    #loaded room images
-    rooms = {}   #scaled room images
+    rooms_scaled = {}   #scaled room images
 
     def __init__(self):
         #import display_size
@@ -77,62 +83,32 @@ class Display:
         self.bg_image = pygame.image.load(path)
         
         #consumables
-        path = "../images/items/consumables/Gem_icon.png"
-        self.gem_image = pygame.image.load(path)
-        path = "../images/items/consumables/Gold_Coin_icon.png"
-        self.coin_image = pygame.image.load(path)
-        path = "../images/items/consumables/Ivory_Dice_icon.png"
-        self.dice_image = pygame.image.load(path)
-        path = "../images/items/consumables/Key_icon.png"
-        self.key_image = pygame.image.load(path)
-        path = "../images/items/consumables/Steps_icon.png"
-        self.steps_image = pygame.image.load(path)
+        for name in Inventory.consumables :
+            path = "../images/items/consumables/"+ name +"_icon.png"
+            self.consumable_images[name] = pygame.image.load(path)
 
-        #perm objects
-        path = "../images/items/permanant_objects/Shovel_White_Icon.png"
-        self.shovel_image = pygame.image.load(path)
-        path = "../images/items/permanant_objects/Lockpick_White_Icon.png"
-        self.lockpick_kit_image = pygame.image.load(path)
-        path = "../images/items/permanant_objects/Lucky_Rabbits_Foot_White_Icon.png"
-        self.lucky_rabbit_foot_image = pygame.image.load(path)
-        path = "../images/items/permanant_objects/Metal_Detector_White_Icon.png"
-        self.metal_detector_image = pygame.image.load(path)
-        path = "../images/items/permanant_objects/Power_Hammer_White_Icon.png"
-        self.hammer_image = pygame.image.load(path)
+        #permanent objects
+        for name in Inventory.perm_objects :
+            path = "../images/items/permanant_objects/"+ name +"_White_Icon.png"
+            self.permanents_images[name] = pygame.image.load(path)
 
 
-        #rooms : names in data/rooms_db
-        for name in Rooms_db.blue_rooms:
-            path = "../images/rooms/blue_room/"+name+'.png'
-            self.room_images[name] = pygame.image.load(path)
-        for name in Rooms_db.yellow_rooms:
-            path = "../images/rooms/shop/"+name+'.png'
-            self.room_images[name] = pygame.image.load(path)
-        for name in Rooms_db.orange_rooms:
-            path = "../images/rooms/hallway/"+name+'.png'
-            self.room_images[name] = pygame.image.load(path)
-        for name in Rooms_db.violet_rooms:
-            path = "../images/rooms/bedroom/"+name+'.png'
-            self.room_images[name] = pygame.image.load(path)
-        for name in Rooms_db.green_rooms:
-            path = "../images/rooms/green_room/"+name+'.png'
-            self.room_images[name] = pygame.image.load(path)
-        for name in Rooms_db.red_rooms:
-            path = "../images/rooms/red_room/"+name+'.png'
+        #rooms : import all rooms by name from Rooms_db.rooms
+        for name,color in Rooms_db.rooms.items():
+            path = "../images/rooms/"+ color +'/'+ name +'.png'
             self.room_images[name] = pygame.image.load(path)
 
     def build_bg_screen(self):
+        #bg_screen is invariant => don't recalcul when items change
         W, H = self.W,self.H
         #back ground image
         self.bg = pygame.transform.scale(self.bg_image,(W, H))
+
+        #build consumable images
         #size for consumable_images
         consumable_size = (H//20,H//20)
-        self.gem = pygame.transform.scale(self.gem_image,consumable_size)
-        self.coin = pygame.transform.scale(self.coin_image,consumable_size)
-        self.dice = pygame.transform.scale(self.dice_image,consumable_size)
-        self.key = pygame.transform.scale(self.key_image,consumable_size)
-        self.steps = pygame.transform.scale(self.steps_image,consumable_size)
-        
+        for name,img in self.consumable_images.items():
+            self.consumables_scaled[name] = pygame.transform.scale(img,consumable_size)
 
     def blit_bg_screen(self):
         W, H = self.W,self.H
@@ -140,29 +116,27 @@ class Display:
         self.screen.blit(self.bg, (0,0))
         
         #responsive position
-        self.screen.blit(self.steps, (W * 0.91, H * 0.13))
-        self.screen.blit(self.key,   (W * 0.91, H * 0.18))
-        self.screen.blit(self.gem,   (W * 0.91, H * 0.23))  
-        self.screen.blit(self.coin,  (W * 0.91, H * 0.28)) 
-        # screen.blit(self.dice,  (W * 0.91, H * 0.)) #I don't kwon were it go
+        self.screen.blit(self.consumables_scaled['steps'], (W * 0.91, H * 0.13))
+        self.screen.blit(self.consumables_scaled['key'],   (W * 0.91, H * 0.18))
+        self.screen.blit(self.consumables_scaled['gem'],   (W * 0.91, H * 0.23))  
+        self.screen.blit(self.consumables_scaled['coin'],  (W * 0.91, H * 0.28)) 
+        # screen.blit(self.consumables['dice'],  (W * 0.91, H * 0.)) #I don't kwon were it go
     
-    def build_items(self,consumables):
+    def build_items(self):
         W, H = self.W,self.H
         perm_size = (W//11, H//11)
         #consumable cpt 
-        self.text_step = self.font.render(str(consumables["step"]), True, (255, 255, 255))
+        consumables = Inventory.consumables
+        self.text_step = self.font.render(str(consumables["steps"]), True, (255, 255, 255))
         self.text_key = self.font.render(str(consumables["key"]), True, (255, 255, 255))
         self.text_gem = self.font.render(str(consumables["gem"]), True, (255, 255, 255))
         self.text_coin = self.font.render(str(consumables["coin"]), True, (255, 255, 255))
     
         #permanent objects
-        self.shovel = pygame.transform.scale(self.shovel_image, perm_size)
-        self.lockpick_kit = pygame.transform.scale(self.lockpick_kit_image, perm_size)
-        self.lucky_rabbit_foot = pygame.transform.scale(self.lucky_rabbit_foot_image, perm_size)
-        self.metal_detector = pygame.transform.scale(self.metal_detector_image, perm_size)
-        self.hammer = pygame.transform.scale(self.hammer_image, perm_size)
+        for name,img in self.permanents_images.items() :
+            self.permanents_scaled[name] = pygame.transform.scale(img, perm_size)
 
-    def blit_items(self,permanant_objects):
+    def blit_items(self):
         W, H = self.W,self.H
         #consumable cpt 
         self.screen.blit(self.text_step, (W * 0.94, H * 0.14))
@@ -171,28 +145,25 @@ class Display:
         self.screen.blit(self.text_coin, (W * 0.94, H * 0.29))
 
         #We also can do a for loop for this
-        if permanant_objects['shovel'] == True:
-            self.screen.blit(self.shovel, (W * 0.58, H * 0.43))
-        
-        if permanant_objects['lockpick_kit'] == True:
-            self.screen.blit(self.lockpick_kit, (W * 0.68, H * 0.43))
-        
-        if permanant_objects['lucky_rabbit_foot'] == True:
-            self.screen.blit(self.lucky_rabbit_foot, (W * 0.78, H * 0.43))
-        
-        if permanant_objects['metal_detector'] == True:
-            self.screen.blit(self.metal_detector, (W * 0.86, H * 0.43))
-        
-        if permanant_objects['hammer'] == True:
-            self.screen.blit(self.hammer, (W * 0.48, H * 0.53))
+        perm_objects = Inventory.perm_objects
+        if perm_objects['Shovel'] == True:
+            self.screen.blit(self.permanents_scaled['Shovel'], (W * 0.58, H * 0.43))
+        if perm_objects['Lockpick_Kit'] == True:
+            self.screen.blit(self.permanents_scaled['Lockpick_Kit'], (W * 0.68, H * 0.43))
+        if perm_objects["Lucky_Rabbits_Foot"] == True:
+            self.screen.blit(self.permanents_scaled["Lucky_Rabbits_Foot"], (W * 0.78, H * 0.43))
+        if perm_objects['Metal_Detector'] == True:
+            self.screen.blit(self.permanents_scaled['Metal_Detector'], (W * 0.86, H * 0.43))
+        if perm_objects['Power_Hammer'] == True:
+            self.screen.blit(self.permanents_scaled['Power_Hammer'], (W * 0.48, H * 0.53))
 
-    def build_rooms(self,Map):
+    def build_rooms(self):
         W, H = self.W, self.H
         room_size = (W // 18.5, W // 18.5)
-        for name, _ in Map.rooms.items():
-            self.rooms[name] = pygame.transform.scale(self.room_images[name], room_size)
+        for name, img in self.room_images.items():
+            self.rooms_scaled[name] = pygame.transform.scale(img, room_size)
 
-    def blit_rooms(self, Map):
+    def blit_rooms(self):
         W, H = self.W, self.H
         step_y = H * 0.0959
         step_x = W * 0.054
@@ -203,7 +174,7 @@ class Display:
             for row, col in positions:
                 x = base_x + (col - 1) * step_x
                 y = base_y - row * step_y  
-                self.screen.blit(self.rooms[name], (x, y))
+                self.screen.blit(self.rooms_scaled[name], (x, y))
 
     # #Room : entrance hall
     # self.screen.blit(self.entranceHall, (W * 0.1695, H * 0.837))
