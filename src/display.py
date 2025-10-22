@@ -61,7 +61,7 @@ class Display:
         W,H = self.W,self.H
         #load_screen
         self.bg_load = pygame.transform.scale(self.bg_image_load,(W, H))
-        self.bg_load_position = (0,H//2 - self.bg_load.get_height()//2)  #centre en H
+        self.bg_load_position = (0,0)
         #Logo
         self.logo = pygame.transform.scale(self.image_logo,(W//3, H//3))
         self.logo_position = (W//3 - self.logo.get_height()//2,H//20,)
@@ -77,11 +77,11 @@ class Display:
         #text
         self.screen.blit(self.loading_text, self.text_position)
 
-    def load_images(self):
+    def load_images(self,event_handler):
         #background image
         path = "../images/background/bg_image.png"
         self.bg_image = pygame.image.load(path)
-        
+
         #consumables
         for name in Inventory.consumables :
             path = "../images/items/consumables/"+ name +"_icon.png"
@@ -92,11 +92,11 @@ class Display:
             path = "../images/items/permanant_objects/"+ name +"_White_Icon.png"
             self.permanents_images[name] = pygame.image.load(path)
 
-
         #rooms : import all rooms by name from Rooms_db.rooms
         for name,color in Rooms_db.rooms.items():
             path = "../images/rooms/"+ color +'/'+ name +'.png'
             self.room_images[name] = pygame.image.load(path)
+            event_handler() #room loading may be long : handles user input
 
     def build_bg_screen(self):
         #bg_screen is invariant => don't recalcul when items change

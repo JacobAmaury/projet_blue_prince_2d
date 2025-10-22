@@ -10,20 +10,19 @@ class UI :
     refresh_current_display : lambda : None     #build and blit
 
     def __init__(self):
-        #display initialisation
-        self.display = Display()
+        self.display = Display()    #create window
 
     def load(self):
         # todo : add ui.event_handler calls for pseudo-async effect (responsive window resizing)
         #create and load display
         self.display.create_window()
         self.display.build_and_blit_loadScreen()
-        pygame.display.flip()   #blit before loadind ressources
-        #set as current display for blitting
+        pygame.display.flip()   #blit before loading ressources
+        #set as current display for resising
         self.refresh_current_display = self.display.build_and_blit_loadScreen
 
         #load game ressources
-        self.display.load_images()
+        self.display.load_images(self.event_handler)    #checks for events : pseudo-async
 
         #initialise Navigation (=game controller)
         self.nav = Nav(self)
@@ -62,13 +61,13 @@ class UI :
         self.display.build_rooms()
         self.display.blit_rooms()
 
-    def event_handler(self,events):
-        for event in events:
+    def event_handler(self):
+        for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return  False
+                raise SystemExit() #or sys.exit()
+            
             if event.type == pygame.WINDOWRESIZED or event.type == pygame.WINDOWSIZECHANGED:
                 self.display.W,self.display.H = event.x,event.y
-                Options.display_ratio_enforced = False
                 self.refresh_current_display()
-        return True
+                pygame.display.flip()   #needs to flip faster than fps for fluidity
     

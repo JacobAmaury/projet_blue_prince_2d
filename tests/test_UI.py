@@ -10,11 +10,10 @@ from options import Options     # pyright: ignore[reportMissingImports]
 t = 0
 pygame.init() #ini pygame
 clock = pygame.time.Clock()
-ui = UI()    #create and blit load_screen, load ressources for loadScreen
-ui.load()   #display loadScreen while loading ressources
-running = True
-while running:
-    running = ui.event_handler(pygame.event.get())
+ui = UI()
+ui.load()
+while True:
+    ui.event_handler()
     
     #test
     t += clock.get_time()
