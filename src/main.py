@@ -15,6 +15,3 @@ while running:
 
     clock.tick(Options.fps)
     pygame.display.update()
-
-
-#TODO : ajouter des ui.event_handler() dans ui.load_screen() => asynchrone

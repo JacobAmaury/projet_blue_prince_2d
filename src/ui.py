@@ -20,6 +20,7 @@ class UI :
         self.Inventory = Inventory #needed to avoid circular imports
 
     def load_screen(self):
+        # todo : add ui.event_handler calls for pseudo-async effect (responsive window resizing)
         #create load display
         self.display.create_window()
         self.display.build_load_screen()

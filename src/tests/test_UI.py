@@ -1,14 +1,12 @@
-import pygame
 import sys
 import os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
+import pygame
 from ui import UI
 from options import Options
 from map import Map
 from inventory import Inventory
-
-# Add src to Python path
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 t = 0
 

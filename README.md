@@ -2,7 +2,7 @@
 
 A 2D rendition of the the Blue Prince game, just for fun !
 
-## Pre-requirements
+## Requirements
 
 - Python 3
 - pip
@@ -24,7 +24,7 @@ A 2D rendition of the the Blue Prince game, just for fun !
 
 ## How to use
 
-In folder src/blueprince/ :
+From src/ :
 
 ```sh
 python main.py
@@ -32,10 +32,10 @@ python main.py
 
 ## Debugg
 
-In folder src/blueprince/tests/ :
+From src/ :
 
 ```sh
-python test_UI.py
+python tests/test_UI.py
 ```
 
 ## Authors

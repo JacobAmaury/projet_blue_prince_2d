@@ -39,16 +39,16 @@ class Display:
     def create_window(self):
         #window creation
         pygame.display.set_caption("Blue prince 2D")
-        blueprince_icon = pygame.image.load(os.path.join("images", "blueprince_icon.jpeg"))
+        blueprince_icon = pygame.image.load("../images/blueprince_icon.jpeg")
         pygame.display.set_icon(blueprince_icon)
         self.screen = pygame.display.set_mode((self.W, self.H),pygame.RESIZABLE)
 
     def load_ini_images(self):
         #load_screen
-        path = os.path.join("images","background", "BluePrince_Start.jpg")
+        path = "../images/background/BluePrince_Start.jpg"
         self.bg_image_load = pygame.image.load(path)
         #Logo
-        path = os.path.join("images", "Logo_Blue_Prince.png")
+        path = "../images/Logo_Blue_Prince.png"
         self.image_logo = pygame.image.load(path)
 
     def build_load_screen(self):
@@ -74,52 +74,52 @@ class Display:
 
     def load_images(self,Rooms):
         #background image
-        path = os.path.join("images","background", "bg_image.png")
+        path = "../images/background/bg_image.png"
         self.bg_image = pygame.image.load(path)
         
         #consumables
-        path = os.path.join("images","items","consumables", "Gem_icon.png")
+        path = "../images/items/consumables/Gem_icon.png"
         self.gem_image = pygame.image.load(path)
-        path = os.path.join("images","items","consumables", "Gold_Coin_icon.png")
+        path = "../images/items/consumables/Gold_Coin_icon.png"
         self.coin_image = pygame.image.load(path)
-        path = os.path.join("images","items","consumables", "Ivory_Dice_icon.png")
+        path = "../images/items/consumables/Ivory_Dice_icon.png"
         self.dice_image = pygame.image.load(path)
-        path = os.path.join("images","items","consumables", "Key_icon.png")
+        path = "../images/items/consumables/Key_icon.png"
         self.key_image = pygame.image.load(path)
-        path = os.path.join("images","items","consumables", "Steps_icon.png")
+        path = "../images/items/consumables/Steps_icon.png"
         self.steps_image = pygame.image.load(path)
 
         #perm objects
-        path = os.path.join("images","items","permanant_objects", "Shovel_White_Icon.png")
+        path = "../images/items/permanant_objects/Shovel_White_Icon.png"
         self.shovel_image = pygame.image.load(path)
-        path = os.path.join("images","items","permanant_objects",'Lockpick_White_Icon.png')
+        path = "../images/items/permanant_objects/Lockpick_White_Icon.png"
         self.lockpick_kit_image = pygame.image.load(path)
-        path = os.path.join("images","items","permanant_objects",'Lucky_Rabbits_Foot_White_Icon.png')
+        path = "../images/items/permanant_objects/Lucky_Rabbits_Foot_White_Icon.png"
         self.lucky_rabbit_foot_image = pygame.image.load(path)
-        path = os.path.join("images","items","permanant_objects",'Metal_Detector_White_Icon.png')
+        path = "../images/items/permanant_objects/Metal_Detector_White_Icon.png"
         self.metal_detector_image = pygame.image.load(path)
-        path = os.path.join("images","items","permanant_objects",'Power_Hammer_White_Icon.png')
+        path = "../images/items/permanant_objects/Power_Hammer_White_Icon.png"
         self.hammer_image = pygame.image.load(path)
 
 
         #rooms : names in data/rooms_db
         for name in Rooms_db.blue_rooms:
-            path = os.path.join("images","rooms","blue_room", name+'.png')
+            path = "../images/rooms/blue_room/"+name+'.png'
             self.room_images[name] = pygame.image.load(path)
         for name in Rooms_db.yellow_rooms:
-            path = os.path.join("images","rooms","shop", name+'.png')
+            path = "../images/rooms/shop/"+name+'.png'
             self.room_images[name] = pygame.image.load(path)
         for name in Rooms_db.orange_rooms:
-            path = os.path.join("images","rooms","hallway", name+'.png')
+            path = "../images/rooms/hallway/"+name+'.png'
             self.room_images[name] = pygame.image.load(path)
         for name in Rooms_db.violet_rooms:
-            path = os.path.join("images","rooms","bedroom", name+'.png')
+            path = "../images/rooms/bedroom/"+name+'.png'
             self.room_images[name] = pygame.image.load(path)
         for name in Rooms_db.green_rooms:
-            path = os.path.join("images","rooms","green_room", name+'.png')
+            path = "../images/rooms/green_room/"+name+'.png'
             self.room_images[name] = pygame.image.load(path)
         for name in Rooms_db.red_rooms:
-            path = os.path.join("images","rooms","red_room", name+'.png')
+            path = "../images/rooms/red_room/"+name+'.png'
             self.room_images[name] = pygame.image.load(path)
 
     def build_bg_screen(self):
