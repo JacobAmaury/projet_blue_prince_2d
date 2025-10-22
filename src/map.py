@@ -6,7 +6,7 @@ class Map :
 
     def add_room(self,name,position):
         x, y, a = position
-        a = a %4    #position in [0;<4]
+        a = a %4    #angle in [0;<4]
         if name in Map.rooms :
             Map.rooms[name] += [(x, y, a)]
         else:

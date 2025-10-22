@@ -13,7 +13,7 @@ class Display:
     permanents_images = {}  #loaded permanent objects images
     permanents_scaled = {}  #scaled permanent objects images
     room_images = {}    #loaded room images
-    rooms_scaled = {}   #scaled room images
+    rooms_scaled = {}   #scaled room images, rotations : [O°,90°,180°,-90°]
 
     def __init__(self):
         #import display_size
