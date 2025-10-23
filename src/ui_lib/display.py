@@ -170,19 +170,24 @@ class Display:
             self.screen.blit(self.permanent_images['Power_Hammer'][1], (W * 0.48, H * 0.53))
 
     def build_rooms(self):
-        W, _ = self.W, self.H
-        room_size = (W // 18.5, W // 18.5)
-        for name, position in Map.rooms.items():
-            img_temp = pygame.transform.scale(self.room_images[name], room_size)
+        W, H = self.W, self.H
+        # for rot = 0,2
+        w_size = W // 18.5
+        h_size =  H // 10.40625          # screen 16:9 => 16/18.5 = 9/X => X = 9*18.5/16 = 10.40625
+        for name, _ in Map.rooms.items():
             self.rooms_scaled[name] = [None]*4
-            for _, _, angle in position:
-                 self.rooms_scaled[name][angle] = pygame.transform.rotate(img_temp,90*angle)
+            for angle in range(0,3,2):
+                img_temp = pygame.transform.scale(self.room_images[name], (w_size,h_size))
+                self.rooms_scaled[name][angle] = pygame.transform.rotate(img_temp,90*angle)
+            for angle in range(1,4,2):
+                img_temp = pygame.transform.scale(self.room_images[name], (h_size,w_size))
+                self.rooms_scaled[name][angle] = pygame.transform.rotate(img_temp,90*angle)
 
     def blit_rooms(self):
         W, H = self.W, self.H
         step_y = H * 0.0959
         step_x = W * 0.054
-        base_x = W * 0.1695 # center (left_corner) of map_grid      or W * 0.2234 with col -1
+        base_x = W * 0.1695 # center (left_corner) of map_grid
         base_y = H * 0.837  # bottom (up_corner) of map_grid
 
         for name, position in Map.rooms.items():
@@ -191,5 +196,38 @@ class Display:
                 y = base_y - row * step_y  
                 self.screen.blit(self.rooms_scaled[name][angle], (x, y))
 
-    def build_door(self):
-        pass
+    def build_door(self,row=0,col=0,rot=0):
+        #rot in [0,3]
+        #Paramètres :
+        length = 40/100      # in step %
+        thickness = 6/100  # in step %
+
+        W, H = self.W, self.H
+        step_y = H * 0.0959
+        step_x = W * 0.054
+        base_x = W * 0.1695 # center (left_corner) of map_grid
+        base_y = H * 0.837  # bottom (up_corner) of map_grid
+        x = base_x + col * step_x   #left of case
+        y = base_y - row * step_y   #top of case
+
+        r = 1 - rot // 2
+        if rot%2 == 0 : # if pair (0:bot or 2:top)
+            length = int(length * step_x)
+            thickness = int(thickness * step_y)
+            x = x + (step_x - length)//2    #centered
+            w = length
+            y = y + (step_y - thickness)*r
+            h = thickness
+        else:
+            length = int(length * step_y)
+            thickness = int(thickness * step_x)
+            y = y + (step_y - length)//2    #centered
+            h = length
+            x = x + (step_x - thickness)*r
+            w = thickness
+        self.door =  pygame.Rect(x,y,w,h)
+
+
+    def draw_door(self):
+        color = (255,0,0)
+        pygame.draw.rect(self.screen,color,self.door)

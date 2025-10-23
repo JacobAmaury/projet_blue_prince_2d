@@ -1,7 +1,6 @@
 import pygame
 
-
-from display import Display
+from ui_lib.display import Display
 from navigation import Nav
 
 class UI :
@@ -32,11 +31,13 @@ class UI :
         self.display.build_bg_screen()
         self.display.build_items()
         self.display.build_rooms()
+        self.display.build_door()
 
     def blit_mainScreen(self):
         self.display.blit_bg_screen()
         self.display.blit_items() 
         self.display.blit_rooms()
+        self.display.draw_door()
 
     def build_and_blit_mainScreen(self):
         self.build_mainScreen()
@@ -53,21 +54,25 @@ class UI :
 
     def update_permanents(self):
         self.display.blit_items()
-        self.blit_mainScreen() # useless if we cannot lose a permanent object
+        self.blit_mainScreen() # overkill if we cannot lose a permanent object
 
     def update_map(self):
         self.display.build_rooms()
-        self.display.blit_rooms()
+        self.blit_mainScreen() # overkill if we cannot remove a room
 
     def update_door(self,y,x,r):
         """
-        Deplaces the door (player) to case (y,x) and side r: (bot=0 , right=1 , up=2 , left=3 )%4
-            (y,x) are in map coordinates : (0,0) =(center,bottom)
+        Deplaces the door (player) to case (y,x) and side r: (bot=0 , right=1 , up=2 , left=3 ) modulo 4
+            (y,x) are in map coordinates : (0,0) = (bottom,center)
         """
-        pass
-    def update_door_temp(self,y,x,r):
-        #temporary terminal function for update_door
-        print(f'player move :{(y,x,r)}')
+        r = r % 4 ; y = y % 9 ; x = x % 5 -2    #protection overflow
+        self.display.build_door(y,x,r)
+        self.update_map()
+
+    # def update_door_temp(self,y,x,r):
+    #     #temporary terminal function for update_door
+    #     r = r %4
+    #     print(f'player move :{(y,x,r)}')
 
     def selectionScreen_temp(self,prompt_msg,items):
         pass
