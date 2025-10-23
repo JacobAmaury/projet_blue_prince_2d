@@ -182,14 +182,14 @@ class Display:
         W, H = self.W, self.H
         step_y = H * 0.0959
         step_x = W * 0.054
-        base_x = W * 0.2234
-        base_y = H * 0.837
+        base_x = W * 0.1695 # center (left_corner) of map_grid      or W * 0.2234 with col -1
+        base_y = H * 0.837  # bottom (up_corner) of map_grid
 
         for name, position in Map.rooms.items():
             for row, col, angle in position:
-                x = base_x + (col - 1) * step_x
+                x = base_x + col * step_x
                 y = base_y - row * step_y  
                 self.screen.blit(self.rooms_scaled[name][angle], (x, y))
 
-    # #Room : entrance hall
-    # self.screen.blit(self.entranceHall, (W * 0.1695, H * 0.837))
+    def build_door(self):
+        pass

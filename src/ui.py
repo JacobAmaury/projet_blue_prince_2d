@@ -59,6 +59,25 @@ class UI :
         self.display.build_rooms()
         self.display.blit_rooms()
 
+    def update_door(self,y,x,r):
+        """
+        Deplaces the door (player) to case (y,x) and side r: (bot=0 , right=1 , up=2 , left=3 )%4
+            (y,x) are in map coordinates : (0,0) =(center,bottom)
+        """
+        pass
+    def update_door_temp(self,y,x,r):
+        #temporary terminal function for update_door
+        print(f'player move :{(y,x,r)}')
+
+    def selectionScreen_temp(self,prompt_msg,items):
+        pass
+    def selectionScreen_temp(self,prompt_msg,items):
+        #temporary terminal function for selectionScreen
+        print('Selection choice :')
+        print(prompt_msg)
+        for nb,i in enumerate(items):
+            print(f'{nb}. ',i)
+
     def event_handler(self):
         for event in pygame.event.get():
             event_type = event.type
