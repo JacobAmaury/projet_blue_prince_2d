@@ -8,6 +8,6 @@ clock = pygame.time.Clock()
 ui = UI()                           #create window, load ressources for loadScreen
 ui.load()                           #display loadScreen while loading ressources
 while True:
-    ui.event_handler()
+    ui.event_listener()
     clock.tick(Options.fps)
     pygame.display.update()

@@ -89,7 +89,7 @@ class Display:
         #text
         self.screen.blit(self.loading_text, self.text_position)
 
-    def load_images(self,event_handler):
+    def load_images(self,event_listener):
         #background image
         path = "../images/background/bg_image.png"
         self.bg_image = pygame.image.load(path).convert()
@@ -108,7 +108,7 @@ class Display:
         for name,color in Rooms_db.rooms.items():
             path = "../images/rooms/"+ color +'/'+ name +'.png'
             self.room_images[name] = pygame.image.load(path).convert()
-            event_handler() #room loading may be long : handles user input
+            event_listener() #room loading may be long : handles user input
 
     def build_bg_screen(self):
         #bg_screen is invariant => don't recalcul when items change

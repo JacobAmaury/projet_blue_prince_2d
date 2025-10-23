@@ -11,13 +11,4 @@ class Nav :
         self.map = Map(self.ui)
         self.ui.mainScreen()   #creates and blits main_screen
 
-    class input :
-        ## handlers for player inputs
-        # keyboard inputs
-        escape = lambda: print('escape')
-        enter = lambda: print('enter')
-        back = lambda: print('back')
-        up = lambda: print('up')
-        down = lambda: print('down')
-        left = lambda: print('left')
-        right = lambda: print('right')
+

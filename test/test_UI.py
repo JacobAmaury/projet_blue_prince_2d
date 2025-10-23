@@ -16,7 +16,7 @@ clock = pygame.time.Clock()
 ui = UI()
 ui.load()
 while True:
-    ui.event_handler()
+    ui.event_listener()
     clock.tick(Options.fps)
     pygame.display.update()
     
