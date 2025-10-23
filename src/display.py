@@ -8,10 +8,21 @@ from map import Map
 
 class Display:
     window_ratio = (16,9)
-    consumable_images = {}  #loaded consumable images
-    consumables_scaled = {}  #scaled consumable images
-    permanents_images = {}  #loaded permanent objects images
-    permanents_scaled = {}  #scaled permanent objects images
+    #loaded consumable images [loaded, scaled]
+    consumable_images = {
+        'steps':[None,None], 
+        'coin':[None,None], 
+        'gem':[None,None], 
+        'key':[None,None], 
+        'dice':[None,None]}
+    #loaded permanent objects images [loaded, scaled]
+    permanent_images = {
+        'Shovel':[None,None],
+        'Lockpick_Kit':[None,None],
+        'Lucky_Rabbits_Foot':[None,None],
+        'Metal_Detector':[None,None],
+        'Power_Hammer':[None,None]
+        }
     room_images = {}    #loaded room images
     rooms_scaled = {}   #scaled room images, rotations : [O°,90°,180°,-90°]
 
@@ -84,14 +95,14 @@ class Display:
         self.bg_image = pygame.image.load(path).convert()
 
         #consumables
-        for name in Inventory.consumables :
+        for name in self.consumable_images :
             path = "../images/items/consumables/"+ name +"_icon.png"
-            self.consumable_images[name] = pygame.image.load(path).convert_alpha()
+            self.consumable_images[name][0] = pygame.image.load(path).convert_alpha()
 
         #permanent objects
-        for name in Inventory.perm_objects :
+        for name in self.permanent_images :
             path = "../images/items/permanant_objects/"+ name +"_White_Icon.png"
-            self.permanents_images[name] = pygame.image.load(path).convert_alpha()
+            self.permanent_images[name][0] = pygame.image.load(path).convert_alpha()
 
         #rooms : import all rooms by name from Rooms_db.rooms
         for name,color in Rooms_db.rooms.items():
@@ -109,7 +120,7 @@ class Display:
         #size for consumable_images
         consumable_size = (H//20,H//20)
         for name,img in self.consumable_images.items():
-            self.consumables_scaled[name] = pygame.transform.scale(img,consumable_size)
+            self.consumable_images[name][1] = pygame.transform.scale(img[0],consumable_size)
 
     def blit_bg_screen(self):
         W, H = self.W,self.H
@@ -117,11 +128,11 @@ class Display:
         self.screen.blit(self.bg, (0,0))
         
         #responsive position
-        self.screen.blit(self.consumables_scaled['steps'], (W * 0.91, H * 0.13))
-        self.screen.blit(self.consumables_scaled['key'],   (W * 0.91, H * 0.18))
-        self.screen.blit(self.consumables_scaled['gem'],   (W * 0.91, H * 0.23))  
-        self.screen.blit(self.consumables_scaled['coin'],  (W * 0.91, H * 0.28)) 
-        # screen.blit(self.consumables['dice'],  (W * 0.91, H * 0.)) #I don't kwon were it go
+        self.screen.blit(self.consumable_images['steps'][1], (W * 0.91, H * 0.13))
+        self.screen.blit(self.consumable_images['key'][1],   (W * 0.91, H * 0.18))
+        self.screen.blit(self.consumable_images['gem'][1],   (W * 0.91, H * 0.23))  
+        self.screen.blit(self.consumable_images['coin'][1],  (W * 0.91, H * 0.28)) 
+        # screen.blit(self.consumable_images['dice'][1],  (W * 0.91, H * 0.)) #I don't kwon were it go
     
     def build_items(self):
         W, H = self.W,self.H
@@ -134,8 +145,8 @@ class Display:
         self.text_coin = self.font.render(str(consumables["coin"]), True, (255, 255, 255))
     
         #permanent objects
-        for name,img in self.permanents_images.items() :
-            self.permanents_scaled[name] = pygame.transform.scale(img, perm_size)
+        for name,img in self.permanent_images.items() :
+            self.permanent_images[name][1] = pygame.transform.scale(img[0], perm_size)
 
     def blit_items(self):
         W, H = self.W,self.H
@@ -148,15 +159,15 @@ class Display:
         #We also can do a for loop for this
         perm_objects = Inventory.perm_objects
         if perm_objects['Shovel'] == True:
-            self.screen.blit(self.permanents_scaled['Shovel'], (W * 0.58, H * 0.43))
+            self.screen.blit(self.permanent_images['Shovel'][1], (W * 0.58, H * 0.43))
         if perm_objects['Lockpick_Kit'] == True:
-            self.screen.blit(self.permanents_scaled['Lockpick_Kit'], (W * 0.68, H * 0.43))
+            self.screen.blit(self.permanent_images['Lockpick_Kit'][1], (W * 0.68, H * 0.43))
         if perm_objects["Lucky_Rabbits_Foot"] == True:
-            self.screen.blit(self.permanents_scaled["Lucky_Rabbits_Foot"], (W * 0.78, H * 0.43))
+            self.screen.blit(self.permanent_images["Lucky_Rabbits_Foot"][1], (W * 0.78, H * 0.43))
         if perm_objects['Metal_Detector'] == True:
-            self.screen.blit(self.permanents_scaled['Metal_Detector'], (W * 0.86, H * 0.43))
+            self.screen.blit(self.permanent_images['Metal_Detector'][1], (W * 0.86, H * 0.43))
         if perm_objects['Power_Hammer'] == True:
-            self.screen.blit(self.permanents_scaled['Power_Hammer'], (W * 0.48, H * 0.53))
+            self.screen.blit(self.permanent_images['Power_Hammer'][1], (W * 0.48, H * 0.53))
 
     def build_rooms(self):
         W, _ = self.W, self.H

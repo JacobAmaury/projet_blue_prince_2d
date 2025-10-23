@@ -2,6 +2,7 @@ from map import Map
 from inventory import Inventory
 
 class Nav :
+    # called by ui, manages Inventory and Map (which call ui to update)
     def __init__(self,ui):
         self.ui = ui
     

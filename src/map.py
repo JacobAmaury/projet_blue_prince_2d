@@ -14,10 +14,3 @@ class Map :
         Map.ui.update_map()
 
 
-    # rooms = {
-    #     "Mechanarium": [(1, 0),(2,-2)],
-    #     "MusicRoom": [(2, 0)]
-    # }
-
-
-    # pool = {}
