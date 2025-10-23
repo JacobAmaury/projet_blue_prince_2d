@@ -1,20 +1,18 @@
 import pygame
 
-from options import Options
+
 from display import Display
 from navigation import Nav
 
 class UI :
-    #UI class must define all the Rect boxes for input management (mouse boxes)
-    
-    refresh_current_display : lambda : None     #build and blit
+    #UI class must define all the Rect boxes for input_handler management (mouse boxes)
 
     def __init__(self):
-        self.display = Display()    #create window
+        self.display = Display()    #set window size, font size
 
     def load(self):
-        # todo : add ui.event_handler calls for pseudo-async effect (responsive window resizing)
         #create and load display
+        self.display.load_loadScreen_images()
         self.display.create_window()
         self.display.build_and_blit_loadScreen()
         pygame.display.flip()   #blit before loading ressources
@@ -63,11 +61,31 @@ class UI :
 
     def event_handler(self):
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            event_type = event.type
+            if event_type == pygame.QUIT:
+                pygame.quit()
                 raise SystemExit() #or sys.exit()
             
-            if event.type == pygame.WINDOWRESIZED or event.type == pygame.WINDOWSIZECHANGED:
+            elif event_type == pygame.WINDOWRESIZED or event_type == pygame.WINDOWSIZECHANGED:
                 self.display.W,self.display.H = event.x,event.y
                 self.refresh_current_display()
                 pygame.display.flip()   #need to flip during loadScreen
-    
+
+            elif event_type == pygame.KEYDOWN:
+                event_key = event.key
+                if event_key == pygame.K_ESCAPE:
+                    self.nav.input.escape()
+                elif event_key == pygame.K_RETURN:
+                    self.nav.input.enter()
+                elif event_key == pygame.K_BACKSPACE:
+                    self.nav.input.back()
+                elif event_key == pygame.K_z or event_key == pygame.K_w or event_key == pygame.K_UP :
+                    self.nav.input.up()
+                elif event_key == pygame.K_s or event_key == pygame.K_DOWN:
+                    self.nav.input.down()
+                elif event_key == pygame.K_q or event_key == pygame.K_a or event_key == pygame.K_LEFT:
+                    self.nav.input.left()
+                elif event_key == pygame.K_d or event_key == pygame.K_RIGHT:
+                    self.nav.input.right()
+
+

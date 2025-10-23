@@ -22,8 +22,6 @@ class Display:
         self.screen_set_size(Options.default_window_size)
         #text size
         self.font = pygame.font.Font(None, self.H // 25) 
-        #load ressources for loadScreen
-        self.load_loadScreen_images()
 
     def screen_set_size(self,window_size):
         W,H = window_size
@@ -41,13 +39,6 @@ class Display:
             width -= self.window_ratio[0] ; height -= self.window_ratio[1]
         self.W, self.H = (width,height)
 
-    def create_window(self):
-        #window creation
-        pygame.display.set_caption("Blue prince 2D")
-        blueprince_icon = pygame.image.load("../images/blueprince_icon.jpeg")
-        pygame.display.set_icon(blueprince_icon)
-        self.screen = pygame.display.set_mode((self.W, self.H),pygame.RESIZABLE)
-
     def load_loadScreen_images(self):
         #load_screen
         path = "../images/background/BluePrince_Start.jpg"
@@ -55,6 +46,16 @@ class Display:
         #Logo
         path = "../images/Logo_Blue_Prince.png"
         self.image_logo = pygame.image.load(path)
+
+    def create_window(self):
+        #window creation
+        pygame.display.set_caption("Blue prince 2D")
+        blueprince_icon = pygame.image.load("../images/blueprince_icon.jpeg")
+        pygame.display.set_icon(blueprince_icon)
+        self.screen = pygame.display.set_mode((self.W, self.H),pygame.RESIZABLE)
+        # images convertions for fast blitting : cannot do before set_mode
+        self.bg_image_load = self.bg_image_load.convert()
+        self.image_logo = self.image_logo.convert_alpha()
 
     def build_and_blit_loadScreen(self):
         ##build_load_screen
@@ -80,22 +81,22 @@ class Display:
     def load_images(self,event_handler):
         #background image
         path = "../images/background/bg_image.png"
-        self.bg_image = pygame.image.load(path)
+        self.bg_image = pygame.image.load(path).convert()
 
         #consumables
         for name in Inventory.consumables :
             path = "../images/items/consumables/"+ name +"_icon.png"
-            self.consumable_images[name] = pygame.image.load(path)
+            self.consumable_images[name] = pygame.image.load(path).convert_alpha()
 
         #permanent objects
         for name in Inventory.perm_objects :
             path = "../images/items/permanant_objects/"+ name +"_White_Icon.png"
-            self.permanents_images[name] = pygame.image.load(path)
+            self.permanents_images[name] = pygame.image.load(path).convert_alpha()
 
         #rooms : import all rooms by name from Rooms_db.rooms
         for name,color in Rooms_db.rooms.items():
             path = "../images/rooms/"+ color +'/'+ name +'.png'
-            self.room_images[name] = pygame.image.load(path)
+            self.room_images[name] = pygame.image.load(path).convert()
             event_handler() #room loading may be long : handles user input
 
     def build_bg_screen(self):

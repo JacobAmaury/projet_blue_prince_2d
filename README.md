@@ -32,9 +32,9 @@ It is a pseudo os-independant shortcut to ./src/main.py (automatically sets cwd)
 ## Debugg
 Set cwd to ```src/``` then run:
 ```sh
-python ../tests/test_UI.py
+python ../test/test_UI.py
 ```
-Or from cwd at ```tests/```, run:
+Or from cwd at ```test/```, run:
 ```sh
 python test_UI.py
 ```
