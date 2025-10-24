@@ -187,8 +187,9 @@ class Display:
             room_image = self.room_images[name]
             room_image.rot[0] = pygame.transform.scale(room_image.loaded, (w_size,h_size))
             room_image.rot[2] = pygame.transform.rotate(room_image.rot[0],90*2)
-            room_image.rot[1] = pygame.transform.scale(room_image.loaded, (h_size,w_size))
-            room_image.rot[3] = pygame.transform.rotate(room_image.rot[1],90*3)
+            im_temp = pygame.transform.scale(room_image.loaded, (h_size,w_size))    #due to bg_screen ratio variable
+            room_image.rot[1] = pygame.transform.rotate(im_temp,90*1)
+            room_image.rot[3] = pygame.transform.rotate(im_temp,90*3)
 
     def blit_rooms(self):
         W, H = self.W, self.H
