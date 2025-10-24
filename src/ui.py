@@ -1,43 +1,40 @@
 import pygame
 
 from ui_lib.display import Display
+from ui_lib.map_grid import door
 from navigation import Nav
 
 class UI :
     #UI class must define all the Rect boxes for input_handler management (mouse boxes)
 
     def __init__(self):
-        self.display = Display()    #set window size, font size
-        self.display.load_loadScreen_images()
+        self.display = Display()    #set window size, font size, loads load_screen ressources
         self.display.create_window()
-
         #create and load display
-        self.display.convert_loadScreen()
+        self.display.loadScreen.convert_loaded()
         self.display.build_and_blit_loadScreen()
         pygame.display.flip()   #blit before loading ressources
         #set as current display for resising
         self.refresh_current_display = self.display.build_and_blit_loadScreen
-
         #load game ressources
         self.display.load_images(self.event_listener)    #checks for events : pseudo-async
-
         #initialise Navigation (=game controller)
         self.nav = Nav(self)
-
         #start a new game
         self.nav.new_game()
 
     def build_mainScreen(self):
+        self.display.set_all_grids_mainScreen()
         self.display.build_bg_screen()
         self.display.build_items()
         self.display.build_rooms()
-        self.display.build_door()
+        door.build()
 
     def blit_mainScreen(self):
         self.display.blit_bg_screen()
         self.display.blit_items() 
         self.display.blit_rooms()
-        self.display.draw_door()
+        door.draw(self.display.screen)
 
     def build_and_blit_mainScreen(self):
         self.build_mainScreen()
@@ -66,11 +63,9 @@ class UI :
             (y,x) are in map coordinates : (0,0) = (bottom,center)
         """
         r = r % 4 ; y = y % 9 ; x = x % 5 -2    #protection overflow
-        self.display.build_door(y,x,r)
+        door.build(y,x,r)
         self.update_map()
 
-    def selectionScreen(self,prompt_msg,items):
-        pass
     def selectionScreen_temp(self,prompt_msg,items):
         #temporary terminal function for selectionScreen
         print('Selection choice :')
@@ -82,10 +77,10 @@ class UI :
         for event in pygame.event.get():
             event_type = event.type
             if event_type == pygame.QUIT:
-                self.quit_game()
+                UI.quit_game()
             
             elif event_type == pygame.WINDOWRESIZED or event_type == pygame.WINDOWSIZECHANGED:
-                self.display.W,self.display.H = event.x,event.y
+                self.display.size = event.x,event.y
                 self.refresh_current_display()
                 pygame.display.flip()   #need to flip during loadScreen
 
@@ -106,7 +101,8 @@ class UI :
                 elif event_key == pygame.K_d or event_key == pygame.K_RIGHT:
                     UI.handler.right()
 
-    def quit_game():
+    @classmethod
+    def quit_game(cls):
         pygame.quit()
         raise SystemExit() #or sys.exit()
     

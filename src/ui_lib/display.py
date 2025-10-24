@@ -5,7 +5,9 @@ from rooms_db import Rooms_db
 from inventory import Inventory
 from map import Map
 
-from .images import Permanent, Consumable, Room
+from .load_screen import loadScreen
+from .inventory_grid import Permanent,Consumable
+from .map_grid import Room,map
 
 class Display:
     window_ratio = (16,9)
@@ -29,64 +31,38 @@ class Display:
         #set window_size based on default_window_size
         self.screen_set_size(Options.default_window_size)
         #text size
-        self.font = pygame.font.Font(None, self.H // 25) 
+        _,H = self.size
+        self.font = pygame.font.Font(None, H // 25) 
+        #load load_screen images
+        self.loadScreen = loadScreen(bg_path="../images/background/BluePrince_Start.jpg",
+                             logo_path="../images/Logo_Blue_Prince.png")
 
     def screen_set_size(self,window_size):
         W,H = window_size
-        self.W, self.H = W,H
+        self.size = W,H
         #if default_window_size > display_size
-        if self.W > self.desk_W or self.H > self.desk_H :
+        if W > self.desk_W or H > self.desk_H :
             self.maximize_window_v1(self.desk_W,self.desk_H)
         #set window_size
-        Options.window_size = (W,H)
+        Options.window_size = self.size
 
     def maximize_window_v1(self,desk_w,desk_h):
         #maximize window to biggest size inferior to current, keeping window_ratio
-        width,height = self.W, self.H
-        while width > desk_w or height > desk_h :
-            width -= self.window_ratio[0] ; height -= self.window_ratio[1]
-        self.W, self.H = (width,height)
-
-    def load_loadScreen_images(self):
-        #load images : cannot convert before set_mode()
-        #load_screen
-        path = "../images/background/BluePrince_Start.jpg"
-        self.bg_image_load = pygame.image.load(path)
-        #Logo
-        path = "../images/Logo_Blue_Prince.png"
-        self.image_logo = pygame.image.load(path)
+        W,H = self.size
+        while W > desk_w or H > desk_h :
+            W -= self.window_ratio[0] ; H -= self.window_ratio[1]
+        self.size = (W,H)
 
     def create_window(self):
         #window creation
         pygame.display.set_caption("Blue prince 2D")
         blueprince_icon = pygame.image.load("../images/blueprince_icon.jpeg")
         pygame.display.set_icon(blueprince_icon)
-        self.screen = pygame.display.set_mode((self.W, self.H),pygame.RESIZABLE)
-
-    def convert_loadScreen(self):
-        self.bg_image_load = self.bg_image_load.convert()
-        self.image_logo = self.image_logo.convert_alpha()
+        self.screen = pygame.display.set_mode(self.size,pygame.RESIZABLE)
 
     def build_and_blit_loadScreen(self):
-        ##build_load_screen
-        W,H = self.W,self.H
-        #load_screen
-        self.bg_load = pygame.transform.smoothscale(self.bg_image_load,(W, H))
-        self.bg_load_position = (0,0)
-        #Logo
-        self.logo = pygame.transform.scale(self.image_logo,(W//3, H//3))
-        self.logo_position = (W//3 - self.logo.get_height()//2,H//20,)
-        #text
-        self.loading_text = self.font.render("Loading game ...", True, (255, 255, 255))
-        self.text_position = (W //2 - self.loading_text.get_width()//2, H * 0.95)
-
-        ##blit_load_screen
-        #create load_screen
-        self.screen.blit(self.bg_load, self.bg_load_position)   
-        #Logo
-        self.screen.blit(self.logo,self.logo_position )    
-        #text
-        self.screen.blit(self.loading_text, self.text_position)
+        W,H = self.size
+        self.loadScreen.build_and_blit(W,H,self.font,self.screen)
 
     def load_images(self,event_listener):
         #background image
@@ -112,7 +88,7 @@ class Display:
 
     def build_bg_screen(self):
         #bg_screen is invariant => don't recalcul when items change
-        W, H = self.W,self.H
+        W, H = self.size
         #back ground image
         self.bg = pygame.transform.smoothscale(self.bg_image,(W, H))
 
@@ -123,14 +99,13 @@ class Display:
             imageC.scaled = pygame.transform.scale(imageC.loaded,consumable_size)
 
     def blit_bg_screen(self):
-        W, H = self.W,self.H
+        W, H = self.size
         #back ground image
         self.screen.blit(self.bg, (0,0))
         
         #consumables :responsive position
-        Consumable.set_position(W,H)
-        for id,imageC in enumerate(self.consumable_images):
-            self.screen.blit(imageC.scaled, Consumable.get_position_img(id))    #issue with dice position
+        for id,consumable in enumerate(self.consumable_images):
+            self.screen.blit(consumable.scaled, Consumable.get_position_img(id))    #issue with dice position
     
     def build_items(self):
         #consumable cpt 
@@ -139,33 +114,25 @@ class Display:
             consumable.txt = self.font.render(str(inventory_consumables[consumable.name]), True, (255, 255, 255))
 
         #permanent objects
-        W, H = self.W,self.H
+        W, H = self.size
         perm_size = (W//11, H//11)
-        for imageC in self.permanent_images :
-            imageC.scaled = pygame.transform.scale(imageC.loaded,perm_size)
+        for permanent in self.permanent_images :
+            permanent.scaled = pygame.transform.scale(permanent.loaded,perm_size)
 
     def blit_items(self):
-        W, H = self.W,self.H
+        W, H = self.size
         #consumable cpt 
-        Consumable.set_position(W,H)
         for id,consumable in enumerate(self.consumable_images):
             self.screen.blit(consumable.txt, Consumable.get_position_txt(id))
 
-        #We also can do a for loop for this
-        perm_objects = Inventory.perm_objects
-        if perm_objects['Shovel'] == True:
-            self.screen.blit(self.permanent_images[0].scaled, (W * 0.58, H * 0.43))
-        if perm_objects['Lockpick_Kit'] == True:
-            self.screen.blit(self.permanent_images[1].scaled, (W * 0.68, H * 0.43))
-        if perm_objects["Lucky_Rabbits_Foot"] == True:
-            self.screen.blit(self.permanent_images[2].scaled, (W * 0.78, H * 0.43))
-        if perm_objects['Metal_Detector'] == True:
-            self.screen.blit(self.permanent_images[3].scaled, (W * 0.86, H * 0.43))
-        if perm_objects['Power_Hammer'] == True:
-            self.screen.blit(self.permanent_images[4].scaled, (W * 0.48, H * 0.53))
+        #permanents
+        inv_permanents = Inventory.perm_objects
+        for id,permanent in enumerate(self.permanent_images):
+            if inv_permanents[permanent.name] == True:
+                self.screen.blit(permanent.scaled, Permanent.get_position_img(id))
 
     def build_rooms(self):
-        W, H = self.W, self.H
+        W, H = self.size
         # for rot = 0,2
         w_size = W // 18.5
         # h_size = W // 18.5            # if square => if bg_screen_H/bg_screen_W ratio constant
@@ -179,50 +146,15 @@ class Display:
             room_image.rot[3] = pygame.transform.rotate(im_temp,90*3)
 
     def blit_rooms(self):
-        W, H = self.W, self.H
-        step_y = H * 0.0959
-        step_x = W * 0.054
-        base_x = W * 0.1695 # center (left_corner) of map_grid
-        base_y = H * 0.837  # bottom (up_corner) of map_grid
-
+        W, H = self.size
         for name, position in Map.rooms.items():
+            room_image = self.room_images[name]
             for row, col, angle in position:
-                x = base_x + col * step_x
-                y = base_y - row * step_y  
-                self.screen.blit(self.room_images[name].rot[angle], (x, y))
+                self.screen.blit(room_image.rot[angle], room_image.get_position_case(col,row))
 
-    def build_door(self,row=0,col=0,rot=0):
-        #rot in [0,3]
-        #Paramètres :
-        length = 40/100      # in step %
-        thickness = 6/100  # in step %
-
-        W, H = self.W, self.H
-        step_y = H * 0.0959
-        step_x = W * 0.054
-        base_x = W * 0.1695 # center (left_corner) of map_grid
-        base_y = H * 0.837  # bottom (up_corner) of map_grid
-        x = base_x + col * step_x   #left of case
-        y = base_y - row * step_y   #top of case
-
-        r = 1 - rot // 2
-        if rot%2 == 0 : # if pair (0:bot or 2:top)
-            length = int(length * step_x)
-            thickness = int(thickness * step_y)
-            x = x + (step_x - length)//2    #centered
-            w = length
-            y = y + (step_y - thickness)*r
-            h = thickness
-        else:
-            length = int(length * step_y)
-            thickness = int(thickness * step_x)
-            y = y + (step_y - length)//2    #centered
-            h = length
-            x = x + (step_x - thickness)*r
-            w = thickness
-        self.door =  pygame.Rect(x,y,w,h)
-
-
-    def draw_door(self):
-        color = (255,0,0)
-        pygame.draw.rect(self.screen,color,self.door)
+    def set_all_grids_mainScreen(self):
+        """recalculates x,y,step_x,step_y of all grids of mainScreen"""
+        W, H = self.size
+        map.set_grid(W,H)
+        Consumable.set_grid(W,H)
+        Permanent.set_grid(W,H)
