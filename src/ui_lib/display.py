@@ -1,7 +1,7 @@
 import pygame
 
+import database
 from options import Options
-from rooms_db import Rooms_db
 from inventory import Inventory
 from map import Map
 
@@ -12,18 +12,9 @@ from .map_grid import Room,map
 class Display:
     window_ratio = (16,9)
 
-    #list : sets the order on screen
-    consumable_images = [Consumable('steps'),Consumable('key'),Consumable('gem'),Consumable('coin'),Consumable('dice')]
-    permanent_images = [
-        Permanent('Shovel'),
-        Permanent('Lockpick_Kit'),
-        Permanent('Lucky_Rabbits_Foot'),
-        Permanent('Metal_Detector'),
-        Permanent('Power_Hammer')
-        ]
-    
-    # dic : no pre-set order on screen
-    room_images = {}
+    permanent_images = []   #list : order on screen
+    consumable_images = []
+    room_images = {}        #dict : no preset order on screen
 
     def __init__(self):
         #import display_size
@@ -65,22 +56,28 @@ class Display:
         self.loadScreen.build_and_blit(W,H,self.font,self.screen)
 
     def load_images(self,event_listener):
+        #create variables
+        for name in database.consumables:
+            Display.consumable_images.append(Consumable(name))
+        for name in database.permanents:
+            Display.permanent_images.append(Permanent(name))
+
         #background image
         path = "../images/background/bg_image.png"
         self.bg_image = pygame.image.load(path).convert()
 
         #consumables
-        for imageC in self.consumable_images :
-            path = "../images/items/consumables/"+ imageC.name +"_icon.png"
-            imageC.loaded = pygame.image.load(path).convert_alpha()
+        for image in self.consumable_images :
+            path = "../images/items/consumables/"+ image.name +"_icon.png"
+            image.loaded = pygame.image.load(path).convert_alpha()
 
         #permanent objects
-        for imageC in self.permanent_images :
-            path = "../images/items/permanant_objects/"+ imageC.name +"_White_Icon.png"
-            imageC.loaded = pygame.image.load(path).convert_alpha()
+        for image in self.permanent_images :
+            path = "../images/items/permanant_objects/"+ image.name +"_White_Icon.png"
+            image.loaded = pygame.image.load(path).convert_alpha()
 
         #rooms : import all rooms by names from Rooms_db.rooms
-        for name,color in Rooms_db.rooms.items():
+        for name,color in database.rooms.items():
             path = "../images/rooms/"+ color +'/'+ name +'.png'
             self.room_images[name] = Room()
             self.room_images[name].loaded = pygame.image.load(path).convert()
@@ -95,8 +92,8 @@ class Display:
         #build consumable images
         #size for consumable_images
         consumable_size = (H//20,H//20) #square
-        for imageC in self.consumable_images:
-            imageC.scaled = pygame.transform.scale(imageC.loaded,consumable_size)
+        for image in self.consumable_images:
+            image.scaled = pygame.transform.scale(image.loaded,consumable_size)
 
     def blit_bg_screen(self):
         W, H = self.size
@@ -126,9 +123,9 @@ class Display:
             self.screen.blit(consumable.txt, Consumable.get_position_txt(id))
 
         #permanents
-        inv_permanents = Inventory.perm_objects
+        inv_permanents = Inventory.permanents
         for id,permanent in enumerate(self.permanent_images):
-            if inv_permanents[permanent.name] == True:
+            if permanent.name in inv_permanents:
                 self.screen.blit(permanent.scaled, Permanent.get_position_img(id))
 
     def build_rooms(self):

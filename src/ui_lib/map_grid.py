@@ -24,13 +24,14 @@ class Room(Image,map) : #Room images
 ## private to ../
 class door(map):
     #Parameters :
-    length = 40/100         # in step %
-    thickness = 6/100       # in step %
+    LENGTH = 40/100         # in step %
+    THICKNESS = 6/100       # in step %
 
     @classmethod
-    def build(cls,row=0,col=0,rot=0):
+    def build(cls,door_map):
+        (row,col,rot) = door_map
         #rot in [0,3]
-        length, thickness = cls.length, cls.thickness
+        length, thickness = cls.LENGTH, cls.THICKNESS
         x,y = cls.get_position_case(col,row)
 
         r = 1 - rot // 2
@@ -52,5 +53,5 @@ class door(map):
 
     @classmethod
     def draw(cls,screen):
-        color = (255,0,0)
-        pygame.draw.rect(screen,color,cls.door)
+        COLOR = (255,0,0)
+        pygame.draw.rect(screen,COLOR,cls.door)

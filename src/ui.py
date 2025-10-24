@@ -28,7 +28,7 @@ class UI :
         self.display.build_bg_screen()
         self.display.build_items()
         self.display.build_rooms()
-        door.build()
+        door.build(self.nav.map.door)
 
     def blit_mainScreen(self):
         self.display.blit_bg_screen()
@@ -57,13 +57,8 @@ class UI :
         self.display.build_rooms()
         self.blit_mainScreen() # overkill if we cannot remove a room
 
-    def update_door(self,y,x,r):
-        """
-        Deplaces the door (player) to case (y,x) and side r: (bot=0 , right=1 , up=2 , left=3 ) modulo 4
-            (y,x) are in map coordinates : (0,0) = (bottom,center)
-        """
-        r = r % 4 ; y = y % 9 ; x = x % 5 -2    #protection overflow
-        door.build(y,x,r)
+    def update_door(self):
+        door.build(self.nav.map.door)
         self.update_map()
 
     def selectionScreen_temp(self,prompt_msg,items):
@@ -78,42 +73,40 @@ class UI :
             event_type = event.type
             if event_type == pygame.QUIT:
                 UI.quit_game()
-            
             elif event_type == pygame.WINDOWRESIZED or event_type == pygame.WINDOWSIZECHANGED:
                 self.display.size = event.x,event.y
                 self.refresh_current_display()
                 pygame.display.flip()   #need to flip during loadScreen
-
             elif event_type == pygame.KEYDOWN:
                 event_key = event.key
                 if event_key == pygame.K_ESCAPE:
-                    UI.handler.escape()
+                    event_handler.escape()
                 elif event_key == pygame.K_RETURN:
-                    UI.handler.enter()
+                    event_handler.enter()
                 elif event_key == pygame.K_BACKSPACE:
-                    UI.handler.back()
+                    event_handler.back()
                 elif event_key == pygame.K_z or event_key == pygame.K_w or event_key == pygame.K_UP :
-                    UI.handler.up()
+                    event_handler.up()
                 elif event_key == pygame.K_s or event_key == pygame.K_DOWN:
-                    UI.handler.down()
+                    event_handler.down()
                 elif event_key == pygame.K_q or event_key == pygame.K_a or event_key == pygame.K_LEFT:
-                    UI.handler.left()
+                    event_handler.left()
                 elif event_key == pygame.K_d or event_key == pygame.K_RIGHT:
-                    UI.handler.right()
+                    event_handler.right()
 
     @classmethod
     def quit_game(cls):
         pygame.quit()
         raise SystemExit() #or sys.exit()
     
-    ## handlers for player inputs
-    # keyboard inputs
-    class handler : pass
-    handler.escape = quit_game
-    handler.enter = lambda: print('enter')
-    handler.back = lambda: print('back')
-    handler.up = lambda: print('up')
-    handler.down = lambda: print('down')
-    handler.left = lambda: print('left')
-    handler.right = lambda: print('right')
-
+## event_handlers for player inputs
+# keyboard inputs
+class event_handler :
+    escape = UI.quit_game
+    enter = lambda: print('enter')
+    back = lambda: print('back')
+    up = lambda: print('up')
+    down = lambda: print('down')
+    left = lambda: print('left')
+    right = lambda: print('right')
+UI.event_handler = event_handler
