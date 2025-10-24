@@ -5,32 +5,21 @@ from rooms_db import Rooms_db
 from inventory import Inventory
 from map import Map
 
-class Image : #Loaded Image (without names)
-    def __init__(self) : 
-        self.loaded = None
-
-class ImageCP(Image) : #consumable and permanent Image
-    def __init__(self,name) :
-        Image.__init__(self)
-        self.name = name; self.scaled = None
-
-class ImageR(Image) : #Room images
-    def __init__(self):
-        Image.__init__(self)
-        self.rot = [None]*4 # rotations : [O°,90°,180°,-90°]    directly stores scaled images
+from .images import Permanent, Consumable, Room
 
 class Display:
     window_ratio = (16,9)
 
     #list : sets the order on screen
-    consumable_images = [ImageCP('steps'),ImageCP('key'),ImageCP('gem'),ImageCP('coin'),ImageCP('dice')]
+    consumable_images = [Consumable('steps'),Consumable('key'),Consumable('gem'),Consumable('coin'),Consumable('dice')]
     permanent_images = [
-        ImageCP('Shovel'),
-        ImageCP('Lockpick_Kit'),
-        ImageCP('Lucky_Rabbits_Foot'),
-        ImageCP('Metal_Detector'),
-        ImageCP('Power_Hammer')
+        Permanent('Shovel'),
+        Permanent('Lockpick_Kit'),
+        Permanent('Lucky_Rabbits_Foot'),
+        Permanent('Metal_Detector'),
+        Permanent('Power_Hammer')
         ]
+    
     # dic : no pre-set order on screen
     room_images = {}
 
@@ -59,6 +48,7 @@ class Display:
         self.W, self.H = (width,height)
 
     def load_loadScreen_images(self):
+        #load images : cannot convert before set_mode()
         #load_screen
         path = "../images/background/BluePrince_Start.jpg"
         self.bg_image_load = pygame.image.load(path)
@@ -72,7 +62,8 @@ class Display:
         blueprince_icon = pygame.image.load("../images/blueprince_icon.jpeg")
         pygame.display.set_icon(blueprince_icon)
         self.screen = pygame.display.set_mode((self.W, self.H),pygame.RESIZABLE)
-        # images convertions for fast blitting : cannot do before set_mode
+
+    def convert_loadScreen(self):
         self.bg_image_load = self.bg_image_load.convert()
         self.image_logo = self.image_logo.convert_alpha()
 
@@ -115,7 +106,7 @@ class Display:
         #rooms : import all rooms by names from Rooms_db.rooms
         for name,color in Rooms_db.rooms.items():
             path = "../images/rooms/"+ color +'/'+ name +'.png'
-            self.room_images[name] = ImageR()
+            self.room_images[name] = Room()
             self.room_images[name].loaded = pygame.image.load(path).convert()
             event_listener() #room loading may be long : handles user input
 
@@ -137,32 +128,28 @@ class Display:
         self.screen.blit(self.bg, (0,0))
         
         #consumables :responsive position
+        Consumable.set_position(W,H)
         for id,imageC in enumerate(self.consumable_images):
-            self.screen.blit(imageC.scaled, (W * 0.91, H * (0.13 + .05*id)))    #issue with dice position
+            self.screen.blit(imageC.scaled, Consumable.get_position_img(id))    #issue with dice position
     
     def build_items(self):
+        #consumable cpt 
+        inventory_consumables = Inventory.consumables
+        for consumable in self.consumable_images:
+            consumable.txt = self.font.render(str(inventory_consumables[consumable.name]), True, (255, 255, 255))
+
+        #permanent objects
         W, H = self.W,self.H
         perm_size = (W//11, H//11)
-        #consumable cpt 
-        consumables = Inventory.consumables
-        self.text_step = self.font.render(str(consumables["steps"]), True, (255, 255, 255))
-        self.text_key = self.font.render(str(consumables["key"]), True, (255, 255, 255))
-        self.text_gem = self.font.render(str(consumables["gem"]), True, (255, 255, 255))
-        self.text_coin = self.font.render(str(consumables["coin"]), True, (255, 255, 255))
-        self.text_dice = self.font.render(str(consumables["dice"]), True, (255, 255, 255))
-    
-        #permanent objects
         for imageC in self.permanent_images :
             imageC.scaled = pygame.transform.scale(imageC.loaded,perm_size)
 
     def blit_items(self):
         W, H = self.W,self.H
         #consumable cpt 
-        self.screen.blit(self.text_step, (W * 0.94, H * 0.14))
-        self.screen.blit(self.text_key, (W * 0.94, H * 0.19))
-        self.screen.blit(self.text_gem, (W * 0.94, H * 0.24))
-        self.screen.blit(self.text_coin, (W * 0.94, H * 0.29))
-        self.screen.blit(self.text_dice, (W * 0.94, H * 0.34)) #I don't kwon were it go
+        Consumable.set_position(W,H)
+        for id,consumable in enumerate(self.consumable_images):
+            self.screen.blit(consumable.txt, Consumable.get_position_txt(id))
 
         #We also can do a for loop for this
         perm_objects = Inventory.perm_objects

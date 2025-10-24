@@ -8,11 +8,11 @@ class UI :
 
     def __init__(self):
         self.display = Display()    #set window size, font size
-
-    def load(self):
-        #create and load display
         self.display.load_loadScreen_images()
         self.display.create_window()
+
+        #create and load display
+        self.display.convert_loadScreen()
         self.display.build_and_blit_loadScreen()
         pygame.display.flip()   #blit before loading ressources
         #set as current display for resising

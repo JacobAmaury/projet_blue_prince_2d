@@ -1,26 +1,27 @@
 import __src_path   #set path ../src
 
 
-#test values
+#test variables
 t = 0
 x,y,r = 0,0,0
 
 
 #main
 import pygame
-from ui import UI               # pyright: ignore[reportMissingImports] 
-from options import Options     # pyright: ignore[reportMissingImports] 
+from ui import UI                   # pyright: ignore[reportMissingImports]
+from options import Options         # pyright: ignore[reportMissingImports]
 
-pygame.init() #ini pygame
+
+pygame.init()                       #ini pygame
 clock = pygame.time.Clock()
 ui = UI()
-ui.load()
 while True:
     ui.event_listener()
     clock.tick(Options.fps)
     pygame.display.update()
+
     
-    #test
+#test
     t += clock.get_time()
     if t > 1000:
         ui.nav.inventory.change_consumable("steps",-1)

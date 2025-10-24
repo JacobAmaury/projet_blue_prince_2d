@@ -3,10 +3,9 @@ from ui import UI
 from options import Options
 
 
-pygame.init() #ini pygame
+pygame.init()                       #ini pygame
 clock = pygame.time.Clock()
-ui = UI()                           #create window, load ressources for loadScreen
-ui.load()                           #display loadScreen while loading ressources
+ui = UI()
 while True:
     ui.event_listener()
     clock.tick(Options.fps)
