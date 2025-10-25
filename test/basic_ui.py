@@ -44,7 +44,7 @@ class UI :
         print(f'player position : layer = {y}, x = {x}, rot = {r}')
 
     @classmethod
-    def selectionScreen_temp(cls,prompt_msg,items):
+    def selectionScreen(cls,prompt_msg,items):
         #this function needs to be better defined
         print('Selection choice :')
         print(prompt_msg)

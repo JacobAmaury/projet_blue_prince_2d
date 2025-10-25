@@ -66,12 +66,8 @@ class UI :
         cls.update_map()
 
     @classmethod
-    def selectionScreen_temp(cls,prompt_msg,items):
-        #temporary terminal function for selectionScreen
-        print('Selection choice :')
-        print(prompt_msg)
-        for nb,i in enumerate(items):
-            print(f'{nb}. ',i)
+    def selectionScreen(cls,prompt_msg,items):
+        pass
 
     @classmethod
     def event_listener(cls):
