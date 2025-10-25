@@ -10,7 +10,7 @@ x,y,r = 0,0,0
 import pygame
 from ui import UI                   # pyright: ignore[reportMissingImports]
 from options import Options         # pyright: ignore[reportMissingImports]
-from navigation import Nav          # pyright: ignore[reportMissingImports]
+from basic_nav import Nav           # pyright: ignore[reportMissingImports]
 
 
 pygame.init()                       #ini pygame
