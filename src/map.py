@@ -1,7 +1,6 @@
 
 class Map :
-    @classmethod
-    def __init__(cls,ui):
+    def __init__(self,ui):
         Map.ui = ui
         Map.rooms = { 'EntranceHall': [(0,0,0)] }
         Map.door = (0,0,0)

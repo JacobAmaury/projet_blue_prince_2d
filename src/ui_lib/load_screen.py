@@ -3,6 +3,7 @@ import pygame
 
 ##private
 class Image:
+    #this class should be reworked : see inventory_grid
     ##constructors
     def __init__(self,loaded_image) : 
         self.loaded = loaded_image
@@ -11,14 +12,6 @@ class Image:
     @classmethod
     def from_path_no_convertion(cls,bg_path):
         return cls(pygame.image.load(bg_path))
-    
-    @classmethod
-    def from_path(cls,bg_path):
-        return cls(pygame.image.load(bg_path).convert())
-
-    @classmethod
-    def from_path_transparent(cls,bg_path):
-        return cls(pygame.image.load(bg_path).convert_alpha())
 
     ##methods
     def smoothscale(self,W,H):

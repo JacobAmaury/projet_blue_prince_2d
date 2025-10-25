@@ -1,6 +1,7 @@
 
 ##private to file
 class Image : #Loaded Image (without names)
+    #this class is currently useless : add load methods
     def __init__(self) : 
         self.loaded = None
 

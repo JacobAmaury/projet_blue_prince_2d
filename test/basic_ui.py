@@ -1,16 +1,16 @@
 import __src_path   #set path ../src
+""" This is a terminal based UserInterface.
+    It is meant to be changed based on Navigation's needs, and used as a reference for the actual ui.
+"""
+
 
 import pygame
-from navigation import Nav      # pyright: ignore[reportMissingImports]
 
 class UI :
-    @classmethod
-    def __init__(cls):
+    def __init__(self,nav):
         pygame.display.set_mode(flags=pygame.HIDDEN)
         print('Loading game ...')
-        print('! Click on terminal to refocus !')
-        cls.nav = Nav(cls)    #initialise Navigation (=game controller)
-        cls.nav.new_game()     #start a new game
+        UI.nav = nav
 
     @classmethod
     def mainScreen(cls):
@@ -45,6 +45,7 @@ class UI :
 
     @classmethod
     def selectionScreen_temp(cls,prompt_msg,items):
+        #this function needs to be better defined
         print('Selection choice :')
         print(prompt_msg)
         for nb,i in enumerate(items):

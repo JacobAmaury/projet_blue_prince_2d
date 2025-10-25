@@ -2,80 +2,86 @@ import pygame
 
 from ui_lib.display import Display
 from ui_lib.map_grid import door
-from navigation import Nav
 
 class UI :
-    #UI class must define all the Rect boxes for input_handler management (mouse boxes)
+    #UI class must define all the Rect boxes needed for event_handling (mouse boxes)
 
-    def __init__(self):
-        self.display = Display()    #set window size, font size, loads load_screen ressources
-        self.display.create_window()
+    def __init__(self,nav):
+        UI.display = Display()    #set window size, font size, loads load_screen ressources
+        UI.display.create_window()
         #create and load display
-        self.display.loadScreen.convert_loaded()
-        self.display.build_and_blit_loadScreen()
+        UI.display.loadScreen.convert_loaded()
+        UI.display.build_and_blit_loadScreen()
         pygame.display.flip()   #blit before loading ressources
         #set as current display for resising
-        self.refresh_current_display = self.display.build_and_blit_loadScreen
+        UI.refresh_current_display = UI.display.build_and_blit_loadScreen
         #load game ressources
-        self.display.load_images(self.event_listener)    #checks for events : pseudo-async
-        #initialise Navigation (=game controller)
-        self.nav = Nav(self)
-        #start a new game
-        self.nav.new_game()
+        UI.display.load_images(UI.event_listener)    #checks for events : pseudo-async
+        UI.nav = nav
 
-    def build_mainScreen(self):
-        self.display.set_all_grids_mainScreen()
-        self.display.build_bg_screen()
-        self.display.build_items()
-        self.display.build_rooms()
-        door.build(self.nav.map.door)
+    @classmethod
+    def build_mainScreen(cls):
+        cls.display.set_all_grids_mainScreen()
+        cls.display.build_bg_screen()
+        cls.display.build_items()
+        cls.display.build_rooms()
+        door.build(cls.nav.map.door)
 
-    def blit_mainScreen(self):
-        self.display.blit_bg_screen()
-        self.display.blit_items() 
-        self.display.blit_rooms()
-        door.draw(self.display.screen)
+    @classmethod
+    def blit_mainScreen(cls):
+        cls.display.blit_bg_screen()
+        cls.display.blit_items() 
+        cls.display.blit_rooms()
+        door.draw(cls.display.screen)
 
-    def build_and_blit_mainScreen(self):
-        self.build_mainScreen()
-        self.blit_mainScreen()
+    @classmethod
+    def build_and_blit_mainScreen(cls):
+        cls.build_mainScreen()
+        cls.blit_mainScreen()
 
-    def mainScreen(self):
-        self.build_and_blit_mainScreen()
+    @classmethod
+    def mainScreen(cls):
+        cls.build_and_blit_mainScreen()
         #set as current screen for blitting
-        self.refresh_current_display = self.build_and_blit_mainScreen
+        cls.refresh_current_display = cls.build_and_blit_mainScreen
 
-    def update_consumables(self):
-        self.display.build_items()
-        self.blit_mainScreen()
+    @classmethod
+    def update_consumables(cls):
+        cls.display.build_items()
+        cls.blit_mainScreen()
 
-    def update_permanents(self):
-        self.display.blit_items()
-        self.blit_mainScreen() # overkill if we cannot lose a permanent object
+    @classmethod
+    def update_permanents(cls):
+        cls.display.blit_items()
+        cls.blit_mainScreen() # overkill if we cannot lose a permanent object
 
-    def update_map(self):
-        self.display.build_rooms()
-        self.blit_mainScreen() # overkill if we cannot remove a room
+    @classmethod
+    def update_map(cls):
+        cls.display.build_rooms()
+        cls.blit_mainScreen() # overkill if we cannot remove a room
 
-    def update_door(self):
-        door.build(self.nav.map.door)
-        self.update_map()
+    @classmethod
+    def update_door(cls):
+        door.build(cls.nav.map.door)
+        cls.update_map()
 
-    def selectionScreen_temp(self,prompt_msg,items):
+    @classmethod
+    def selectionScreen_temp(cls,prompt_msg,items):
         #temporary terminal function for selectionScreen
         print('Selection choice :')
         print(prompt_msg)
         for nb,i in enumerate(items):
             print(f'{nb}. ',i)
 
-    def event_listener(self):
+    @classmethod
+    def event_listener(cls):
         for event in pygame.event.get():
             event_type = event.type
             if event_type == pygame.QUIT:
                 UI.quit_game()
             elif event_type == pygame.WINDOWRESIZED or event_type == pygame.WINDOWSIZECHANGED:
-                self.display.size = event.x,event.y
-                self.refresh_current_display()
+                cls.display.size = event.x,event.y
+                cls.refresh_current_display()
                 pygame.display.flip()   #need to flip during loadScreen
             elif event_type == pygame.KEYDOWN:
                 event_key = event.key

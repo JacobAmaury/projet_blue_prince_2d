@@ -10,7 +10,7 @@ from .inventory_grid import Permanent,Consumable
 from .map_grid import Room,map
 
 class Display:
-    window_ratio = (16,9)
+    WINDOW_RATIO = (16,9)
 
     permanent_images = []   #list : order on screen
     consumable_images = []
@@ -39,9 +39,10 @@ class Display:
 
     def maximize_window_v1(self,desk_w,desk_h):
         #maximize window to biggest size inferior to current, keeping window_ratio
+        ratio_W, ratio_H = self.WINDOW_RATIO
         W,H = self.size
         while W > desk_w or H > desk_h :
-            W -= self.window_ratio[0] ; H -= self.window_ratio[1]
+            W -= ratio_W ; H -= ratio_H
         self.size = (W,H)
 
     def create_window(self):

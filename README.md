@@ -19,24 +19,30 @@ A 2D rendition of the the Blue Prince game, just for fun !
     ```
 
 
-## Execute
+## Launch
 Set cwd to ```src/``` then run:
 ```sh
 python main.py
 ```
 Or from any cwd :
 - you may create a shortcut to src/main.py
-- you can run file (with python)  : ```blueprince.py``` of Project root directory.\
-It is a pseudo os-independant shortcut to ./src/main.py (automatically sets cwd)
+- you can run file  : ```blueprince.py``` (with python)\
+It is a pseudo os-independant shortcut to ./src/main.py (automatically sets the cwd)\
+Note : the blueprince.py file must stay at Project root.
 
-## Debugg
+## Developpement
+The UserInterface and the game controller (Navigation) have been separated and can be tested independently.\
+Run ```test_ui.py``` for UI testing, and ```test_nav.py``` fo Navigation.
+
+You can do so either from ```./src``` ro from ```./test``` :
+
 Set cwd to ```src/``` then run:
 ```sh
-python ../test/test_UI.py
+python ../test/test_ui.py
 ```
 Or from cwd at ```test/```, run:
 ```sh
-python test_UI.py
+python test_ui.py
 ```
 
 ## Authors
