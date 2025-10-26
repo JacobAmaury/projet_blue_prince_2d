@@ -8,20 +8,21 @@ from .inventory_grid import Permanent,Consumable
 from .map_grid import Room,map
 
 class Display:
+    #todo : complete restructuring of Display in Object classes. Display class will eventually be deleted.
     #todo : background should keep ratio, not window : padding around the background to fill
-    #This means squares remain as squares no further transformations needed.
+            #This means squares remain as squares no further transformations needed.
     WINDOW_RATIO = (16,9)
+    default_window_size = (1920,1080)  #default window_size (should be saveable)
 
     consumable_images = []  #list : order on screen
     permanent_images = {}   #dict : no preset order on screen
     room_images = {}
 
-    def __init__(self,nav):
-        self.nav = nav  #not clean, already in ui
+    def __init__(self):
         #import display_size
         self.desk_W, self.desk_H = pygame.display.get_desktop_sizes()[0]
         #set window_size based on default_window_size
-        self.screen_set_size(Options.default_window_size)
+        self.screen_set_size(Display.default_window_size)
         #text size
         _,H = self.size
         self.font = pygame.font.Font(None, H // 25) 
@@ -34,9 +35,9 @@ class Display:
         self.size = W,H
         #if default_window_size > display_size
         if W > self.desk_W or H > self.desk_H :
-            self.maximize_window_v1(self.desk_W,self.desk_H)
+            (W,H) = self.maximize_window_v1(self.desk_W,self.desk_H)
         #set window_size
-        Options.window_size = self.size
+        self.size = (W,H)
 
     def maximize_window_v1(self,desk_w,desk_h):
         #maximize window to biggest size inferior to current, keeping window_ratio
@@ -44,7 +45,7 @@ class Display:
         W,H = self.size
         while W > desk_w or H > desk_h :
             W -= ratio_W ; H -= ratio_H
-        self.size = (W,H)
+        return (W,H)
 
     def create_window(self):
         #window creation
@@ -107,7 +108,7 @@ class Display:
     
     def build_items(self):
         #consumable cpt 
-        inventory_consumables = self.nav.inventory.consumables
+        inventory_consumables = self.player.inventory.consumables
         for consumable in self.consumable_images:
             consumable.txt = self.font.render(str(inventory_consumables[consumable.name]), True, (255, 255, 255))
 
@@ -123,7 +124,7 @@ class Display:
             self.screen.blit(consumable.txt, Consumable.get_position_txt(id))
 
         #permanents
-        inv_permanents = self.nav.inventory.permanents
+        inv_permanents = self.player.inventory.permanents
         for id,name in enumerate(inv_permanents):
             self.screen.blit(self.permanent_images[name].scaled, Permanent.get_position_img(id))
 
@@ -133,7 +134,7 @@ class Display:
         w_size = W // 18.5
         # h_size = W // 18.5            # if square => if bg_screen_H/bg_screen_W ratio constant
         h_size =  H // 10.40625         # screen 16:9 => 16/18.5 = 9/X => X = 9*18.5/16 = 10.40625
-        for name, _ in self.nav.map.rooms.items():
+        for name, _ in self.player.map.rooms.items():
             room_image = self.room_images[name]
             room_image.rot[0] = pygame.transform.scale(room_image.loaded, (w_size,h_size))
             room_image.rot[2] = pygame.transform.rotate(room_image.rot[0],90*2)
@@ -142,7 +143,7 @@ class Display:
             room_image.rot[3] = pygame.transform.rotate(im_temp,90*3)
 
     def blit_rooms(self):
-        for name, position in self.nav.map.rooms.items():
+        for name, position in self.player.map.rooms.items():
             room_image = self.room_images[name]
             for row, col, angle in position:
                 self.screen.blit(room_image.rot[angle], room_image.get_position_case(col,row))

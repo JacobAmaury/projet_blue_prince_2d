@@ -1,12 +1,16 @@
 class Options:
-    default_window_size = (1920,1080)  #default window_size (should be saveable)
-    window_size = None  #current window size
-    fps = 60
-
     @staticmethod
-    def change_window_size(w,h):
-        #this function should be used for window_size changes (do not direclty use Display method)
+    def set_window_size(w,h):
         pass
     @staticmethod
-    def change_text_size(h):
+    def set_current_size_as_default_window_size(w,h):
+        pass
+    @staticmethod
+    def set_text_size(h):
+        pass
+    @staticmethod
+    def set_fps():
+        pass
+    @staticmethod
+    def get_fps():
         pass

@@ -1,13 +1,18 @@
 import __src_path   #set path ../src
 
 
-from map_inventory import Inventory, Map                 # pyright: ignore[reportMissingImports]
+from player import Player                 # pyright: ignore[reportMissingImports]
 
 class Nav :
-    def __init__(self,UI):
-        Nav.ui = UI(Nav)
-        Nav.inventory = Inventory(Nav.ui)
-        Nav.map = Map(Nav.ui)
-        Nav.ui.mainScreen()   #creates and blits main_screen
+    @classmethod
+    def ini(cls,UI):            #initialise the class
+        cls.ui = UI.ini()
+        cls.new_game()          #start a new game
+        return cls
 
-
+    @classmethod
+    def new_game(cls):
+        player= Player(cls.ui)      # creates inventory,map,...
+        cls.ui.set_player(player)   # ui displays data from this player
+        cls.ui.mainScreen()             # creates and blits main_screen
+        cls.inventory, cls.map = player.inventory, player.map

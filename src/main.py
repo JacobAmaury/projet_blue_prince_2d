@@ -6,8 +6,8 @@ from navigation import Nav
 
 pygame.init()                       #ini pygame
 clock = pygame.time.Clock()
-nav = Nav(UI)
+nav = Nav.ini(UI)
 while True:
     UI.event_listener()
-    clock.tick(Options.fps)
+    clock.tick(UI.fps)
     pygame.display.update()

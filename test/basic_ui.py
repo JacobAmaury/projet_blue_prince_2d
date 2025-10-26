@@ -7,10 +7,16 @@ import __src_path   #set path ../src
 import pygame
 
 class UI :
-    def __init__(self,nav):
+    fps = 60
+    @classmethod
+    def ini(cls):                  #initialise the class
         pygame.display.set_mode(flags=pygame.HIDDEN)
         print('Loading game ...')
-        UI.nav = nav
+        return cls
+
+    @classmethod
+    def set_player(cls,player):
+        cls.player = player
 
     @classmethod
     def mainScreen(cls):
@@ -23,24 +29,24 @@ class UI :
     @classmethod
     def update_consumables(cls):
         print('consumables : ')
-        for name,value in cls.nav.inventory.consumables.items():
+        for name,value in cls.player.inventory.consumables.items():
             print(f'    {name} : {value}')
 
     @classmethod
     def update_permanents(cls):
         print('permanents : ')
-        for name in cls.nav.inventory.permanents:
+        for name in cls.player.inventory.permanents:
             print(f'    {name}')
 
     @classmethod
     def update_map(cls):
         print('rooms : ')
-        for name,values in cls.nav.map.rooms.items():
+        for name,values in cls.player.map.rooms.items():
             print(f'    {name} : {values}')
 
     @classmethod
     def update_door(cls):
-        y,x,r = cls.nav.map.door
+        y,x,r = cls.player.map.door
         print(f'player position : layer = {y}, x = {x}, rot = {r}')
 
     @classmethod

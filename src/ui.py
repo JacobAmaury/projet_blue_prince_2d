@@ -6,18 +6,26 @@ from ui_lib.map_grid import door
 class UI :
     #UI class must define all the Rect boxes needed for event_handling (mouse boxes)
 
-    def __init__(self,nav):
-        UI.display = Display(nav)    #set window size, font size, loads load_screen ressources
-        UI.display.create_window()
+    fps = 60
+
+    @classmethod
+    def ini(cls):                  #initialise the class
+        cls.display = Display()      #set window size, font size, loads load_screen ressources
+        cls.display.create_window()
         #create and load display
-        UI.display.loadScreen.convert_loaded()
-        UI.display.build_and_blit_loadScreen()
+        cls.display.loadScreen.convert_loaded()
+        cls.display.build_and_blit_loadScreen()
         pygame.display.flip()   #blit before loading ressources
         #set as current display for resising
-        UI.refresh_current_display = UI.display.build_and_blit_loadScreen
+        cls.refresh_current_display = cls.display.build_and_blit_loadScreen
         #load game ressources
-        UI.display.load_images(UI.event_listener)    #checks for events : pseudo-async
-        UI.nav = nav
+        cls.display.load_images(cls.event_listener)    #checks for events : pseudo-async
+        return cls
+
+    @classmethod
+    def set_player(cls,player):
+        cls.display.player = player     #todo : remmove nav.player from display
+        cls.player = player
 
     @classmethod
     def build_mainScreen(cls):
@@ -25,7 +33,7 @@ class UI :
         cls.display.build_bg_screen()
         cls.display.build_items()
         cls.display.build_rooms()
-        door.build(cls.nav.map.door)
+        door.build(cls.player.map.door)
 
     @classmethod
     def blit_mainScreen(cls):
@@ -62,7 +70,7 @@ class UI :
 
     @classmethod
     def update_door(cls):
-        door.build(cls.nav.map.door)
+        door.build(cls.player.map.door)
         cls.update_map()
 
     @classmethod

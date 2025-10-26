@@ -1,14 +1,17 @@
-from map_inventory import Inventory, Map
+from player import Player
 
 class Nav :
-    def __init__(self,UI):
-        Nav.ui = UI(Nav)
-        Nav.new_game()     #start a new game
+    @classmethod
+    def ini(cls,UI):            #initialise the class
+        cls.ui = UI.ini()
+        cls.new_game()          #start a new game
+        return cls
 
     @classmethod
     def new_game(cls):
-        cls.inventory = Inventory(cls.ui)
-        cls.map = Map(cls.ui)
-        cls.ui.mainScreen()   #creates and blits main_screen
+        player= Player(cls.ui)      # creates inventory,map,...
+        cls.ui.set_player(player)   # ui displays data from this player
+        cls.ui.mainScreen()             # creates and blits main_screen
+        cls.inventory, cls.map = player.inventory, player.map
 
 
