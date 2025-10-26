@@ -1,8 +1,7 @@
 import __src_path   #set path ../src
 
 
-from map import Map                 # pyright: ignore[reportMissingImports]
-from inventory import Inventory     # pyright: ignore[reportMissingImports]
+from map_inventory import Inventory, Map                 # pyright: ignore[reportMissingImports]
 
 class Nav :
     def __init__(self,UI):

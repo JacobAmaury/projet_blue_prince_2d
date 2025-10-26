@@ -22,3 +22,4 @@ src/ui_lib/__pycache__/map_grid.cpython-313.pyc
 test/__pycache__/__src_path.cpython-313.pyc
 test/__pycache__/basic_ui.cpython-313.pyc
 test/__pycache__/basic_nav.cpython-313.pyc
+src/__pycache__/map_inventory.cpython-313.pyc

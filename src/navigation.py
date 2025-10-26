@@ -1,5 +1,4 @@
-from map import Map
-from inventory import Inventory
+from map_inventory import Inventory, Map
 
 class Nav :
     def __init__(self,UI):

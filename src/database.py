@@ -1,7 +1,6 @@
 #names used for images loading in Display
 
-#list : sets the order on screen
-consumables = ['steps', 'coin', 'gem', 'key', 'dice']
+consumables = ['steps', 'coin', 'gem', 'key', 'dice'] #sets the order on screen
 permanents = ['Shovel','Lockpick_Kit','Lucky_Rabbits_Foot','Metal_Detector','Power_Hammer']
 
 rooms = {

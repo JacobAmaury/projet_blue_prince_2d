@@ -2,21 +2,22 @@ import pygame
 
 import database
 from options import Options
-from inventory import Inventory
-from map import Map
 
 from .load_screen import loadScreen
 from .inventory_grid import Permanent,Consumable
 from .map_grid import Room,map
 
 class Display:
+    #todo : background should keep ratio, not window : padding around the background to fill
+    #This means squares remain as squares no further transformations needed.
     WINDOW_RATIO = (16,9)
 
-    permanent_images = []   #list : order on screen
-    consumable_images = []
-    room_images = {}        #dict : no preset order on screen
+    consumable_images = []  #list : order on screen
+    permanent_images = {}   #dict : no preset order on screen
+    room_images = {}
 
-    def __init__(self):
+    def __init__(self,nav):
+        self.nav = nav  #not clean, already in ui
         #import display_size
         self.desk_W, self.desk_H = pygame.display.get_desktop_sizes()[0]
         #set window_size based on default_window_size
@@ -61,7 +62,7 @@ class Display:
         for name in database.consumables:
             Display.consumable_images.append(Consumable(name))
         for name in database.permanents:
-            Display.permanent_images.append(Permanent(name))
+            Display.permanent_images[name] = Permanent()
 
         #background image
         path = "../images/background/bg_image.png"
@@ -73,8 +74,8 @@ class Display:
             image.loaded = pygame.image.load(path).convert_alpha()
 
         #permanent objects
-        for image in self.permanent_images :
-            path = "../images/items/permanant_objects/"+ image.name +"_White_Icon.png"
+        for name,image in self.permanent_images.items() :
+            path = "../images/items/permanant_objects/"+ name +"_White_Icon.png"
             image.loaded = pygame.image.load(path).convert_alpha()
 
         #rooms : import all rooms by names from Rooms_db.rooms
@@ -92,12 +93,11 @@ class Display:
 
         #build consumable images
         #size for consumable_images
-        consumable_size = (H//20,H//20) #square
+        consumable_size = (H//22,H//22) #square
         for image in self.consumable_images:
             image.scaled = pygame.transform.scale(image.loaded,consumable_size)
 
     def blit_bg_screen(self):
-        W, H = self.size
         #back ground image
         self.screen.blit(self.bg, (0,0))
         
@@ -107,27 +107,25 @@ class Display:
     
     def build_items(self):
         #consumable cpt 
-        inventory_consumables = Inventory.consumables
+        inventory_consumables = self.nav.inventory.consumables
         for consumable in self.consumable_images:
             consumable.txt = self.font.render(str(inventory_consumables[consumable.name]), True, (255, 255, 255))
 
         #permanent objects
         W, H = self.size
         perm_size = (W//11, H//11)
-        for permanent in self.permanent_images :
+        for _,permanent in self.permanent_images.items() :
             permanent.scaled = pygame.transform.scale(permanent.loaded,perm_size)
 
     def blit_items(self):
-        W, H = self.size
         #consumable cpt 
         for id,consumable in enumerate(self.consumable_images):
             self.screen.blit(consumable.txt, Consumable.get_position_txt(id))
 
         #permanents
-        inv_permanents = Inventory.permanents
-        for id,permanent in enumerate(self.permanent_images):
-            if permanent.name in inv_permanents:
-                self.screen.blit(permanent.scaled, Permanent.get_position_img(id))
+        inv_permanents = self.nav.inventory.permanents
+        for id,name in enumerate(inv_permanents):
+            self.screen.blit(self.permanent_images[name].scaled, Permanent.get_position_img(id))
 
     def build_rooms(self):
         W, H = self.size
@@ -135,7 +133,7 @@ class Display:
         w_size = W // 18.5
         # h_size = W // 18.5            # if square => if bg_screen_H/bg_screen_W ratio constant
         h_size =  H // 10.40625         # screen 16:9 => 16/18.5 = 9/X => X = 9*18.5/16 = 10.40625
-        for name, _ in Map.rooms.items():
+        for name, _ in self.nav.map.rooms.items():
             room_image = self.room_images[name]
             room_image.rot[0] = pygame.transform.scale(room_image.loaded, (w_size,h_size))
             room_image.rot[2] = pygame.transform.rotate(room_image.rot[0],90*2)
@@ -144,8 +142,7 @@ class Display:
             room_image.rot[3] = pygame.transform.rotate(im_temp,90*3)
 
     def blit_rooms(self):
-        W, H = self.size
-        for name, position in Map.rooms.items():
+        for name, position in self.nav.map.rooms.items():
             room_image = self.room_images[name]
             for row, col, angle in position:
                 self.screen.blit(room_image.rot[angle], room_image.get_position_case(col,row))

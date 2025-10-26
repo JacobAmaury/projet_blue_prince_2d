@@ -7,7 +7,7 @@ class UI :
     #UI class must define all the Rect boxes needed for event_handling (mouse boxes)
 
     def __init__(self,nav):
-        UI.display = Display()    #set window size, font size, loads load_screen ressources
+        UI.display = Display(nav)    #set window size, font size, loads load_screen ressources
         UI.display.create_window()
         #create and load display
         UI.display.loadScreen.convert_loaded()
