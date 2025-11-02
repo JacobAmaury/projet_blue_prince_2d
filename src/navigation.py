@@ -13,14 +13,7 @@ class Nav :
         cls.ui.set_player(player)   # ui displays data from this player
         cls.ui.mainScreen()             # creates and blits main_screen
         cls.inventory, cls.map = player.inventory, player.map
-        cls.ui.event_handler.space = cls.handler_space
-
-    @classmethod
-    def handler_space(cls):
-        room_needed, rooms, next_position = Nav.player_move()
-        if room_needed: 
-            new_room_name = cls.ui.selection_menu(rooms) 
-            Nav.open_room(new_room_name, next_position)
+        cls.ui.event_handler.space = cls.player_move
 
     @classmethod
     def open_room(cls, room_name, position):
@@ -29,12 +22,9 @@ class Nav :
         cls.map.move_door(y, x, r)
     
     @classmethod
-    def player_move(cls):  # when space is pressed
+    def player_move(cls):
         """
         Control the player allowed movement
-        Return True if a new room is needed
-        with the position of the new room
-        and the list of existing rooms
         """
         #(0,0,0) : (bottom,center,0°), rot:(0:0°,1:90°,2:180°,3:-90°)
         y, x, r = cls.map.door
@@ -61,10 +51,10 @@ class Nav :
 
             if room_exist :
                 cls.map.move_door(next_y, next_x, r)
-                return False, rooms, next_position
             else:
-            # to do : check if there is a door and its level
-                return True, rooms, next_position
+                # to do : check if there is a door and its level
+                new_room_name = cls.ui.selection_menu(rooms) 
+                # cls.open_room(new_room_name, next_position)
 
             
 
