@@ -74,8 +74,65 @@ class UI :
         cls.update_map()
 
     @classmethod
-    def selectionScreen(cls,prompt_msg,items):
-        pass
+    def selection_menu(cls, room_names):
+        """
+        Display a selection menu for choosing one of three rooms.
+        Returns the name of the selected room, or None if cancelled.
+        """
+        display = cls.display
+        screen = display.screen
+        W, H = display.size
+
+
+        bg_menu_path = "../images/background/selection_menu.png"
+        menu_bg = pygame.image.load(bg_menu_path).convert_alpha()
+        menu_bg = pygame.transform.smoothscale(menu_bg, (W, H))
+
+        #image loading and scaling
+        room_imgs = []
+        for name in room_names:
+            img = display.room_images[name].loaded
+            scaled = pygame.transform.smoothscale(img, (int(W * 0.173), int(W * 0.16)))
+            room_imgs.append((name, scaled))
+
+        positions = [
+            (W * 0.309, H * 0.172),
+            (W * 0.496, H * 0.172),
+            (W * 0.683, H * 0.172),
+        ]
+
+        selected_room = None
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    cls.quit_game()
+
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        running = False  #close menu without selection
+                        selected_room = None
+
+
+
+            #draw menu
+            cls.blit_mainScreen()
+            dark_overlay = pygame.Surface((W, H), pygame.SRCALPHA)
+            dark_overlay.fill((0, 0, 0, 180))
+            screen.blit(dark_overlay, (0, 0))
+            screen.blit(menu_bg, (0, 0))
+
+            for (_, img), (x, y) in zip(room_imgs, positions):
+                screen.blit(img, (x, y))
+            pygame.display.flip()
+            pygame.time.wait(16)
+
+        # redraw main screen
+        cls.blit_mainScreen()
+        pygame.display.flip()
+
+        return selected_room
+
 
     @classmethod
     def event_listener(cls):
