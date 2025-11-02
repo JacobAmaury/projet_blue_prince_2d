@@ -13,6 +13,14 @@ class Nav :
         cls.ui.set_player(player)   # ui displays data from this player
         cls.ui.mainScreen()             # creates and blits main_screen
         cls.inventory, cls.map = player.inventory, player.map
+        cls.ui.event_handler.space = cls.handler_space
+
+    @classmethod
+    def handler_space(cls):
+        room_needed, rooms, next_position = Nav.player_move()
+        if room_needed: 
+            new_room_name = cls.ui.selection_menu(rooms) 
+            Nav.open_room(new_room_name, next_position)
 
     @classmethod
     def open_room(cls, room_name, position):

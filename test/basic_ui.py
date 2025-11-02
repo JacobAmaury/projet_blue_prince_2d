@@ -61,7 +61,7 @@ class UI :
     @classmethod
     def event_listener(cls):
         value = input()
-        if value == 'x':
+        if value == 'exit':
             event_handler.escape()
         elif value == '':
             event_handler.enter()
@@ -75,6 +75,8 @@ class UI :
             event_handler.left()
         elif value == 'd':
             event_handler.right()
+        elif value == 'space':
+            event_handler.right()
 
     @classmethod
     def quit_game(cls):
@@ -86,6 +88,7 @@ class UI :
 # keyboard inputs
 class event_handler :
     escape = UI.quit_game
+    space = lambda: print('space')
     enter = lambda: print('enter')
     back = lambda: print('back')
     up = lambda: print('up')

@@ -2,7 +2,6 @@ import pygame
 
 from ui_lib.display import Display
 from ui_lib.map_grid import door
-from navigation import Nav
 
 class UI :
     #UI class must define all the Rect boxes needed for event_handling (mouse boxes)
@@ -165,12 +164,6 @@ class UI :
                     event_handler.escape()
                 elif event_key == pygame.K_SPACE:
                     event_handler.space()
-
-                    # room_needed, rooms, next_position = Nav.player_move()
-                    # if room_needed: 
-                    #     new_room_name = UI.selection_menu(rooms) 
-                    #     Nav.open_room(new_room_name, next_position)
-
                 elif event_key == pygame.K_RETURN:
                     event_handler.enter()
                 elif event_key == pygame.K_BACKSPACE:
