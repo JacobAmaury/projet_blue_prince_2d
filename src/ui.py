@@ -125,8 +125,22 @@ class UI :
 
             for (_, img), (x, y) in zip(room_imgs, positions):
                 screen.blit(img, (x, y))
+
+
+            #dice display
+            dice_img = display.consumable_images[-1].loaded  
+            dice_scaled = pygame.transform.smoothscale(dice_img, (int(W * 0.04), int(W * 0.04)))
+            dice_x, dice_y = W * 0.87, H * 0.2
+            screen.blit(dice_scaled, (dice_x, dice_y))
+
+            dice_count = cls.player.inventory.consumables["dice"]
+            font = pygame.font.Font(None, int(H * 0.05))
+            dice_text = font.render(str(dice_count), True, (255, 255, 255))
+            screen.blit(dice_text, (dice_x + W * 0.05, dice_y + H * 0.005))
+
             pygame.display.flip()
-            pygame.time.wait(16)
+
+
 
         # redraw main screen
         cls.blit_mainScreen()
