@@ -38,7 +38,7 @@ class Nav :
             y, x, r = cls.map.door
             cls.map.move_door(y, x , 3)
         else:
-            if cls.ui.room_choice >= 0:
+            if cls.ui.room_choice > 0:
                 cls.ui.room_choice -= 1 
 
     @classmethod
@@ -47,7 +47,7 @@ class Nav :
             y, x, r = cls.map.door
             cls.map.move_door(y, x , 1)
         else:
-            if cls.ui.room_choice <= 3:
+            if cls.ui.room_choice < 3:
                 cls.ui.room_choice += 1 
 
 

@@ -110,9 +110,18 @@ class UI :
                     cls.quit_game()
 
                 elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
+                    event_key = event.key
+                    if event_key == pygame.K_ESCAPE:
                         running = False  #close menu without selection
                         selected_room = None
+                    elif event_key == pygame.K_q or event_key == pygame.K_a or event_key == pygame.K_LEFT:
+                        event_handler.left()
+                    elif event_key == pygame.K_d or event_key == pygame.K_RIGHT:
+                        event_handler.right()
+                    elif event_key == pygame.K_RETURN:
+                        event_handler.enter()
+                        running = False  #close menu with selection
+                        selected_room = None #to do 
 
 
 
