@@ -12,7 +12,7 @@ class Map :
 
     def add_room(self,name,position):
         y, x, r = position
-        y = y % 9 ; x = x % 5 -2    #protection overflow (same in ui.update_door)
+        y = y % 9 ; x = (x+2) % 5 -2   #protection overflow (same in ui.update_door)
         r = r %4    #angle in [0;<4]
         if name in self.rooms :
             self.rooms[name] += [(y, x, r)]
@@ -22,7 +22,7 @@ class Map :
 
     def move_door(self,y,x,r):
         """(0,0,0) : (bottom,center,0°), rot:(0:0°,1:90°,2:180°,3:-90°)"""
-        r = r % 4 ; y = y % 9 ; x = x % 5 -2    #protection overflow
+        r = r % 4 ; y = y % 9 ; x = (x+2) % 5 -2   #protection overflow 
         self.door = (y,x,r)
         Player.ui.update_door()
 

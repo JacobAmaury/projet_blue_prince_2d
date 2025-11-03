@@ -20,6 +20,7 @@ class UI :
         cls.refresh_current_display = cls.display.build_and_blit_loadScreen
         #load game ressources
         cls.display.load_images(cls.event_listener)    #checks for events : pseudo-async
+        cls.room_choice = 0
         return cls
 
     @classmethod
