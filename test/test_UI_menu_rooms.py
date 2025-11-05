@@ -22,7 +22,7 @@ while True:
 
     t += clock.get_time()
     if t > 3000:
-        choix = UI.selection_menu(["Library", "Vault", "Observatory"])
+        choix = UI.selection_menu(["LockerRoom", "Vault", "MusicRoom"])
         t = 0
 
 
