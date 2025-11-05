@@ -23,7 +23,7 @@ class Map :
         rotated_room[0] = last_element
         return rotated_room
 
-    def doors_layout(self, doors, x, y, player_r):
+    def doors_layout(self, room_doors, x, y, player_r):
         """
         doors = [bottom, right, top, left]
         0 : if no door
@@ -31,6 +31,7 @@ class Map :
         Return  True if the doors can be placed in the position x, y
                 and the rotation of the future room
         """
+        doors = room_doors
         allowed_doors = [-1, -1, -1, -1]
 
         #Check walls
@@ -44,14 +45,9 @@ class Map :
             allowed_doors[2] = 0
         
         #Unlock the front door
-        if player_r == 0 : # bottom
-            allowed_doors[0] = 1
-        elif player_r == 1: # right
-            allowed_doors[0] = 1
-        elif player_r == 2 : #top
-            allowed_doors[0] = 1
-        elif player_r == 3: # left
-            allowed_doors[0] = 1
+        player_r = (player_r+2) % 4 #Change the player rotation to the front of the room
+        allowed_doors[player_r] = 1
+
 
         for r in range(4): #test 4 rotation
                 doors_valid = True

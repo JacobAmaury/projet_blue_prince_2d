@@ -80,7 +80,8 @@ class Display:
             image.loaded = pygame.image.load(path).convert_alpha()
 
         #rooms : import all rooms by names from Rooms_db.rooms
-        for name,color in database.rooms.items():
+        for name, data in database.rooms.items():
+            color = data['color']
             path = "../images/rooms/"+ color +'/'+ name +'.png'
             self.room_images[name] = Room()
             self.room_images[name].loaded = pygame.image.load(path).convert()
