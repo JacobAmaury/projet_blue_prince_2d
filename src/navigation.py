@@ -70,13 +70,13 @@ class Nav :
             rooms = cls.map.rooms
             next_y, next_x = y, x
 
-            if r == 0 : # bottom
+            if r == 0 : #bottom
                 next_y = y - 1 
-            elif r == 1: # right
+            elif r == 1: #right
                 next_x = x + 1
             elif r == 2 : #top
                 next_y = y + 1 
-            elif r == 3: # left
+            elif r == 3: #left
                 next_x = x - 1
             next_position = (next_y, next_x, r)
             next_move_in_map = (-2 <= next_x <= 2) and (0 <= next_y <= 8)
@@ -109,5 +109,38 @@ class Nav :
                     if new_room_name != None:
                         cls.open_room(new_room_name, next_position)
 
-            
+    
+
+    
+
+
+    def alea_room():
+        
+        import random
+        from database import rooms
+
+        pool = []
+
+        rarity_weights = {
+            -1: 0,   # exclu
+            0: 27,   # commun
+            1: 27/3,    # standard
+            2: 27/6,    # uncommon
+            3: 1     # rare
+        }
+
+        for name, data in rooms.items():
+            rarity = data["rarity"]
+            weight = rarity_weights.get(rarity, 0)
+            if weight > 0:
+                pool.extend([name] * weight)
+
+        
+        return random.choice(pool)
+
+
+
+
+
+
 
