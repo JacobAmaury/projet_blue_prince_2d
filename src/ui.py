@@ -34,7 +34,7 @@ class UI :
         cls.display.build_bg_screen()
         cls.display.build_items()
         cls.display.build_rooms()
-        door.build(cls.player.map.door)
+        door.build(cls.player.map.player_position)
 
     @classmethod
     def blit_mainScreen(cls):
@@ -70,8 +70,8 @@ class UI :
         cls.blit_mainScreen() # overkill if we cannot remove a room
 
     @classmethod
-    def update_door(cls):
-        door.build(cls.player.map.door)
+    def update_player_position(cls):
+        door.build(cls.player.map.player_position)
         cls.update_map()
 
     @classmethod

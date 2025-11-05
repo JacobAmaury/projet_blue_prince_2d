@@ -28,8 +28,8 @@ class door(map):
     THICKNESS = 6/100       # in step %
 
     @classmethod
-    def build(cls,door_map):
-        (row,col,rot) = door_map
+    def build(cls,player_position_map):
+        (row,col,rot) = player_position_map
         #rot in [0,3]
         length, thickness = cls.LENGTH, cls.THICKNESS
         x,y = cls.get_position_case(col,row)
@@ -49,9 +49,9 @@ class door(map):
             h = length
             x = x + (cls.step_x - thickness)*r
             w = thickness
-        cls.door =  pygame.Rect(x,y,w,h)
+        cls.player_position =  pygame.Rect(x,y,w,h)
 
     @classmethod
     def draw(cls,screen):
         COLOR = (255,0,0)
-        pygame.draw.rect(screen,COLOR,cls.door)
+        pygame.draw.rect(screen,COLOR,cls.player_position)

@@ -23,20 +23,20 @@ class Nav :
     @classmethod
     def up(cls):
         if not(cls.in_menu_selection):
-            y, x, r = cls.map.door
-            cls.map.move_door(y, x , 2)
+            y, x, r = cls.map.player_position
+            cls.map.move_player_position(y, x , 2)
 
     @classmethod
     def down(cls):
         if not(cls.in_menu_selection):
-            y, x, r = cls.map.door
-            cls.map.move_door(y, x , 0)
+            y, x, r = cls.map.player_position
+            cls.map.move_player_position(y, x , 0)
 
     @classmethod
     def left(cls):
         if not(cls.in_menu_selection):
-            y, x, r = cls.map.door
-            cls.map.move_door(y, x , 3)
+            y, x, r = cls.map.player_position
+            cls.map.move_player_position(y, x , 3)
         else:
             if cls.ui.room_choice > 0:
                 cls.ui.room_choice -= 1 
@@ -44,8 +44,8 @@ class Nav :
     @classmethod
     def right(cls):
         if not(cls.in_menu_selection):
-            y, x, r = cls.map.door
-            cls.map.move_door(y, x , 1)
+            y, x, r = cls.map.player_position
+            cls.map.move_player_position(y, x , 1)
         else:
             if cls.ui.room_choice < 3:
                 cls.ui.room_choice += 1 
@@ -56,7 +56,7 @@ class Nav :
     def open_room(cls, room_name, position):
         cls.map.add_room(room_name, position)
         y, x, r = position
-        cls.map.move_door(y, x, r)
+        cls.map.move_player_position(y, x, r)
     
     @classmethod
     def player_move(cls):
@@ -65,7 +65,7 @@ class Nav :
         """
         if not(cls.in_menu_selection):
             #(0,0,0) : (bottom,center,0°), rot:(0:0°,1:90°,2:180°,3:-90°)
-            y, x, r = cls.map.door
+            y, x, r = cls.map.player_position
             rooms = cls.map.rooms
             next_y, next_x = y, x
 
@@ -87,9 +87,20 @@ class Nav :
                             room_exist = True
                             break
                 if room_exist :
-                    cls.map.move_door(next_y, next_x, r)
+                    r = (r+2) % 4 #Change the player rotation when entering a new room
+                    cls.map.move_player_position(next_y, next_x, r)
                 else:
                     # to do : check if there is a door and its level
+
+                    three_rooms = []
+                    #if three_rooms == [] : 
+                        #while len(three_rooms) <= 3:
+                            #choose new_room
+                            #doors = new_room["doors"]
+                            #room_doors_valid, rotation = cls.map.doors_layout(doors, next_x, next_y, r)
+                            #if room_doors_valid:
+                                #three_rooms += new_room
+
                     cls.in_menu_selection = True
                     new_room_name = cls.ui.selection_menu(rooms)
                     cls.in_menu_selection = False

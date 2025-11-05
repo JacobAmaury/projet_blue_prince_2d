@@ -4,7 +4,7 @@ consumables = ['steps', 'coin', 'gem', 'key', 'dice'] #sets the order on screen
 permanents = ['Shovel','Lockpick_Kit','Lucky_Rabbits_Foot','Metal_Detector','Power_Hammer']
 
 #|-2--|
-#3    1          position = [0,1,2,3]
+#3    1          doors = [0,1,2,3]
 #|_0__|
 
 #rarity : 0 common, 1 standar, 2 unusual, 3 rare, -1 antichamber
@@ -19,7 +19,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 3, 
-        'position': [1,0,0,1]},
+        'doors': [1,0,0,1]},
 
     'Casino':{        
         'color': 'yellow', 
@@ -28,7 +28,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 2, 
-        'position': [1,0,0,1]},
+        'doors': [1,0,0,1]},
 
 
     'Commissary':{        
@@ -38,7 +38,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 1, 
-        'position': [1,0,0,1]},
+        'doors': [1,0,0,1]},
 
     'GiftShop':{        
         'color': 'yellow', 
@@ -47,7 +47,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 3, 
-        'position': [1,1,0,1]},
+        'doors': [1,1,0,1]},
 
     'Kitchen':{        
         'color': 'yellow', 
@@ -56,7 +56,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 0, 
-        'position': [1,0,0,1]},
+        'doors': [1,0,0,1]},
 
 
     'LaundryRoom':{        
@@ -66,7 +66,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 3, 
-        'position': [1,0,0,0]},
+        'doors': [1,0,0,0]},
 
     'Locksmith':{        
         'color': 'yellow', 
@@ -75,7 +75,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 2, 
-        'position': [1,0,0,0]},
+        'doors': [1,0,0,0]},
 
     'Showroom':{        
         'color': 'yellow', 
@@ -84,7 +84,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 3, 
-        'position': [1,0,1,0]},
+        'doors': [1,0,1,0]},
 
     'TheArmory':{        
         'color': 'yellow', 
@@ -93,7 +93,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 1, 
-        'position': [1,0,0,1]},
+        'doors': [1,0,0,1]},
 
     'TradingPost':{        
         'color': 'yellow', 
@@ -102,7 +102,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 1, 
-        'position': [1,0,0,0]},
+        'doors': [1,0,0,0]},
 
     #blue rooms
     'Antechamber':{        
@@ -112,7 +112,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': -1, 
-        'position': [1,1,1,1]},
+        'doors': [1,1,1,1]},
 
     'Aquarium':{        
         'color': 'blue', 
@@ -121,7 +121,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 2, 
-        'position': [1,1,0,1]},
+        'doors': [1,1,0,1]},
 
     # 'Attic':{        
     #     'color': 'blue', 
@@ -130,7 +130,7 @@ rooms = {
     #     'gem': 0, 
     #     'key': 0,
     #     'rarity': 3, 
-    #     'position': [1,0,0,0]},
+    #     'doors': [1,0,0,0]},
 
     # 'Ballroom':{        
     #     'color': 'blue', 
@@ -139,7 +139,7 @@ rooms = {
     #     'gem': 2, 
     #     'key': 0,
     #     'rarity': 2, 
-    #     'position': [1,0,1,0]},
+    #     'doors': [1,0,1,0]},
         
     'BilliardRoom':{        
         'color': 'blue', 
@@ -148,7 +148,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 0, 
-        'position': [1,0,0,1]},
+        'doors': [1,0,0,1]},
         
     # 'BoilerRoom':{        
     #     'color': 'blue', 
@@ -157,7 +157,7 @@ rooms = {
     #     'gem': 0, 
     #     'key': 0,
     #     'rarity': 2, 
-    #     'position': [1,0,1,1]},
+    #     'doors': [1,0,1,1]},
         
     # 'ChamberofMirrors':{        
     #     'color': 'blue', 
@@ -166,7 +166,7 @@ rooms = {
     #     'gem': 0, 
     #     'key': 0,
     #     'rarity': 3, 
-    #     'position': [1,0,0,0]},
+    #     'doors': [1,0,0,0]},
         
     # 'Classroom':{        
     #     'color': 'blue', 
@@ -175,7 +175,7 @@ rooms = {
     #     'gem': 0, 
     #     'key': 0,
     #     'rarity': 2, 
-    #     'position': [1,0,0,1]},
+    #     'doors': [1,0,0,1]},
         
     # 'ClockTower':{        
     #     'color': 'blue', 
@@ -184,7 +184,7 @@ rooms = {
     #     'gem': 0, 
     #     'key': 1,
     #     'rarity': 2, 
-    #     'position': [1,0,0,0]},
+    #     'doors': [1,0,0,0]},
         
     # 'Closet':{        
     #     'color': 'blue', 
@@ -193,7 +193,7 @@ rooms = {
     #     'gem': 2, 
     #     'key': 1,
     #     'rarity': 0, 
-    #     'position': [1,0,0,0]},
+    #     'doors': [1,0,0,0]},
         
     # 'CoatCheck':{        
     #     'color': 'blue', 
@@ -202,7 +202,7 @@ rooms = {
     #     'gem': 0, 
     #     'key': 0,
     #     'rarity': 3, 
-    #     'position': [1,0,0,0]},
+    #     'doors': [1,0,0,0]},
         
     # 'ConferenceRoom':{        
     #     'color': 'blue', 
@@ -211,7 +211,7 @@ rooms = {
     #     'gem': 0, 
     #     'key': 0,
     #     'rarity': 2, 
-    #     'position': [1,1,1,0]},
+    #     'doors': [1,1,1,0]},
         
     'Den':{        
         'color': 'blue', 
@@ -220,7 +220,7 @@ rooms = {
         'gem': 1, 
         'key': 0,
         'rarity': 0, 
-        'position': [1,1,0,1]},
+        'doors': [1,1,0,1]},
         
     # 'DiningRoom':'blue',
     # 'Dovecote':'blue',
@@ -233,7 +233,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': -1, 
-        'position': [0,1,1,1]},
+        'doors': [0,1,1,1]},
         
     # 'Freezer':'blue',
     'Gallery':{        
@@ -243,7 +243,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 3, 
-        'position': [1,0,1,0]},
+        'doors': [1,0,1,0]},
         
     'Garage':{        
         'color': 'blue', 
@@ -252,7 +252,7 @@ rooms = {
         'gem': 0, 
         'key': 3,
         'rarity': 2, 
-        'position': [1,0,0,0]},
+        'doors': [1,0,0,0]},
         
     # 'Laboratory':'blue',
     # 'Library':'blue',
@@ -263,7 +263,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 3, 
-        'position': [1,0,1,0]},
+        'doors': [1,0,1,0]},
         
     # 'MailRoom':'blue',
     # 'Mechanarium':'blue',
@@ -274,7 +274,7 @@ rooms = {
         'gem': 0, 
         'key': 2,
         'rarity': 2, 
-        'position': [1,0,0,1]},
+        'doors': [1,0,0,1]},
         
     'Nook':{        
         'color': 'blue', 
@@ -283,7 +283,7 @@ rooms = {
         'gem': 0, 
         'key': 1,
         'rarity': 0, 
-        'position': [1,0,0,1]},
+        'doors': [1,0,0,1]},
         
     # 'Observatory':'blue',
     'Office':{        
@@ -293,7 +293,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 1, 
-        'position': [1,0,0,1]},
+        'doors': [1,0,0,1]},
         
     'Pantry':{        
         'color': 'blue', 
@@ -302,7 +302,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 0, 
-        'position': [1,0,0,1]},
+        'doors': [1,0,0,1]},
         
     # 'Parlor':'blue',
     # 'Planetarium':'blue',
@@ -317,7 +317,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 1, 
-        'position': [1,0,1,0]},
+        'doors': [1,0,1,0]},
         
     # 'Schoolhouse':'blue',
     # 'Security':'blue',
@@ -330,7 +330,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 0, 
-        'position': [1,0,1.0]},
+        'doors': [1,0,1.0]},
         
     'Storeroom':{        
         'color': 'blue', 
@@ -339,7 +339,7 @@ rooms = {
         'gem': 1, 
         'key': 1,
         'rarity': 0, 
-        'position': [1,0,0,0]},
+        'doors': [1,0,0,0]},
         
     # 'Study':'blue',
     # 'TheKennel':'blue',
@@ -354,7 +354,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 2, 
-        'position': [1,0,0,1]},
+        'doors': [1,0,0,1]},
         
     'TrophyRoom':{        
         'color': 'blue', 
@@ -363,7 +363,7 @@ rooms = {
         'gem': 5, 
         'key': 0,
         'rarity': 3, 
-        'position': [1,0,0,1]},
+        'doors': [1,0,0,1]},
         
     # 'UtilityCloset':'blue',
     'Vault':{        
@@ -373,7 +373,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 3, 
-        'position': [1,0,0,0]},
+        'doors': [1,0,0,0]},
         
     'WalkinCloset':{        
         'color': 'blue', 
@@ -382,7 +382,7 @@ rooms = {
         'gem': 0, 
         'key': 2,
         'rarity': 1, 
-        'position': [1,0,0,0]},
+        'doors': [1,0,0,0]},
         
     'WineCellar':{        
         'color': 'blue', 
@@ -391,7 +391,7 @@ rooms = {
         'gem': 3, 
         'key': 0,
         'rarity': 2, 
-        'position': [1,0,0,0]},
+        'doors': [1,0,0,0]},
         
     # 'Workshop':'blue',
 
@@ -403,7 +403,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 0, 
-        'position': [1,0,1,0]},
+        'doors': [1,0,1,0]},
 
 
     'EastWingHall':{        
@@ -413,7 +413,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 2, 
-        'position': [1,1,0,1]},
+        'doors': [1,1,0,1]},
 
     # 'Foyer':'orange',
     # 'GreatHall':'orange',
@@ -424,7 +424,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 0, 
-        'position': [1,1,0,1]},
+        'doors': [1,1,0,1]},
 
     'Passageway':{        
         'color': 'orange', 
@@ -433,7 +433,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 0, 
-        'position': [1,1,1,1]},
+        'doors': [1,1,1,1]},
 
     # 'SecretPassage':'orange',
     # 'Tunnel':'orange',
@@ -445,7 +445,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 1, 
-        'position': [1,1,0,1]},
+        'doors': [1,1,0,1]},
 
 
     #violet rooms
@@ -456,7 +456,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 2, 
-        'position': [1,0,0,1]},
+        'doors': [1,0,0,1]},
 
     'Boudoir':{        
         'color': 'violet', 
@@ -465,7 +465,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 1, 
-        'position': [1,0,0,1]},
+        'doors': [1,0,0,1]},
 
     'BunkRoom':{        
         'color': 'violet', 
@@ -474,7 +474,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 2, 
-        'position': [1,0,0,0]},
+        'doors': [1,0,0,0]},
 
     # 'Dormitory':'violet',
     'GuestBedroom':{        
@@ -484,7 +484,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 0, 
-        'position': [1,0,0,0]},
+        'doors': [1,0,0,0]},
 
     # 'HerLadyshipsChamber':'violet',
     # 'Hovel':'violet',
@@ -500,7 +500,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 2, 
-        'position': [1,1,1,1]},
+        'doors': [1,1,1,1]},
 
     # 'Conservatory':'green',
     'Courtyard':{        
@@ -510,7 +510,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 1, 
-        'position': [1,1,0,1]},
+        'doors': [1,1,0,1]},
 
     # 'Greenhouse':'green',
     'MorningRoom':{        
@@ -520,7 +520,7 @@ rooms = {
         'gem': 2, 
         'key': 0,
         'rarity': 3, 
-        'position': [1,1,0,0]},
+        'doors': [1,1,0,0]},
 
     'Patio':{        
         'color': 'green', 
@@ -529,7 +529,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 1, 
-        'position': [1,0,0,1]},
+        'doors': [1,0,0,1]},
 
     # 'RootCellar':'green',
     'SecretGarden':{        
@@ -539,7 +539,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 3, 
-        'position': [1,1,0,1]},
+        'doors': [1,1,0,1]},
 
     # 'Solarium':'green',
     # 'Terrace':'green',
@@ -554,7 +554,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 0, 
-        'position': [1,1,0,1]},
+        'doors': [1,1,0,1]},
 
     # 'ClosedExhibit':'red',
     # 'Darkroom':'red',
@@ -567,7 +567,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 1, 
-        'position': [1,1,0,1]},
+        'doors': [1,1,0,1]},
         
     # 'Lost&Found':'red',
     # 'MaidsChamber':'red',
