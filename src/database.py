@@ -330,7 +330,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 0, 
-        'doors': [1,0,1.0]},
+        'doors': [1,0,1,0]},
         
     'Storeroom':{        
         'color': 'blue', 
@@ -567,7 +567,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 1, 
-        'doors': [1,1,0,1]},
+        'doors': [1,0,0,0]},
         
     # 'Lost&Found':'red',
     # 'MaidsChamber':'red',

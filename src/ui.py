@@ -121,7 +121,10 @@ class UI :
                     elif event_key == pygame.K_RETURN:
                         event_handler.enter()
                         running = False  #close menu with selection
-                        selected_room = None #to do 
+                        if cls.room_choice != 3 :
+                            selected_room = room_names[cls.room_choice]
+                        else : 
+                            return "Reroll" 
 
 
 
