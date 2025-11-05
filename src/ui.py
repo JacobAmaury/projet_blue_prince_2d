@@ -132,8 +132,19 @@ class UI :
             screen.blit(dark_overlay, (0, 0))
             screen.blit(menu_bg, (0, 0))
 
+            
+
             for (_, img), (x, y) in zip(room_imgs, positions):
                 screen.blit(img, (x, y))
+
+            #white rectangle 
+            if cls.room_choice in (0, 1, 2):
+                rect = pygame.Rect(positions[cls.room_choice][0], positions[cls.room_choice][1], int(W * 0.174), int(W * 0.16))
+                pygame.draw.rect(screen, (255, 255, 255), rect, width=4)
+            else:
+                rect = pygame.Rect(W * 0.87, H * 0.2, int(W * 0.04), int(W * 0.04))
+                pygame.draw.rect(screen, (255, 255, 255), rect, width=4)
+
 
 
             #dice display

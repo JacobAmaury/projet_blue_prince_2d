@@ -49,6 +49,7 @@ class Nav :
         else:
             if cls.ui.room_choice < 3:
                 cls.ui.room_choice += 1 
+                print(cls.ui.room_choice)
 
 
 
