@@ -75,7 +75,7 @@ class UI :
         cls.update_map()
 
     @classmethod
-    def selection_menu(cls, room_names):
+    def selection_menu(cls, room_names, rotations):
         """
         Display a selection menu for choosing one of three rooms.
         Returns the name of the selected room, or None if cancelled.
@@ -93,6 +93,7 @@ class UI :
         room_imgs = []
         for name in room_names:
             img = display.room_images[name].loaded
+            img = pygame.transform.rotate(img, rotations[name]*90)
             scaled = pygame.transform.smoothscale(img, (int(W * 0.173), int(W * 0.16)))
             room_imgs.append((name, scaled))
 
@@ -124,7 +125,7 @@ class UI :
                         if cls.room_choice != 3 :
                             selected_room = room_names[cls.room_choice]
                         else : 
-                            return "Reroll" 
+                            return "Reroll" #to do
 
 
 

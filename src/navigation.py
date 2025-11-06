@@ -17,6 +17,7 @@ class Nav :
         cls.inventory, cls.map = player.inventory, player.map
         cls.in_menu_selection = False
         cls.three_rooms = [[[] for y in range(9)] for x in range(5)]  #x, y, rooms[1, 2, 3]
+        cls.three_rotations = [[{} for y in range(9)] for x in range(5)]  #x, y, rotation[1, 2, 3]
         cls.ui.event_handler.space = cls.player_move
         cls.ui.event_handler.up = cls.up
         cls.ui.event_handler.down = cls.down
@@ -77,7 +78,6 @@ class Nav :
     @classmethod
     def three_room_choice(cls, next_x, next_y, r):
         index_next_x = next_x + 2
-        rotation_dict = {}
         if cls.three_rooms[index_next_x][next_y] == [] : 
             while len(cls.three_rooms[index_next_x][next_y]) < 3:
                 new_room = cls.pool_room()
@@ -86,8 +86,8 @@ class Nav :
 
                 if room_doors_valid:
                     cls.three_rooms[index_next_x][next_y].append(new_room) 
-                    rotation_dict[new_room] = rotation
-        return rotation_dict
+                    cls.three_rotations[index_next_x][next_y][new_room] = rotation
+        return cls.three_rotations[index_next_x][next_y]
     
     @classmethod
     def player_move(cls):
@@ -122,28 +122,28 @@ class Nav :
                 else:
                     # to do : check if there is a door and its level
                     index_next_x = next_x + 2
-                    rotation = cls.three_room_choice(next_x, next_y, r)
+                    rotations = cls.three_room_choice(next_x, next_y, r)
 
                     cls.in_menu_selection = True
-                    new_room_name = cls.ui.selection_menu(cls.three_rooms[index_next_x][next_y])
+                    new_room_name = cls.ui.selection_menu(cls.three_rooms[index_next_x][next_y], rotations)
                     cls.in_menu_selection = False
 
 
 
                     if new_room_name != None:
-                        cls.three_rooms = [[[] for y in range(9)] for x in range(5)]
-                        next_position = (next_y, next_x, rotation[new_room_name])
+                        cls.three_rooms[index_next_x][next_y] = []
+                        next_position = (next_y, next_x, rotations[new_room_name])
 
                         doors = database.rooms[new_room_name]["doors"]
-                        for i in range(rotation[new_room_name]):
+                        for i in range(rotations[new_room_name]):
                             doors = cls.map.rot_doors(doors)
 
                         cls.map.add_room(new_room_name, next_position, doors)
                         cls.map.move_player_position(next_y, next_x, r)
       
                     if new_room_name == "Reroll":
-                        cls.three_rooms = [[[] for y in range(9)] for x in range(5)]
-                        rotation = cls.three_room_choice(next_x, next_y, r)
+                        cls.three_rooms[index_next_x][next_y] = []
+                        rotations = cls.three_room_choice(next_x, next_y, r)
 
 
 
