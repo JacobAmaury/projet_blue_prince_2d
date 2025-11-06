@@ -568,7 +568,16 @@ rooms = {
         'doors': [1,1,0,1],
         'effect': 0},
 
-    # 'Greenhouse':'green',
+    'Greenhouse':{        
+        'color': 'green', 
+        'step': 0, 
+        'coin': 0,
+        'gem': 0, 
+        'key': 0,
+        'rarity': 1, 
+        'doors': [1,1,0,0],
+        'effect': 5},
+
     'MorningRoom':{        
         'color': 'green', 
         'step': 0, 

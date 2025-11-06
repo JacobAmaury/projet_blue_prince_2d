@@ -160,10 +160,17 @@ class Effect:
                 if database.rooms[i]["color"] == "red" and database.rooms[i]["rarity"] > 1:
                     database.rooms[i]["rarity"] -= 1
 
+        if room_name == "Greenhouse":
+            for i in range(len(database.rooms)):
+                if database.rooms[i]["colot"] == "green" and database.rooms[i]["rarity"] > 1:
+                    database.rooms[i]["rarity"] -= 1
+
     def set_gem_number_8(room_name):
         if room_name == "Ballroom":
             player.Inventory.consumables['gem'] = 2
 
-    def divide_steps_by_2(room_name):
-        if room_name == "Library":
+    def divide_steps_by_2_9(room_name):
+        if room_name == "Library" or "WeightRoom":
             player.Inventory.consumables['steps'] //= 2
+
+        
