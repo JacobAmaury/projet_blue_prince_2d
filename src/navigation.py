@@ -15,9 +15,13 @@ class Nav :
         cls.ui.set_player(player)   # ui displays data from this player
         cls.ui.mainScreen()             # creates and blits main_screen
         cls.inventory, cls.map = player.inventory, player.map
+
         cls.in_menu_selection = False
-        cls.three_rooms = [[[] for y in range(9)] for x in range(5)]  #x, y, rooms[1, 2, 3]
-        cls.three_rotations = [[{} for y in range(9)] for x in range(5)]  #x, y, rotation[1, 2, 3]
+        cls.three_rooms = [[[] for y in range(9)] for x in range(5)]  #x, y, rooms[0, 1, 2]
+        cls.three_rotations = [[{} for y in range(9)] for x in range(5)]  #x, y, rotation{0, 1, 2}
+        cls.pool = cls.map.init_pool()
+        cls.proba_pool = cls.map.update_proba_pool()
+
         cls.ui.event_handler.space = cls.player_move
         cls.ui.event_handler.up = cls.up
         cls.ui.event_handler.down = cls.down
@@ -53,34 +57,17 @@ class Nav :
         else:
             if cls.ui.room_choice < 3:
                 cls.ui.room_choice += 1 
-
-
+    
     @classmethod
-    def pool_room(cls):
-        pool = []
-
-        rarity_weights = {
-            -1: 0,   # exclu
-            0: 27,   # commun
-            1: 9,    # standard
-            2: 3,    # uncommon
-            3: 1     # rare
-        }
-
-        for name, data in database.rooms.items():
-            rarity = data["rarity"]
-            weight = rarity_weights.get(rarity, 0)
-            if weight > 0:
-                pool.extend([name] * weight)
-
-        return random.choice(pool)
+    def pool_room(cls, proba_pool):
+        return random.choice(proba_pool)
 
     @classmethod
     def three_room_choice(cls, next_x, next_y, r):
         index_next_x = next_x + 2
         if cls.three_rooms[index_next_x][next_y] == [] : 
             while len(cls.three_rooms[index_next_x][next_y]) < 3:
-                new_room = cls.pool_room()
+                new_room = cls.pool_room(cls.proba_pool)
                 doors = database.rooms[new_room]["doors"]
                 room_doors_valid, rotation = cls.map.doors_layout(doors, next_x, next_y, r)
 
@@ -117,7 +104,7 @@ class Nav :
                             room_exist = True
                             break
                 if room_exist :
-                    # r = (r+2) % 4 #Change the player rotation when entering a new room
+                    # r = (r+2) % 4 #Change the player rotation when entering a room
                     cls.map.move_player_position(next_y, next_x, r)
                 else:
                     # to do : check if there is a door and its level
@@ -139,6 +126,12 @@ class Nav :
                             doors = cls.map.rot_doors(doors)
 
                         cls.map.add_room(new_room_name, next_position, doors)
+
+                        if new_room_name in cls.pool : 
+                            cls.pool.remove(new_room_name)
+                            cls.proba_pool = cls.map.update_proba_pool()
+                            print(len(cls.pool), len(cls.proba_pool))
+
                         cls.map.move_player_position(next_y, next_x, r)
       
                     if new_room_name == "Reroll":

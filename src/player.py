@@ -13,6 +13,33 @@ class Map :
         self.doors_map[2][0] = [0, 1, 1, 1]
         self.player_position = (0,0,0)
 
+    def init_pool(self):
+        self.pool = [name for name in database.rooms.keys()]
+        # We can add more room here
+        return self.pool
+
+
+    def update_proba_pool(self):
+        self.proba_pool = []
+
+        rarity_weights = {
+            -1: 0,   # exclu
+            0: 27,   # commun
+            1: 9,    # standard
+            2: 3,    # uncommon
+            3: 1     # rare
+        }
+
+        for name in self.pool:
+            data = database.rooms[name]
+            rarity = data["rarity"]
+            weight = rarity_weights.get(rarity, 0)
+            if weight > 0:
+                self.proba_pool.extend([name] * weight)
+
+        return self.proba_pool
+
+
     def rot_doors(self, room):
         """
         The last element of a list of door become the first 
