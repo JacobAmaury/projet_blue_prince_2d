@@ -94,7 +94,7 @@ class UI :
         for name in room_names:
             img = display.room_images[name].loaded
             img = pygame.transform.rotate(img, rotations[name]*90)
-            scaled = pygame.transform.smoothscale(img, (int(W * 0.173), int(W * 0.16)))
+            scaled = pygame.transform.smoothscale(img, (int(W * 0.173), int(W * 0.173)))
             room_imgs.append((name, scaled))
 
         positions = [
@@ -143,7 +143,7 @@ class UI :
 
             #white rectangle 
             if cls.room_choice in (0, 1, 2):
-                rect = pygame.Rect(positions[cls.room_choice][0], positions[cls.room_choice][1], int(W * 0.174), int(W * 0.16))
+                rect = pygame.Rect(positions[cls.room_choice][0], positions[cls.room_choice][1], int(W * 0.174), int(W * 0.174))
                 pygame.draw.rect(screen, (255, 255, 255), rect, width=4)
             else:
                 rect = pygame.Rect(W * 0.87, H * 0.2, int(W * 0.04), int(W * 0.04))
