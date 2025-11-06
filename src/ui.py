@@ -125,6 +125,7 @@ class UI :
                         if cls.room_choice != 3 :
                             selected_room = room_names[cls.room_choice]
                         else : 
+                            running = False  #close menu with selection
                             return "Reroll" #to do
 
 

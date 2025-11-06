@@ -11,6 +11,7 @@ class Map :
         self.rooms = { 'EntranceHall': [(0,0,0)] }
         self.doors_map = [[[] for y in range(9)] for x in range(5)]  #x, y, doors[]
         self.doors_map[2][0] = [0, 1, 1, 1]
+        self.rooms_inventory =  [[{} for y in range(9)] for x in range(5)]  #x, y, database_element
         self.player_position = (0,0,0)
 
     def init_pool(self):

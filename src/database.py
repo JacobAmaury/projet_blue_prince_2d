@@ -369,7 +369,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 0, 
-        'doors': [1,0,1.0],
+        'doors': [1,0,1,0],
         'effect': 0},
         
     'Storeroom':{        
