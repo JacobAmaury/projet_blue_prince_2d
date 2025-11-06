@@ -55,7 +55,7 @@ class Nav :
 
 
     @classmethod
-    def alea_room(cls):
+    def pool_room(cls):
         pool = []
 
         rarity_weights = {
@@ -80,7 +80,7 @@ class Nav :
         rotation_dict = {}
         if cls.three_rooms[index_next_x][next_y] == [] : 
             while len(cls.three_rooms[index_next_x][next_y]) < 3:
-                new_room = cls.alea_room()
+                new_room = cls.pool_room()
                 doors = database.rooms[new_room]["doors"]
                 room_doors_valid, rotation = cls.map.doors_layout(doors, next_x, next_y, r)
 
