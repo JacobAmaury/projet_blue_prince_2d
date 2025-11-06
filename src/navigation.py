@@ -152,7 +152,7 @@ class Effect:
 
         if room_name == "Solarium":
             for i in range(len(database.rooms)):
-                if database.rooms[i]["rarity"] == 2 or database.rooms[i]["rarity"] == 3:
+                if database.rooms[i]["rarity"] == 2 or database.rooms[i]["rarity"] == 3 or database.rooms[i]["rarity"] == 1:
                     database.rooms[i]["rarity"] -= 1
                     
         if room_name == "Furnace": 
