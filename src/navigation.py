@@ -12,10 +12,10 @@ class Nav :
 
     @classmethod
     def new_game(cls):
-        player= Player(cls.ui)      # creates inventory,map,...
-        cls.ui.set_player(player)   # ui displays data from this player
+        cls.player = Player(cls.ui)      # creates inventory,map,...
+        cls.ui.set_player(cls.player)   # ui displays data from this player
         cls.ui.mainScreen()             # creates and blits main_screen
-        cls.inventory, cls.map = player.inventory, player.map
+        cls.inventory, cls.map = cls.player.inventory, cls.player.map
 
         cls.in_menu_selection = False
         cls.three_rooms = [[[] for y in range(9)] for x in range(5)]  #x, y, rooms[0, 1, 2]
@@ -34,19 +34,19 @@ class Nav :
     def up(cls):
         if not(cls.in_menu_selection):
             y, x, r = cls.map.player_position
-            cls.map.move_player_position(y, x , 2)
+            cls.player.move_player_position(y, x , 2)
 
     @classmethod
     def down(cls):
         if not(cls.in_menu_selection):
             y, x, r = cls.map.player_position
-            cls.map.move_player_position(y, x , 0)
+            cls.player.move_player_position(y, x , 0)
 
     @classmethod
     def left(cls):
         if not(cls.in_menu_selection):
             y, x, r = cls.map.player_position
-            cls.map.move_player_position(y, x , 3)
+            cls.player.move_player_position(y, x , 3)
         else:
             if cls.ui.room_choice > 0:
                 cls.ui.room_choice -= 1 
@@ -55,7 +55,7 @@ class Nav :
     def right(cls):
         if not(cls.in_menu_selection):
             y, x, r = cls.map.player_position
-            cls.map.move_player_position(y, x , 1)
+            cls.player.move_player_position(y, x , 1)
         else:
             if cls.ui.room_choice < 3:
                 cls.ui.room_choice += 1 
@@ -110,9 +110,7 @@ class Nav :
             cls.pool.remove(new_room_name)
             cls.proba_pool = cls.map.update_proba_pool()
 
-        cls.map.move_player_position(next_y, next_x, r)
-        cls.inventory.change_consumable('steps', -1)
-    
+        cls.player.move_player_position(next_y, next_x, r)
 
 
     @classmethod
@@ -139,9 +137,7 @@ class Nav :
             if doors_open == 1: 
                 if cls.room_exist(next_x, next_y):
                     # r = (r+2) % 4 #Change the player rotation when entering a room
-                    cls.map.move_player_position(next_y, next_x, r)
-                    cls.inventory.change_consumable('steps', -1)
-
+                    cls.player.move_player_position(next_y, next_x, r)
                 else:
                     index_next_x = next_x + 2
 

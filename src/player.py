@@ -6,6 +6,13 @@ class Player :
         self.map = Map()
         self.inventory = Inventory()
 
+    def move_player_position(self,y,x,r):
+        """(0,0,0) : (bottom,center,0°), rot:(0:0°,1:90°,2:180°,3:-90°)"""
+        r = r % 4 ; y = y % 9 ; x = (x+2) % 5 -2   #protection overflow 
+        self.map.player_position = (y,x,r)
+        self.inventory.change_consumable('steps', -1)
+        Player.ui.update_player_position()
+
 class Map :
     def __init__(self):
         self.rooms = { 'EntranceHall': [(0,0,0)] }
@@ -24,10 +31,10 @@ class Map :
         self.proba_pool = []
 
         rarity_weights = {
-            -1: 0,   # exclu
-            0: 27,   # commun
+            -1: 0,   # antechamber
+            0: 27,   # common
             1: 9,    # standard
-            2: 3,    # uncommon
+            2: 3,    # unusual
             3: 1     # rare
         }
 
@@ -75,7 +82,7 @@ class Map :
             allowed_doors[2] = 0
         
         #Unlock the front door
-        front = (player_r+2) % 4 #Change the player rotation to the front of the room
+        front = (player_r+2) % 4 #Change the rotation to the front of the room
         allowed_doors[front] = 1
 
 
@@ -105,12 +112,6 @@ class Map :
         self.doors_map[index_x][y] = doors 
         
         Player.ui.update_map()
-
-    def move_player_position(self,y,x,r):
-        """(0,0,0) : (bottom,center,0°), rot:(0:0°,1:90°,2:180°,3:-90°)"""
-        r = r % 4 ; y = y % 9 ; x = (x+2) % 5 -2   #protection overflow 
-        self.player_position = (y,x,r)
-        Player.ui.update_player_position()
 
 class Inventory:
     def __init__(self):

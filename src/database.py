@@ -3,11 +3,11 @@
 consumables = ['steps', 'coin', 'gem', 'key', 'dice'] #sets the order on screen
 permanents = ['Shovel','Lockpick_Kit','Lucky_Rabbits_Foot','Metal_Detector','Power_Hammer']
 
-#|-2--|
-#3    1          doors = [0,1,2,3]
-#|_0__|
+#|-2-|
+#3   1          doors = [0,1,2,3]
+#|_0_|
 
-#rarity : 0 common, 1 standar, 2 unusual, 3 rare, -1 antichamber
+#rarity : 0 common, 1 standar, 2 unusual, 3 rare, -1 antechamber
 
 """effects : 0- no effects
              1- spread gem in rooms
