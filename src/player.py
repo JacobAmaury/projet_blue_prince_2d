@@ -10,7 +10,6 @@ class Player :
         """(0,0,0) : (bottom,center,0°), rot:(0:0°,1:90°,2:180°,3:-90°)"""
         r = r % 4 ; y = y % 9 ; x = (x+2) % 5 -2   #protection overflow 
         self.map.player_position = (y,x,r)
-        self.inventory.change_consumable('steps', -1)
         Player.ui.update_player_position()
 
 class Map :

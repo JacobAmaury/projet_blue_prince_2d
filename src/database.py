@@ -7,7 +7,7 @@ permanents = ['Shovel','Lockpick_Kit','Lucky_Rabbits_Foot','Metal_Detector','Pow
 #3   1          doors = [0,1,2,3]
 #|_0_|
 
-#rarity : 0 common, 1 standar, 2 unusual, 3 rare, -1 antechamber
+#rarity : 0 common, 1 standard, 2 unusual, 3 rare, -1 antechamber
 
 """effects : 0- no effects
              1- spread gem in rooms

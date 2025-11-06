@@ -78,6 +78,20 @@ class Nav :
 
     @classmethod
     def three_room_choice(cls, next_x, next_y, r):
+        """
+        Chooses up to three valid rooms for the given map position.
+
+        Checks door alignment and rotation compatibility, stores valid rooms 
+        and their rotations at (next_x, next_y).
+
+        Args:
+            next_x (int): X-coordinate on the map.
+            next_y (int): Y-coordinate on the map.
+            r (int): Rotation index.
+
+        Returns:
+            dict: Rooms mapped to their valid rotations.
+        """
         index_next_x = next_x + 2
         if cls.three_rooms[index_next_x][next_y] == [] : 
             while len(cls.three_rooms[index_next_x][next_y]) < 3:
@@ -92,6 +106,12 @@ class Nav :
     
     @classmethod
     def open_room(cls, next_x, next_y, rotations, new_room_name):
+        """
+        Opens and places a new room at the given coordinates.
+
+        Updates the map, room inventory, and player state, removing the room 
+        from the pool and adjusting probabilities.
+        """
         y, x, r = cls.map.player_position
         index_next_x = next_x + 2
 
@@ -111,12 +131,30 @@ class Nav :
             cls.proba_pool = cls.map.update_proba_pool()
 
         cls.player.move_player_position(next_y, next_x, r)
+        cls.inventory.change_consumable('steps', -1)
+        
+
+    @classmethod
+    def door_level_check(cls, door):
+        doors_open = False
+        if door == 1:
+            doors_open == True
+        elif door == 2:
+            if ('Lockpick_Kit' in cls.inventory.permanents) or (cls.inventory.consumables["key"]>= 1):
+                doors_open == True
+        elif door == 3:
+            if (cls.inventory.consumables["key"]>= 1):
+                doors_open == True
+        return doors_open        
 
 
     @classmethod
     def player_move(cls):
         """
-        Control the player allowed movement
+        Handles player movement and room entry logic.
+
+        Moves the player forward if possible or triggers room selection when 
+        entering an unexplored area.
         """
         if not(cls.in_menu_selection):
             #(0,0,0) : (bottom,center,0°), rot:(0:0°,1:90°,2:180°,3:-90°)
@@ -137,10 +175,10 @@ class Nav :
             if doors_open == 1: 
                 if cls.room_exist(next_x, next_y):
                     # r = (r+2) % 4 #Change the player rotation when entering a room
+                    cls.inventory.change_consumable('steps', -1)
                     cls.player.move_player_position(next_y, next_x, r)
                 else:
                     index_next_x = next_x + 2
-
 
                     new_room_name = "Reroll"
                     while(new_room_name == "Reroll"):

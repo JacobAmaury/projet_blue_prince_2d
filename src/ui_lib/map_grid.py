@@ -53,5 +53,5 @@ class door(map):
 
     @classmethod
     def draw(cls,screen):
-        COLOR = (255,0,0)
+        COLOR = (255,255,255)
         pygame.draw.rect(screen,COLOR,cls.player_position)

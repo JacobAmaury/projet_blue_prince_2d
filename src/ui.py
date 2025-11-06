@@ -78,7 +78,7 @@ class UI :
     def selection_menu(cls, room_names, rotations):
         """
         Display a selection menu for choosing one of three rooms.
-        Returns the name of the selected room, or None if cancelled.
+        Returns the name of the selected room, reroll or None if cancelled.
         """
         display = cls.display
         screen = display.screen
@@ -121,12 +121,13 @@ class UI :
                         event_handler.right()
                     elif event_key == pygame.K_RETURN:
                         event_handler.enter()
-                        running = False  #close menu with selection
                         if cls.room_choice != 3 :
+                            running = False  #close menu with selection
                             selected_room = room_names[cls.room_choice]
                         else : 
-                            running = False  #close menu with selection
-                            return "Reroll" #to do
+                            if dice_count >= 1 :
+                                running = False  #close menu to rerun selection_menu
+                                return "Reroll"
 
 
 
