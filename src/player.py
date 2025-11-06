@@ -12,9 +12,18 @@ class Player :
         self.map.player_position = (y,x,r)
         Player.ui.update_player_position()
 
+    def game_won(self):
+        print("You won!!!")
+        Player.ui.quit_game()
+
+    def game_over(self):
+        print("You lost...")
+        Player.ui.quit_game()
+
+
 class Map :
     def __init__(self):
-        self.rooms = { 'EntranceHall': [(0,0,0)] }
+        self.rooms = { 'EntranceHall': [(0,0,0)] } #y, x
         self.doors_map = [[[] for y in range(9)] for x in range(5)]  #x, y, doors[]
         self.doors_map[2][0] = [0, 1, 1, 1]
         self.rooms_inventory =  [[{} for y in range(9)] for x in range(5)]  #x, y, database_element

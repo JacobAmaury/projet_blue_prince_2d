@@ -132,18 +132,22 @@ class Nav :
 
         cls.player.move_player_position(next_y, next_x, r)
         cls.inventory.change_consumable('steps', -1)
+        if cls.inventory.consumables['steps'] <= 0:
+            cls.player.game_over()
         
 
     @classmethod
-    def door_level_check(cls, door):
+    def door_level_check(cls, door): #for future usage
         doors_open = False
         if door == 1:
             doors_open == True
         elif door == 2:
             if ('Lockpick_Kit' in cls.inventory.permanents) or (cls.inventory.consumables["key"]>= 1):
+                cls.inventory.change_consumable('key', -1)
                 doors_open == True
         elif door == 3:
             if (cls.inventory.consumables["key"]>= 1):
+                cls.inventory.change_consumable('key', -1)
                 doors_open == True
         return doors_open        
 
@@ -170,18 +174,24 @@ class Nav :
             elif r == 3: #left
                 next_x = x - 1
 
-            # to do : check door level
-            doors_open = cls.map.doors_map[x+2][y][r]
-            if doors_open == 1: 
+            doors_open = cls.map.doors_map[x+2][y][r] == 1
+            if doors_open: 
+
+                if next_x == 0 and next_y == 8:
+                    cls.player.game_won()
+
                 if cls.room_exist(next_x, next_y):
                     # r = (r+2) % 4 #Change the player rotation when entering a room
                     cls.inventory.change_consumable('steps', -1)
+                    if cls.inventory.consumables['steps'] <= 0:
+                        cls.player.game_over()
                     cls.player.move_player_position(next_y, next_x, r)
                 else:
                     index_next_x = next_x + 2
 
                     new_room_name = "Reroll"
                     while(new_room_name == "Reroll"):
+
                         rotations = cls.three_room_choice(next_x, next_y, r)
 
                         cls.in_menu_selection = True
