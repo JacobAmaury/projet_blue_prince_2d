@@ -1,4 +1,5 @@
 import database
+import random as rd
 
 class Player :
     def __init__(self,ui):
@@ -33,6 +34,45 @@ class Map :
         self.pool = [name for name in database.rooms.keys()]
         # We can add more room here
         return self.pool
+
+    def item_randmon_room(self, x, y):
+        """ add random items in rooms_inventory """
+        
+        self.rooms_inventory[x][y] = {
+            "coin": 0,
+            "gem": 0,
+            "key": 0,
+            "dice": 0,
+            "Shovel": 0,
+            "Lockpick_Kit": 0
+        }
+        
+        item_pool = [0]*50
+        rarity_weights = {
+            "coin": 20,
+            "gem": 20,
+            "key": 20,
+            "dice": 10,
+            "Shovel": 2,
+            "Lockpick_Kit": 2
+        }
+        
+        for name, weight in rarity_weights.items():
+            item_pool.extend([name] * weight)
+        
+        for i in range(4):
+            rand_index = rd.randint(0,len(item_pool)-1)
+            act_item = item_pool[rand_index]
+
+            if act_item == "Shovel" and self.rooms_inventory[x][y][act_item] > 0:
+                continue
+
+            if act_item == "Lockpick_Kit" and self.rooms_inventory[x][y][act_item] > 0:
+                continue
+
+            if item_pool[rand_index] != 0:
+                self.rooms_inventory[x][y][act_item] += 1
+        
 
 
     def update_proba_pool(self):
