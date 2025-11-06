@@ -104,40 +104,40 @@ class Nav :
                         if (c[0], c[1]) == (next_y, next_x):
                             room_exist = True
                             break
-                if room_exist :
-                    # r = (r+2) % 4 #Change the player rotation when entering a room
-                    cls.map.move_player_position(next_y, next_x, r)
-                else:
-                    # to do : check if there is a door and its level
-                    index_next_x = next_x + 2
-                    rotations = cls.three_room_choice(next_x, next_y, r)
-
-                    cls.in_menu_selection = True
-                    new_room_name = cls.ui.selection_menu(cls.three_rooms[index_next_x][next_y], rotations)
-                    cls.in_menu_selection = False
-
-
-
-                    if new_room_name != None:
-                        cls.three_rooms[index_next_x][next_y] = []
-                        next_position = (next_y, next_x, rotations[new_room_name])
-
-                        doors = database.rooms[new_room_name]["doors"]
-                        for i in range(rotations[new_room_name]):
-                            doors = cls.map.rot_doors(doors)
-
-                        cls.map.add_room(new_room_name, next_position, doors)
-
-                        if new_room_name in cls.pool : 
-                            cls.pool.remove(new_room_name)
-                            cls.proba_pool = cls.map.update_proba_pool()
-                            print(len(cls.pool), len(cls.proba_pool))
-
+                print(cls.map.doors_map[x+2][y])
+                doors_open = cls.map.doors_map[x+2][y][r]
+                if doors_open == 1: 
+                    if room_exist :
+                        # r = (r+2) % 4 #Change the player rotation when entering a room
                         cls.map.move_player_position(next_y, next_x, r)
-      
-                    if new_room_name == "Reroll":
-                        cls.three_rooms[index_next_x][next_y] = []
+                    else:
+                    # to do : check if there is a door and its level
+                        index_next_x = next_x + 2
                         rotations = cls.three_room_choice(next_x, next_y, r)
+
+                        cls.in_menu_selection = True
+                        new_room_name = cls.ui.selection_menu(cls.three_rooms[index_next_x][next_y], rotations)
+                        cls.in_menu_selection = False
+
+                        if new_room_name not in (None, "Reroll"):
+                            cls.three_rooms[index_next_x][next_y] = []
+                            next_position = (next_y, next_x, rotations[new_room_name])
+
+                            doors = database.rooms[new_room_name]["doors"]
+                            for i in range(rotations[new_room_name]):
+                                doors = cls.map.rot_doors(doors)
+
+                            cls.map.add_room(new_room_name, next_position, doors)
+
+                            if new_room_name in cls.pool : 
+                                cls.pool.remove(new_room_name)
+                                cls.proba_pool = cls.map.update_proba_pool()
+
+                            cls.map.move_player_position(next_y, next_x, r)
+        
+                        if new_room_name == "Reroll":
+                            cls.three_rooms[index_next_x][next_y] = []
+                            rotations = cls.three_room_choice(next_x, next_y, r)
 
 
 
