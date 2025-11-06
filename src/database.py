@@ -15,13 +15,13 @@ permanents = ['Shovel','Lockpick_Kit','Lucky_Rabbits_Foot','Metal_Detector','Pow
              3- spread coins in rooms
              4- spread fruits in rooms
 
-             5- modify the rarity of a room
-             6- modify the probability of objects
+             5- modify the rarity of a room                done
+             6- modify the probability of objects          
 
-             7- add a new room (unlock)
+             7- add a new room (unlock)                 
 
-             8- set the gen number
-             9- divide by 2 step num
+             8- set the gen number                         done
+             9- divide by 2 step num                       done
 
 
 """
@@ -631,7 +631,7 @@ rooms = {
         'key': 0,
         'rarity': 0, 
         'doors': [1,1,0,1],
-        'effect': 6},  
+        'effect': 0},  
 
     # 'ClosedExhibit':'red',
     # 'Darkroom':'red',

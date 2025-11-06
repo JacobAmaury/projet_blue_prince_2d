@@ -1,6 +1,7 @@
 from player import Player
 import random
 import database
+import player
 
 class Nav :
     @classmethod
@@ -140,3 +141,29 @@ class Nav :
 
 
 
+class Effect:
+
+    def apply_effect(room_name):
+        
+        return None
+    
+    def room_rarity_5(room_name):
+        #modify the rarity of room_name to an lower value
+
+        if room_name == "Solarium":
+            for i in range(len(database.rooms)):
+                if database.rooms[i]["rarity"] == 2 or database.rooms[i]["rarity"] == 3:
+                    database.rooms[i]["rarity"] -= 1
+                    
+        if room_name == "Furnace": 
+            for i in range(len(database.rooms)):
+                if database.rooms[i]["color"] == "red" and database.rooms[i]["rarity"] > 1:
+                    database.rooms[i]["rarity"] -= 1
+
+    def set_gem_number_8(room_name):
+        if room_name == "Ballroom":
+            player.Inventory.consumables['gem'] = 2
+
+    def divide_steps_by_2(room_name):
+        if room_name == "Library":
+            player.Inventory.consumables['steps'] //= 2
