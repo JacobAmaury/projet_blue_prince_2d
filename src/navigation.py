@@ -133,7 +133,9 @@ class Nav :
 
         cls.map.add_room(new_room_name, next_position, doors)
         cls.map.item_randmon_room(new_room_name, next_x, next_y)
-        # Effect.apply_effect(new_room_name)
+        
+        # print(new_room_name)
+        Effect().apply_effect(new_room_name)
 
         # remove room from the pool_room
         if new_room_name in cls.pool : 
@@ -178,6 +180,18 @@ class Nav :
                 if increment < 0:
                     if (cls.inventory.consumables[consumable] + increment) < 0:
                         return False
+<<<<<<< HEAD
+=======
+                else :
+                    cls.inventory.change_consumable(consumable, increment)
+                    if consumable != 'steps':
+                        cls.map.rooms_inventory[index_next_x][next_y][consumable] += increment
+                    
+
+        # print("Inventaire database", database.rooms[new_room_name])
+        # print("Inventaire salle", cls.map.rooms_inventory[index_next_x][next_y])
+        # print("Inventaire joueur",cls.inventory.consumables)
+>>>>>>> 70aeb84 (debug all effects. They seem to be ok)
         return True
     
     @classmethod
@@ -224,6 +238,8 @@ class Nav :
                 if next_x == 0 and next_y == 8:
                     cls.player.game_won()
 
+                # print("Inventaire salle", cls.map.rooms_inventory[x][y])
+                
                 if cls.room_exist(next_x, next_y):
                     # r = (r+2) % 4 #Change the player rotation when entering a room
                     cls.inventory.change_consumable('steps', -1)
@@ -266,9 +282,9 @@ class Effect:
         if act_effect in (1, 4):
             self.spread_green_room_1_and_4(room_name)
         elif act_effect == 2:
-            self.spread_items_2_and_3('key')
+            self.spread_items_2_and_3('key', room_name)
         elif act_effect == 3:
-            self.spread_items_2_and_3('coin')
+            self.spread_items_2_and_3('coin', room_name)
         elif act_effect == 4:
             self.spread_green_room_1_and_4(room_name)
         elif act_effect == 5:
@@ -278,50 +294,51 @@ class Effect:
         elif act_effect == 7:
             pass
         elif act_effect == 8:
-            self.set_gem_number_8()
+            self.set_gem_number_8(room_name)
         elif act_effect == 9:
-            self.divide_steps_by_2_9()
+            self.divide_steps_by_2_9(room_name)
             
         
 
         
     
-    def room_rarity_5(room_name):
+    def room_rarity_5(self,room_name):
         #modify the rarity of room_name to an lower value
 
-        if room_name == "Solarium":
-            for i in range(len(database.rooms)):
-                if database.rooms[i]["rarity"] == 2 or database.rooms[i]["rarity"] == 3 or database.rooms[i]["rarity"] == 1:
-                    database.rooms[i]["rarity"] -= 1
+        if room_name == 'Solarium':
+            for i in database.rooms:
+                if database.rooms[i]['rarity'] == 2 or database.rooms[i]['rarity'] == 3 or database.rooms[i]['rarity'] == 1:
+                    database.rooms[i]['rarity'] -= 1
                     
-        if room_name == "Furnace": 
-            for i in range(len(database.rooms)):
-                if database.rooms[i]["color"] == "red" and database.rooms[i]["rarity"] > 1:
-                    database.rooms[i]["rarity"] -= 1
+        if room_name == 'Furnace': 
+            for i in database.rooms:
+                if database.rooms[i]['color'] == "red" and database.rooms[i]['rarity'] > 0:
+                    database.rooms[i]['rarity'] -= 1
 
-        if room_name == "Greenhouse":
-            for i in range(len(database.rooms)):
-                if database.rooms[i]["colot"] == "green" and database.rooms[i]["rarity"] > 1:
-                    database.rooms[i]["rarity"] -= 1
-
-
-    def set_gem_number_8(room_name):
-        if room_name == "Ballroom":
-            player.Inventory.consumables['gem'] = 2
+        if room_name == 'Greenhouse':
+            for i in database.rooms:
+                if database.rooms[i]['color'] == 'green' and database.rooms[i]['rarity'] > 0:
+                    database.rooms[i]['rarity'] -= 1
+        
 
 
-    def divide_steps_by_2_9(room_name):
-        if room_name == "Library" or "WeightRoom":
-            player.Inventory.consumables['steps'] //= 2
+    def set_gem_number_8(self, room_name):
+        if room_name == 'Ballroom':
+            Nav.player.inventory.consumables['gem'] = 2
 
 
-    def modify_proba_item_6(room_name):
+    def divide_steps_by_2_9(self, room_name):
+        if room_name == 'Library' or 'WeightRoom':
+            Nav.player.inventory.consumables['steps'] //= 2
+
+
+    def modify_proba_item_6(self, room_name):
         player.Map.effect_6 = True
 
 
     @classmethod
     def room_ex(cls, next_x, next_y):
-        rooms = cls.map.rooms
+        rooms = Nav.player.map.rooms
         for name, coords_list in rooms.items():
             for c in coords_list:
                 if (c[0], c[1]) == (next_y, next_x):
@@ -334,56 +351,57 @@ class Effect:
 
         if room_name == 'SecretGarden':
             apple_pool = [0]*50
-            apple_pool.extend(["gem"]*20)
+            apple_pool.extend(['gem']*20)
 
             for y in range(9):
                 for x in range(5):
-                    if database.rooms[self.room_ex(x,y)]["color"] == 'green': #verify if the room[x,y] is green
+                    if self.room_ex(x,y) == None:
+                        continue
+                    if database.rooms[self.room_ex(x,y)]['color'] == 'green': #verify if the room[x,y] is green
                         
                         rand_index = rd.randint(0,len(apple_pool)-1) 
                         act_item = apple_pool[rand_index] 
 
                         if act_item != 0: 
-                            player.map.rooms_inventory[x][y]["apple"] += 1
+                            Nav.player.map.rooms_inventory[x][y]['apple'] += 1
             
         
         if room_name == 'Patio':
             gem_pool = [0]*50
-            gem_pool.extend(["gem"]*20)
+            gem_pool.extend(['gem']*20)
             for y in range(9):
                 for x in range(5):
-                    if database.rooms[self.room_ex(x,y)]["color"] == 'green': #verify if the room[x,y] is green
+                    if self.room_ex(x,y) == None:
+                        continue
+                    if database.rooms[self.room_ex(x,y)]['color'] == 'green': #verify if the room[x,y] is green
                         
                         rand_index = rd.randint(0,len(gem_pool)-1) 
                         act_item = gem_pool[rand_index] 
 
                         if act_item != 0: 
-                            player.map.rooms_inventory[x][y]["gem"] += 1
+                            Nav.player.map.rooms_inventory[x][y]['gem'] += 1
 
 
-    def spread_items_2_and_3(self,item_to_spread, room_name):
+    def spread_items_2_and_3(self, item_to_spread, room_name):
 
         item_pools = [0]*50
         rarity_weights = {
-            "coin": 20,
-            "gem": 20,
-            "key": 20,
-            "dice": 10,
+            'coin': 20,
+            'gem': 20,
+            'key': 20,
+            'dice': 10,
         }
-
-        if not(item_pools.has_key(item_to_spread)):
-            raise TypeError(f"{item_to_spread} is not in rarity_wight")
         
         item_pools.extend([item_to_spread]*rarity_weights[item_to_spread]) 
 
         for y in range(9):
             for x in range(5):
-                if player.map.rooms_inventory[x][y]:
+                if Nav.player.map.rooms_inventory[x][y]:
                     for i in range(4):
                         rand_index = rd.randint(0,len(item_pools)-1)
                         act_item = item_pools[rand_index]
                         if act_item != 0:
-                            player.map.rooms_inventory[x][y][act_item] += 1
+                            Nav.player.map.rooms_inventory[x][y][act_item] += 1
         
 
 

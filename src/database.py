@@ -10,18 +10,18 @@ permanents = ['Shovel','Lockpick_Kit','Lucky_Rabbits_Foot','Metal_Detector','Pow
 #rarity : 0 common, 1 standard, 2 unusual, 3 rare, -1 antechamber
 
 """effects : 0- no effects
-             1- spread gem in rooms                        done
-             2- spread keys in rooms                       done
-             3- spread coins in rooms                      done
-             4- spread fruits in rooms                     done
+             1- spread gem in rooms                        done and debug
+             2- spread keys in rooms                       done and debug
+             3- spread coins in rooms                      done and debug
+             4- spread fruits in rooms                     done and debug
 
-             5- modify the rarity of a room                done
+             5- modify the rarity of a room                done and debug
              6- modify the probability of objects          
 
              7- add a new room (unlock)                 
 
-             8- set the gen number                         done
-             9- divide by 2 step num                       done
+             8- set the gen number                         done and debug
+             9- divide by 2 step num                       done and debug
 
 
 """
@@ -340,7 +340,8 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 0, 
-        'doors': [1,0,0,1]},
+        'doors': [1,0,0,1],
+        'effect': 0},
         
     # 'Parlor':'blue',
     # 'Planetarium':'blue',
@@ -527,7 +528,8 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 2, 
-        'doors': [1,0,0,0]},
+        'doors': [1,0,0,0],
+        'effect': 0},
 
     # 'Dormitory':'violet',
     'GuestBedroom':{        

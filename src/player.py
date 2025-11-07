@@ -195,7 +195,7 @@ class Map :
 
 class Inventory:
     def __init__(self):
-        self.consumables = {'steps': 70, 'coin': 0, 'gem': 2, 'key': 0, 'dice': 0}
+        self.consumables = {'steps': 70, 'coin': 0, 'gem': 40, 'key': 0, 'dice': 0}
         self.permanents = []    #sets display order
 
 
