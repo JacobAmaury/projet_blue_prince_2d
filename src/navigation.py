@@ -178,7 +178,7 @@ class Nav :
         for consumable, increment in room_consumables.items():
             if consumable in database.consumables:
                 if increment < 0:
-                    if 0 < cls.inventory[consumable] + increment:
+                    if 0 < cls.inventory.consumables[consumable] + increment:
                        cls.map.rooms_inventory[index_next_x][next_y][consumable] += increment
                     else :
                         return False
@@ -236,7 +236,7 @@ class Nav :
                         cls.menu = "map"
 
                         if new_room_name not in (None, "Reroll"):
-                            if check_consumables(cls, new_room_name, index_next_x, next_y):
+                            if cls.check_consumables(cls, new_room_name, index_next_x, next_y):
                                 cls.open_room(next_x, next_y, rotations, new_room_name)
 
                         if new_room_name == "Reroll":

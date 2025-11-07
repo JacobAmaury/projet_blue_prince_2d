@@ -27,8 +27,16 @@ class Map :
         self.rooms = { 'EntranceHall': [(0,0,0)] } #y, x
         self.doors_map = [[[] for y in range(9)] for x in range(5)]  #x, y, doors[]
         self.doors_map[2][0] = [0, 1, 1, 1]
-        self.rooms_inventory =  [[{} for y in range(9)] for x in range(5)]  #x, y, database_element
         self.player_position = (0,0,0)
+        self.rooms_inventory =  [[{
+            "coin": 0,
+            "gem": 0,
+            "key": 0,
+            "dice": 0,
+            "apple":0,
+            "Shovel": 0,
+            "Lockpick_Kit": 0
+        } for y in range(9)] for x in range(5)]  #x, y, database_element
 
     def init_pool(self):
         #add one time every rooms
@@ -43,16 +51,6 @@ class Map :
 
     def item_randmon_room(self, x, y):
         """ add random items in rooms_inventory """
-        
-        self.rooms_inventory[x][y] = {
-            "coin": 0,
-            "gem": 0,
-            "key": 0,
-            "dice": 0,
-            "apple":0,
-            "Shovel": 0,
-            "Lockpick_Kit": 0
-        }
         
         item_pool = [0]*50
         rarity_weights = {
