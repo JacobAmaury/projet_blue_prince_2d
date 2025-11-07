@@ -215,20 +215,6 @@ class Map :
                     new_doors.append(3)
         return new_doors
     
-    def door_level_check(cls, door):
-        doors_open = False
-        if door == 1:
-            doors_open = True
-        elif door == 2:
-            if ('Lockpick_Kit' in cls.inventory.permanents) or (cls.inventory.consumables["key"]>= 1):
-                cls.inventory.change_consumable('key', -1)
-                doors_open = True
-        elif door == 3:
-            if (cls.inventory.consumables["key"]>= 1):
-                cls.inventory.change_consumable('key', -1)
-                doors_open = True
-        return doors_open      
-
 
     def add_room(self,name,position, doors):
         y, x, r = position

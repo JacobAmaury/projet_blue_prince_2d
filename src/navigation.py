@@ -139,13 +139,15 @@ class Nav :
         doors = database.rooms[new_room_name]["doors"]
         doors = cls.map.rot_doors(doors, rotations[new_room_name])
         doors = cls.map.level_up_door(doors, next_y)
-        #Unlock the front door
-        front = (rotations[new_room_name]+2) % 4 #Change the rotation to the front of the room
-        cls.map.doors_map[next_x+2][next_y][front] = 1
 
 
+        #create room with items and add doors to map 
         cls.map.add_room(new_room_name, next_position, doors)
         cls.map.item_randmon_room(new_room_name, next_x, next_y)
+
+        #Unlock the front door
+        front = (r+2) % 4 #Change the rotation to the front of the room
+        cls.map.doors_map[index_next_x][next_y][front] = 1
         
         # print(new_room_name)
         Effect().apply_effect(new_room_name)
@@ -165,6 +167,23 @@ class Nav :
         # cls.menu = "item selection"
         # new_room_name = cls.ui.item_selection_menu()
         # cls.menu = "map"  
+
+    @classmethod
+    def door_level_check(cls, door):
+        player_got_key = cls.inventory.consumables["key"] >= 1
+        if door == 0:
+            doors_open = False
+        if door == 1:
+            doors_open = True
+        elif door == 2 and ('Lockpick_Kit' in cls.inventory.permanents):
+            doors_open = True
+        elif door == 2 and player_got_key:
+            cls.inventory.change_consumable('key', -1)
+            doors_open = True
+        elif door == 3 and player_got_key:
+            cls.inventory.change_consumable('key', -1)
+            doors_open = True
+        return doors_open   
 
     @classmethod
     def enough_consumables(cls, new_room_name):
@@ -217,7 +236,7 @@ class Nav :
             elif r == 3: #left
                 next_x = x - 1
 
-            doors_open = cls.map.door_level_check(cls.map.doors_map[x+2][y][r])
+            doors_open = cls.door_level_check(cls.map.doors_map[x+2][y][r])
             if doors_open: 
                 #unlock door
                 cls.map.doors_map[x+2][y][r] = 1
