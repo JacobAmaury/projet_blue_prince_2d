@@ -167,32 +167,34 @@ class Nav :
                 doors_open == True
         return doors_open        
 
-    def check_consumables(cls, new_room_name, index_next_x, next_y):
+    @classmethod
+    def enough_consumables(cls, new_room_name):
         """
-        If the player doesn't have enough 'steps', 'coin' or 'gem'
-            return False
-        else 
-            change room inventory change_consumable
-            return True
+        return False if the player doesn't have enough 'steps', 'coin' or 'gem'
         """
         room_consumables = database.rooms[new_room_name]
         for consumable, increment in room_consumables.items():
             if consumable in database.consumables:
                 if increment < 0:
-                    if 0 < cls.inventory.consumables[consumable] + increment:
-                        cls.inventory.change_consumable(consumable, increment)
-                    else :
+                    if (cls.inventory.consumables[consumable] + increment) < 0:
                         return False
-                else :
-                    cls.inventory.change_consumable(consumable, increment)
-                    if consumable != 'steps':
-                        cls.map.rooms_inventory[index_next_x][next_y][consumable] += increment
-                    
-
-        print("Inventaire database", database.rooms[new_room_name])
-        print("Inventaire salle", cls.map.rooms_inventory[index_next_x][next_y])
-        print("Inventaire joueur",cls.inventory.consumables)
         return True
+    
+    @classmethod
+    def change_player_consumables(cls, new_room_name, index_next_x, next_y):
+        """
+        Apply the room's consumable effects to the player:
+        - Subtract if the room costs items
+        - Add if the room gives rewards
+        """
+        room_consumables = database.rooms[new_room_name]
+        for consumable, increment in room_consumables.items():
+            if consumable in database.consumables:
+                cls.inventory.change_consumable(consumable, increment)
+
+                # Update room inventory for positive gains (except 'steps')
+                if increment > 0 and consumable != 'steps':
+                    cls.map.rooms_inventory[index_next_x][next_y][consumable] += increment
 
     @classmethod
     def player_move(cls):
@@ -241,7 +243,8 @@ class Nav :
                         cls.menu = "map"
 
                         if new_room_name not in (None, "Reroll"):
-                            if cls.check_consumables(cls, new_room_name, index_next_x, next_y):
+                            if cls.enough_consumables(new_room_name):
+                                cls.change_player_consumables(new_room_name, index_next_x, next_y)
                                 cls.open_room(next_x, next_y, rotations, new_room_name)
 
                         if new_room_name == "Reroll":

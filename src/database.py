@@ -30,7 +30,7 @@ rooms = {
     #yellow rooms
     'Bookshop':{
         'color': 'yellow', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': -1, 
         'key': 0,
@@ -40,7 +40,7 @@ rooms = {
 
     'Casino':{        
         'color': 'yellow', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': -2, 
         'key': 0,
@@ -51,7 +51,7 @@ rooms = {
 
     'Commissary':{        
         'color': 'yellow', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': -1, 
         'key': 0,
@@ -61,7 +61,7 @@ rooms = {
 
     'GiftShop':{        
         'color': 'yellow', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': 0, 
         'key': 0,
@@ -71,7 +71,7 @@ rooms = {
 
     'Kitchen':{        
         'color': 'yellow', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': -1, 
         'key': 0,
@@ -82,7 +82,7 @@ rooms = {
 
     'LaundryRoom':{        
         'color': 'yellow', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': -1, 
         'key': 0,
@@ -92,7 +92,7 @@ rooms = {
 
     'Locksmith':{        
         'color': 'yellow', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': -1, 
         'key': 0,
@@ -102,7 +102,7 @@ rooms = {
 
     'Showroom':{        
         'color': 'yellow', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': -2, 
         'key': 0,
@@ -112,7 +112,7 @@ rooms = {
 
     'TheArmory':{        
         'color': 'yellow', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': 0, 
         'key': 0,
@@ -122,7 +122,7 @@ rooms = {
 
     'TradingPost':{        
         'color': 'yellow', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': 0, 
         'key': 0,
@@ -133,7 +133,7 @@ rooms = {
     #blue rooms
     'Antechamber':{        
         'color': 'blue', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': 0, 
         'key': 0,
@@ -143,7 +143,7 @@ rooms = {
 
     'Aquarium':{        
         'color': 'blue', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': -1, 
         'key': 0,
@@ -153,7 +153,7 @@ rooms = {
 
     # 'Attic':{        
     #     'color': 'blue', 
-    #     'step': 0, 
+    #     'steps': 0, 
     #     'coin': 0,
     #     'gem': 0, 
     #     'key': 0,
@@ -162,7 +162,7 @@ rooms = {
 
     'Ballroom':{        
         'color': 'blue', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': -2, 
         'key': 0,
@@ -172,7 +172,7 @@ rooms = {
         
     'BilliardRoom':{        
         'color': 'blue', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': 0, 
         'key': 0,
@@ -182,7 +182,7 @@ rooms = {
         
     # 'BoilerRoom':{        
     #     'color': 'blue', 
-    #     'step': 0, 
+    #     'steps': 0, 
     #     'coin': 0,
     #     'gem': 0, 
     #     'key': 0,
@@ -191,7 +191,7 @@ rooms = {
         
     # 'ChamberofMirrors':{        
     #     'color': 'blue', 
-    #     'step': 0, 
+    #     'steps': 0, 
     #     'coin': 0,
     #     'gem': 0, 
     #     'key': 0,
@@ -200,7 +200,7 @@ rooms = {
         
     # 'Classroom':{        
     #     'color': 'blue', 
-    #     'step': 0, 
+    #     'steps': 0, 
     #     'coin': 0,
     #     'gem': 0, 
     #     'key': 0,
@@ -209,7 +209,7 @@ rooms = {
         
     # 'ClockTower':{        
     #     'color': 'blue', 
-    #     'step': 0, 
+    #     'steps': 0, 
     #     'coin': 0,
     #     'gem': 0, 
     #     'key': 1,
@@ -218,7 +218,7 @@ rooms = {
         
     # 'Closet':{        
     #     'color': 'blue', 
-    #     'step': 0, 
+    #     'steps': 0, 
     #     'coin': 0,
     #     'gem': 2, 
     #     'key': 1,
@@ -227,7 +227,7 @@ rooms = {
         
     # 'CoatCheck':{        
     #     'color': 'blue', 
-    #     'step': 0, 
+    #     'steps': 0, 
     #     'coin': 0,
     #     'gem': 0, 
     #     'key': 0,
@@ -236,7 +236,7 @@ rooms = {
         
     # 'ConferenceRoom':{        
     #     'color': 'blue', 
-    #     'step': 0, 
+    #     'steps': 0, 
     #     'coin': 0,
     #     'gem': 0, 
     #     'key': 0,
@@ -245,7 +245,7 @@ rooms = {
         
     'Den':{        
         'color': 'blue', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': 1, 
         'key': 0,
@@ -259,7 +259,7 @@ rooms = {
     # 'DrawingRoom':'blue',
     'EntranceHall':{        
         'color': 'blue', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': 0, 
         'key': 0,
@@ -270,7 +270,7 @@ rooms = {
     # 'Freezer':'blue',
     'Gallery':{        
         'color': 'blue', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': 0, 
         'key': 0,
@@ -280,7 +280,7 @@ rooms = {
         
     'Garage':{        
         'color': 'blue', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': 0, 
         'key': 3,
@@ -292,7 +292,7 @@ rooms = {
     # 'Library':'blue',
     'LockerRoom':{        
         'color': 'blue', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': -1, 
         'key': 0,
@@ -304,7 +304,7 @@ rooms = {
     # 'Mechanarium':'blue',
     'MusicRoom':{        
         'color': 'blue', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': -2, 
         'key': 2,
@@ -314,7 +314,7 @@ rooms = {
         
     'Nook':{        
         'color': 'blue', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': 0, 
         'key': 1,
@@ -325,7 +325,7 @@ rooms = {
     # 'Observatory':'blue',
     'Office':{        
         'color': 'blue', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': -2, 
         'key': 0,
@@ -335,7 +335,7 @@ rooms = {
         
     'Pantry':{        
         'color': 'blue', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 4,
         'gem': 0, 
         'key': 0,
@@ -350,7 +350,7 @@ rooms = {
     # 'Rotunda':'blue',
     'RumpusRoom':{        
         'color': 'blue', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 8,
         'gem': -1, 
         'key': 0,
@@ -364,7 +364,7 @@ rooms = {
     # 'Shrine':'blue',
     'SpareRoom':{        
         'color': 'blue', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': 0, 
         'key': 0,
@@ -374,7 +374,7 @@ rooms = {
         
     'Storeroom':{        
         'color': 'blue', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 1,
         'gem': 1, 
         'key': 1,
@@ -390,7 +390,7 @@ rooms = {
     # 'Toolshed':'blue',
     'TreasureTrove':{        
         'color': 'blue', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 5,
         'gem': -1, 
         'key': 0,
@@ -400,7 +400,7 @@ rooms = {
         
     #'TrophyRoom':{        
         #'color': 'blue', 
-        #'step': 0, 
+        #'steps': 0, 
         #'coin': 0,
         #'gem': 5, 
         #'key': 0,
@@ -411,7 +411,7 @@ rooms = {
     # 'UtilityCloset':'blue',
     'Vault':{        
         'color': 'blue', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 40,
         'gem': -3, 
         'key': 0,
@@ -421,7 +421,7 @@ rooms = {
         
     'WalkinCloset':{        
         'color': 'blue', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 2,
         'gem': 0, 
         'key': 2,
@@ -431,7 +431,7 @@ rooms = {
         
     'WineCellar':{        
         'color': 'blue', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': 3, 
         'key': 0,
@@ -444,7 +444,7 @@ rooms = {
     #orange rooms
     'Corridor':{        
         'color': 'orange', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': 0, 
         'key': 0,
@@ -455,7 +455,7 @@ rooms = {
 
     'EastWingHall':{        
         'color': 'orange', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': 0, 
         'key': 0,
@@ -467,7 +467,7 @@ rooms = {
     # 'GreatHall':'orange',
     'Hallway':{        
         'color': 'orange', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': 0, 
         'key': 0,
@@ -477,7 +477,7 @@ rooms = {
 
     'Passageway':{        
         'color': 'orange', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': -2, 
         'key': 0,
@@ -490,7 +490,7 @@ rooms = {
     # 'Vestibule':'orange',
     'WestWingHall':{        
         'color': 'orange', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': 0, 
         'key': 0,
@@ -502,7 +502,7 @@ rooms = {
     #violet rooms
     'Bedroom':{        
         'color': 'violet', 
-        'step': 2, 
+        'steps': 2, 
         'coin': 0,
         'gem': 0, 
         'key': 0,
@@ -512,7 +512,7 @@ rooms = {
 
     'Boudoir':{        
         'color': 'violet', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': 0, 
         'key': 0,
@@ -522,7 +522,7 @@ rooms = {
 
     'BunkRoom':{        
         'color': 'violet', 
-        'step': 5, 
+        'steps': 5, 
         'coin': 0,
         'gem': 0, 
         'key': 0,
@@ -532,7 +532,7 @@ rooms = {
     # 'Dormitory':'violet',
     'GuestBedroom':{        
         'color': 'violet', 
-        'step': 10, 
+        'steps': 10, 
         'coin': 0,
         'gem': 0, 
         'key': 0,
@@ -549,7 +549,7 @@ rooms = {
     #green rooms
     'Cloister':{        
         'color': 'green', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': -3, 
         'key': 0,
@@ -560,7 +560,7 @@ rooms = {
     # 'Conservatory':'green',
     'Courtyard':{        
         'color': 'green', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': -1, 
         'key': 0,
@@ -570,7 +570,7 @@ rooms = {
 
     'Greenhouse':{        
         'color': 'green', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': 0, 
         'key': 0,
@@ -580,7 +580,7 @@ rooms = {
 
     'MorningRoom':{        
         'color': 'green', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': 2, 
         'key': 0,
@@ -590,7 +590,7 @@ rooms = {
 
     'Patio':{        
         'color': 'green', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': -1, 
         'key': 0,
@@ -601,7 +601,7 @@ rooms = {
     # 'RootCellar':'green',
     'SecretGarden':{        
         'color': 'green', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': 0, 
         'key': 0,
@@ -611,7 +611,7 @@ rooms = {
 
     'Solarium':{        
         'color': 'green', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': -1, 
         'key': 0,
@@ -622,7 +622,7 @@ rooms = {
     # 'Terrace':'green',
     'Veranda':{        
         'color': 'green', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': -2, 
         'key': 0,
@@ -634,7 +634,7 @@ rooms = {
     # 'Archives':'red',
     'Chapel':{        
         'color': 'red', 
-        'step': 0, 
+        'steps': 0, 
         'coin': -1,
         'gem': 0, 
         'key': 0,
@@ -646,7 +646,7 @@ rooms = {
     # 'Darkroom':'red',
     'Furnace':{        
         'color': 'red', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': 0, 
         'key': 0,
@@ -656,7 +656,7 @@ rooms = {
 
     'Gymnasium':{        
         'color': 'red', 
-        'step': -2, 
+        'steps': -2, 
         'coin': 0,
         'gem': 0, 
         'key': 0,
@@ -667,7 +667,7 @@ rooms = {
 
     'Lavatory':{        
         'color': 'red', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': 0, 
         'key': 0,
@@ -678,7 +678,7 @@ rooms = {
     # 'Lost&Found':'red',
     'MaidsChamber':{        
         'color': 'red', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': 0, 
         'key': 0,
@@ -688,7 +688,7 @@ rooms = {
 
     'WeightRoom':{        
         'color': 'red', 
-        'step': 0, 
+        'steps': 0, 
         'coin': 0,
         'gem': 0, 
         'key': 0,
