@@ -46,6 +46,7 @@ class Nav :
             cls.player.move_player_position(y, x , 0)
         elif cls.menu == "item selection": 
             pass
+
     @classmethod
     def left(cls):
         if cls.menu == "map":
@@ -102,7 +103,9 @@ class Nav :
         """
         index_next_x = next_x + 2
         if cls.three_rooms[index_next_x][next_y] == [] : 
-            while len(cls.three_rooms[index_next_x][next_y]) < 3:
+            attempts = 0
+            max_attempts = 1000
+            while len(cls.three_rooms[index_next_x][next_y]) < 3  and attempts < max_attempts:
                 new_room = cls.pool_room(cls.proba_pool)
                 doors = database.rooms[new_room]["doors"]
                 room_doors_valid, rotation = cls.map.doors_layout(doors, next_x, next_y, r)
@@ -110,6 +113,12 @@ class Nav :
                 if room_doors_valid and (new_room not in cls.three_rooms[index_next_x][next_y]):
                     cls.three_rooms[index_next_x][next_y].append(new_room) 
                     cls.three_rotations[index_next_x][next_y][new_room] = rotation
+                attempts += 1 
+            if attempts >= max_attempts:
+                raise RuntimeError(
+                    f"Cannot find a valid room for ({next_x}, {next_y}). "
+                    f"Only found {len(cls.three_rooms[index_next_x][next_y])} valid rooms."
+                )
         return cls.three_rotations[index_next_x][next_y]
     
     @classmethod
@@ -128,8 +137,7 @@ class Nav :
 
         #rotate the doors of the new room
         doors = database.rooms[new_room_name]["doors"]
-        for _ in range(rotations[new_room_name]):
-            doors = cls.map.rot_doors(doors)
+        doors = cls.map.rot_doors(doors, nb_rotation=rotations[new_room_name])
 
         cls.map.add_room(new_room_name, next_position, doors)
         cls.map.item_randmon_room(new_room_name, next_x, next_y)
