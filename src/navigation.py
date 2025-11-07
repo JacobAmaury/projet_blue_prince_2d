@@ -132,7 +132,8 @@ class Nav :
             doors = cls.map.rot_doors(doors)
 
         cls.map.add_room(new_room_name, next_position, doors)
-        cls.map.item_randmon_room(next_x, next_y)
+        cls.map.item_randmon_room(new_room_name, next_x, next_y)
+        # Effect.apply_effect(new_room_name)
 
         # remove room from the pool_room
         if new_room_name in cls.pool : 
@@ -171,7 +172,7 @@ class Nav :
         If the player doesn't have enough 'steps', 'coin' or 'gem'
             return False
         else 
-            change player inventory change_consumable
+            change room inventory change_consumable
             return True
         """
         room_consumables = database.rooms[new_room_name]
@@ -179,14 +180,18 @@ class Nav :
             if consumable in database.consumables:
                 if increment < 0:
                     if 0 < cls.inventory.consumables[consumable] + increment:
-                       cls.map.rooms_inventory[index_next_x][next_y][consumable] += increment
+                        cls.inventory.change_consumable(consumable, increment)
                     else :
                         return False
                 else :
-                    cls.map.rooms_inventory[index_next_x][next_y][consumable] += increment
-                
-        print("Inventaire",cls.inventory.consumables)
-        print("Inventaire salle", room_consumables)
+                    cls.inventory.change_consumable(consumable, increment)
+                    if consumable != 'steps':
+                        cls.map.rooms_inventory[index_next_x][next_y][consumable] += increment
+                    
+
+        print("Inventaire database", database.rooms[new_room_name])
+        print("Inventaire salle", cls.map.rooms_inventory[index_next_x][next_y])
+        print("Inventaire joueur",cls.inventory.consumables)
         return True
 
     @classmethod
