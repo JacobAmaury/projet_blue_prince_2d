@@ -137,7 +137,7 @@ class Nav :
 
         #rotate the doors of the new room
         doors = database.rooms[new_room_name]["doors"]
-        doors = cls.map.rot_doors(doors, nb_rotation=rotations[new_room_name])
+        doors = cls.map.rot_doors(doors, rotations[new_room_name])
 
         cls.map.add_room(new_room_name, next_position, doors)
         cls.map.item_randmon_room(new_room_name, next_x, next_y)

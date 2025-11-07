@@ -128,67 +128,17 @@ class Map :
         return self.proba_pool
 
 
-    def rot_doors(self, room, nb_rotation=1):
+    def rot_doors(self, room, n=1):
         """
-        The last element of a list of door become the first 
-        Input : [1, 2, 3, 4]
-        Output : [4, 1, 2, 3]
-        """
-        if nb_rotation == 0:
-            return room
-
-        for _ in range(nb_rotation):
-            rotated_room = [-1, -1, -1, -1]
-            last_element = room[-1]
-            rotated_room[1:] = room[:-1]
-            rotated_room[0] = last_element
-
-        return rotated_room
-
-    # def doors_layout(self, room_doors, x, y, player_r):
-    #     """
-    #     doors = [bottom, right, top, left]
-    #     0 : if no door
-    #     1 : if door
-    #     Return  True if the doors can be placed in the position x, y
-    #             and the rotation of the future room
-    #     """
-    #     allowed_doors = [-1, -1, -1, -1]
-
-    #     #Check walls
-    #     if x == -2:
-    #         allowed_doors[3] = 0
-    #     if x == 2:
-    #         allowed_doors[1] = 0
-    #     if y == 0:
-    #         allowed_doors[0] = 0
-    #     if y == 8:
-    #         allowed_doors[2] = 0
+        Rotate the door list n times
         
-    #     #Unlock the front door
-    #     front = (player_r+2) % 4 #Change the rotation to the front of the room
-    #     allowed_doors[front] = 1
+        Example:
+            Input : [1, 2, 3, 4], n=1 → [4, 1, 2, 3]
+            Input : [1, 2, 3, 4], n=2 → [3, 4, 1, 2]
+        """
+        n = n % len(room)  # évite les rotations inutiles
+        return room[-n:] + room[:-n]
 
-    #     # Test all 4 rotations in random order
-    #     rotations = [0, 1, 2, 3]; rd.shuffle(rotations)
-    #     for r in rotations:
-    #         # Rotate the room's doors according to r
-    #         rotated_doors = room_doors[:]
-    #         rotated_doors = self.rot_doors(rotated_doors, nb_rotation=r)
-
-    #         # Check compatibility with allowed_doors
-    #         doors_valid = True
-    #         for allowed_door, door in zip(allowed_doors, rotated_doors):
-    #             if allowed_door != -1 and allowed_door != door:
-    #                 doors_valid = False
-    #                 break
-
-    #         if doors_valid:
-    #             return True, r  # Found a valid rotation
-
-    #     # If no valid rotation found
-    #     return False, None
-    
     def doors_layout(self, room_doors, x, y, player_r):
         """
         doors = [bottom, right, top, left]
@@ -197,7 +147,6 @@ class Map :
         Return  True if the doors can be placed in the position x, y
                 and the rotation of the future room
         """
-        doors = room_doors[:]
         allowed_doors = [-1, -1, -1, -1]
 
         #Check walls
@@ -214,19 +163,27 @@ class Map :
         front = (player_r+2) % 4 #Change the rotation to the front of the room
         allowed_doors[front] = 1
 
+        # Test all 4 rotations in random order
+        rotations = [0, 1, 2, 3]; rd.shuffle(rotations)
+        for r in rotations:
+            # Rotate the room's doors according to r
+            rotated_doors = room_doors[:]
 
-        for r in range(4): #test 4 rotation
+            rotated_doors = self.rot_doors(rotated_doors, r)
+
+            # Check compatibility with allowed_doors
             doors_valid = True
-            for allowed_door, door in zip(allowed_doors, doors):
-                if (allowed_door != -1):
-                    if (allowed_door != door):
-                        doors_valid = False
-                        break
+            for allowed_door, door in zip(allowed_doors, rotated_doors):
+                if allowed_door != -1 and allowed_door != door:
+                    doors_valid = False
+                    break
+
             if doors_valid:
-                break
-            else: 
-                doors = self.rot_doors(doors)
-        return doors_valid, r
+                return True, r  # Found a valid rotation
+
+        # If no valid rotation found
+        return False, None
+
 
     def add_room(self,name,position, doors):
         y, x, r = position
