@@ -49,33 +49,62 @@ class Map :
 
         return self.pool
 
-    def item_randmon_room(self, x, y):
+    def item_randmon_room(self, room_name, x, y):
         """ add random items in rooms_inventory """
-        
-        item_pool = [0]*50
-        rarity_weights = {
-            "coin": 20,
-            "gem": 20,
-            "key": 20,
-            "apple": 20,
-            "dice": 10,
-            "Shovel": 2,
-            "Lockpick_Kit": 2
-        }
-        
-        for name, weight in rarity_weights.items():
-            item_pool.extend([name] * weight)
-        
-        for _ in range(4):
-            rand_index = rd.randint(0,len(item_pool)-1)
-            act_item = item_pool[rand_index]
 
-            if act_item in ["Shovel", "Lockpick_Kit"] and self.rooms_inventory[x][y][act_item] > 0:
-                continue
+        self.effect_6 = False #modified in navigatio.py and in the class effect
 
-            if item_pool[rand_index] != 0:
-                self.rooms_inventory[x][y][act_item] += 1
-        
+        if (self.effect_6) and (database.rooms[room_name]['color'] == 'green'):
+            item_pool_green = [0]*50
+            rarity_weights_green = {
+                "coin": 40,
+                "gem": 40,
+                "key": 40,
+                "apple": 40,
+                "dice": 20,
+                "Shovel": 10,
+                "Lockpick_Kit": 10
+            }
+            
+            for name, weight in rarity_weights.items():
+                item_pool_green.extend([name] * weight)
+            
+            for _ in range(4):
+                rand_index = rd.randint(0,len(item_pool)-1)
+                act_item = item_pool_green[rand_index]
+
+                if act_item in ["Shovel", "Lockpick_Kit"] and self.rooms_inventory[x][y][act_item] > 0:
+                    continue
+
+                if item_pool[rand_index] != 0:
+                    self.rooms_inventory[x][y][act_item] += 1
+            
+
+        else:
+            item_pool = [0]*50
+            rarity_weights = {
+                "coin": 20,
+                "gem": 20,
+                "key": 20,
+                "apple": 20,
+                "dice": 10,
+                "Shovel": 2,
+                "Lockpick_Kit": 2
+            }
+            
+            for name, weight in rarity_weights.items():
+                item_pool.extend([name] * weight)
+            
+            for _ in range(4):
+                rand_index = rd.randint(0,len(item_pool)-1)
+                act_item = item_pool[rand_index]
+
+                if act_item in ["Shovel", "Lockpick_Kit"] and self.rooms_inventory[x][y][act_item] > 0:
+                    continue
+
+                if item_pool[rand_index] != 0:
+                    self.rooms_inventory[x][y][act_item] += 1
+            
 
 
     def update_proba_pool(self):

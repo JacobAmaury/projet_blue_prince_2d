@@ -252,9 +252,31 @@ class Nav :
 
 class Effect:
 
-    def apply_effect(room_name, x, y):
+    def apply_effect(self, room_name):
+        act_effect = database.rooms[room_name]['effect']
+
+        if act_effect in (1, 4):
+            self.spread_green_room_1_and_4(room_name)
+        elif act_effect == 2:
+            self.spread_items_2_and_3('key')
+        elif act_effect == 3:
+            self.spread_items_2_and_3('coin')
+        elif act_effect == 4:
+            self.spread_green_room_1_and_4(room_name)
+        elif act_effect == 5:
+            self.room_rarity_5(room_name)
+        elif act_effect == 6:
+            self.modify_proba_item_6(room_name)
+        elif act_effect == 7:
+            pass
+        elif act_effect == 8:
+            self.set_gem_number_8()
+        elif act_effect == 9:
+            self.divide_steps_by_2_9()
+            
         
-        return None
+
+        
     
     def room_rarity_5(room_name):
         #modify the rarity of room_name to an lower value
@@ -274,16 +296,20 @@ class Effect:
                 if database.rooms[i]["colot"] == "green" and database.rooms[i]["rarity"] > 1:
                     database.rooms[i]["rarity"] -= 1
 
+
     def set_gem_number_8(room_name):
         if room_name == "Ballroom":
             player.Inventory.consumables['gem'] = 2
+
 
     def divide_steps_by_2_9(room_name):
         if room_name == "Library" or "WeightRoom":
             player.Inventory.consumables['steps'] //= 2
 
+
     def modify_proba_item_6(room_name):
-        
+        player.Map.effect_6 = True
+
 
     @classmethod
     def room_ex(cls, next_x, next_y):
@@ -326,7 +352,8 @@ class Effect:
                         if act_item != 0: 
                             player.map.rooms_inventory[x][y]["gem"] += 1
 
-    def spread_items(self,item_to_spread, room_name):
+
+    def spread_items_2_and_3(self,item_to_spread, room_name):
 
         item_pools = [0]*50
         rarity_weights = {
