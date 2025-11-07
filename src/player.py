@@ -31,8 +31,14 @@ class Map :
         self.player_position = (0,0,0)
 
     def init_pool(self):
+        #add one time every rooms
         self.pool = [name for name in database.rooms.keys()]
-        # We can add more room here
+
+        # #add more green room
+        # self.pool.extend([name for name, data in database.rooms.items() if data['color'] == 'green'])
+        # #add more orange room
+        # self.pool.extend([name for name, data in database.rooms.items() if data['color'] == 'orange'])
+
         return self.pool
 
     def item_randmon_room(self, x, y):
@@ -60,14 +66,11 @@ class Map :
         for name, weight in rarity_weights.items():
             item_pool.extend([name] * weight)
         
-        for i in range(4):
+        for _ in range(4):
             rand_index = rd.randint(0,len(item_pool)-1)
             act_item = item_pool[rand_index]
 
-            if act_item == "Shovel" and self.rooms_inventory[x][y][act_item] > 0:
-                continue
-
-            if act_item == "Lockpick_Kit" and self.rooms_inventory[x][y][act_item] > 0:
+            if act_item in ["Shovel", "Lockpick_Kit"] and self.rooms_inventory[x][y][act_item] > 0:
                 continue
 
             if item_pool[rand_index] != 0:

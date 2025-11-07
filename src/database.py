@@ -575,7 +575,7 @@ rooms = {
         'gem': 0, 
         'key': 0,
         'rarity': 1, 
-        'doors': [1,1,0,0],
+        'doors': [1,0,0,0],
         'effect': 5},
 
     'MorningRoom':{        

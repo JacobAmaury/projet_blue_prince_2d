@@ -75,7 +75,7 @@ class UI :
         cls.update_map()
 
     @classmethod
-    def selection_menu(cls, room_names, rotations):
+    def room_select_menu(cls, room_names, rotations):
         """
         Display a selection menu for choosing one of three rooms.
         Returns the name of the selected room, reroll or None if cancelled.
@@ -174,6 +174,30 @@ class UI :
 
         return selected_room
 
+    @classmethod
+    def item_selection_menu(cls, room_names, rotations):
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    cls.quit_game()
+
+                elif event.type == pygame.KEYDOWN:
+                    event_key = event.key
+                    if event_key == pygame.K_ESCAPE:
+                        running = False  #close menu
+                    elif event_key == pygame.K_z or event_key == pygame.K_w or event_key == pygame.K_UP :
+                        event_handler.up()
+                    elif event_key == pygame.K_s or event_key == pygame.K_DOWN:
+                        event_handler.down()
+                    elif event_key == pygame.K_q or event_key == pygame.K_a or event_key == pygame.K_LEFT:
+                        event_handler.left()
+                    elif event_key == pygame.K_d or event_key == pygame.K_RIGHT:
+                        event_handler.right()
+
+                    elif event_key == pygame.K_RETURN:
+                        event_handler.enter()
+                        #rooms_inventory get item
 
     @classmethod
     def event_listener(cls):
