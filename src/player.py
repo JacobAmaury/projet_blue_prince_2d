@@ -136,7 +136,7 @@ class Map :
             Input : [1, 2, 3, 4], n=1 → [4, 1, 2, 3]
             Input : [1, 2, 3, 4], n=2 → [3, 4, 1, 2]
         """
-        n = n % len(room)  # évite les rotations inutiles
+        n = n % len(room)  #protection overflow 
         return room[-n:] + room[:-n]
 
     def doors_layout(self, room_doors, x, y, player_r):
@@ -183,6 +183,51 @@ class Map :
 
         # If no valid rotation found
         return False, None
+    
+    def level_up_door(self, doors, y):
+        """
+        Assigne un niveau de verrouillage (0, 1 ou 2) aux portes selon la progression.
+
+        Args:
+            doors (list[int]): liste des portes (ex : [1, 1, 0, 1]) où 1 = porte présente.
+            y (int): indice de la ligne actuelle dans le manoir.
+        
+        Returns:
+            list[int]: liste mise à jour avec niveaux de porte.
+        """
+        if y == 0:
+            return doors
+        elif y == 8:   # dernière rangée
+            return [3 if door != 0 else 0 for door in doors] #change les 1 en 3
+        
+        new_doors = []
+        p = y / 8 * 0.6 #level up too fast without 0.6
+        for d in doors:
+            if d == 0:
+                new_doors.append(0)
+            else:
+                r = rd.random()
+                if r < 1 - p:      
+                    new_doors.append(1)
+                elif r < 1 - p/2:     
+                    new_doors.append(2)
+                else:                 
+                    new_doors.append(3)
+        return new_doors
+    
+    def door_level_check(cls, door):
+        doors_open = False
+        if door == 1:
+            doors_open = True
+        elif door == 2:
+            if ('Lockpick_Kit' in cls.inventory.permanents) or (cls.inventory.consumables["key"]>= 1):
+                cls.inventory.change_consumable('key', -1)
+                doors_open = True
+        elif door == 3:
+            if (cls.inventory.consumables["key"]>= 1):
+                cls.inventory.change_consumable('key', -1)
+                doors_open = True
+        return doors_open      
 
 
     def add_room(self,name,position, doors):
@@ -201,7 +246,7 @@ class Map :
 
 class Inventory:
     def __init__(self):
-        self.consumables = {'steps': 70, 'coin': 0, 'gem': 40, 'key': 0, 'dice': 0}
+        self.consumables = {'steps': 70, 'coin': 0, 'gem': 40, 'key': 10, 'dice': 0}
         self.permanents = []    #sets display order
 
 
