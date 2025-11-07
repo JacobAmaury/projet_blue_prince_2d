@@ -282,6 +282,8 @@ class Effect:
         if room_name == "Library" or "WeightRoom":
             player.Inventory.consumables['steps'] //= 2
 
+    def modify_proba_item_6(room_name):
+        
 
     @classmethod
     def room_ex(cls, next_x, next_y):
@@ -336,12 +338,8 @@ class Effect:
 
         if not(item_pools.has_key(item_to_spread)):
             raise TypeError(f"{item_to_spread} is not in rarity_wight")
-
-
-
-        item_pools.extend([item_to_spread]*rarity_weights[item_to_spread]) 
         
-
+        item_pools.extend([item_to_spread]*rarity_weights[item_to_spread]) 
 
         for y in range(9):
             for x in range(5):
@@ -351,6 +349,7 @@ class Effect:
                         act_item = item_pools[rand_index]
                         if act_item != 0:
                             player.map.rooms_inventory[x][y][act_item] += 1
+        
 
 
 

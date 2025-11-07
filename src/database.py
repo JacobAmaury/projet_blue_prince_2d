@@ -10,10 +10,10 @@ permanents = ['Shovel','Lockpick_Kit','Lucky_Rabbits_Foot','Metal_Detector','Pow
 #rarity : 0 common, 1 standard, 2 unusual, 3 rare, -1 antechamber
 
 """effects : 0- no effects
-             1- spread gem in rooms
-             2- spread keys in rooms
-             3- spread coins in rooms
-             4- spread fruits in rooms
+             1- spread gem in rooms                        done
+             2- spread keys in rooms                       done
+             3- spread coins in rooms                      done
+             4- spread fruits in rooms                     done
 
              5- modify the rarity of a room                done
              6- modify the probability of objects          
