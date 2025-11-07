@@ -180,18 +180,6 @@ class Nav :
                 if increment < 0:
                     if (cls.inventory.consumables[consumable] + increment) < 0:
                         return False
-<<<<<<< HEAD
-=======
-                else :
-                    cls.inventory.change_consumable(consumable, increment)
-                    if consumable != 'steps':
-                        cls.map.rooms_inventory[index_next_x][next_y][consumable] += increment
-                    
-
-        # print("Inventaire database", database.rooms[new_room_name])
-        # print("Inventaire salle", cls.map.rooms_inventory[index_next_x][next_y])
-        # print("Inventaire joueur",cls.inventory.consumables)
->>>>>>> 70aeb84 (debug all effects. They seem to be ok)
         return True
     
     @classmethod
