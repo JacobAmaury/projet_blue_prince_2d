@@ -49,6 +49,7 @@ class Map :
             "gem": 0,
             "key": 0,
             "dice": 0,
+            "apple":0,
             "Shovel": 0,
             "Lockpick_Kit": 0
         }
@@ -58,6 +59,7 @@ class Map :
             "coin": 20,
             "gem": 20,
             "key": 20,
+            "apple": 20,
             "dice": 10,
             "Shovel": 2,
             "Lockpick_Kit": 2

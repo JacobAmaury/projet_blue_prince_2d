@@ -2,6 +2,7 @@ from player import Player
 import random
 import database
 import player
+import random as rd
 
 class Nav :
     @classmethod
@@ -251,7 +252,7 @@ class Nav :
 
 class Effect:
 
-    def apply_effect(room_name):
+    def apply_effect(room_name, x, y):
         
         return None
     
@@ -280,5 +281,80 @@ class Effect:
     def divide_steps_by_2_9(room_name):
         if room_name == "Library" or "WeightRoom":
             player.Inventory.consumables['steps'] //= 2
+
+
+    @classmethod
+    def room_ex(cls, next_x, next_y):
+        rooms = cls.map.rooms
+        for name, coords_list in rooms.items():
+            for c in coords_list:
+                if (c[0], c[1]) == (next_y, next_x):
+                    return name
+        return None
+    
+
+    def spread_green_room_1_and_4(self, room_name):
+        """take the room name if the room name is patio spread gems in all green room"""
+
+        if room_name == 'SecretGarden':
+            apple_pool = [0]*50
+            apple_pool.extend(["gem"]*20)
+
+            for y in range(9):
+                for x in range(5):
+                    if database.rooms[self.room_ex(x,y)]["color"] == 'green': #verify if the room[x,y] is green
+                        
+                        rand_index = rd.randint(0,len(apple_pool)-1) 
+                        act_item = apple_pool[rand_index] 
+
+                        if act_item != 0: 
+                            player.map.rooms_inventory[x][y]["apple"] += 1
+            
+        
+        if room_name == 'Patio':
+            gem_pool = [0]*50
+            gem_pool.extend(["gem"]*20)
+            for y in range(9):
+                for x in range(5):
+                    if database.rooms[self.room_ex(x,y)]["color"] == 'green': #verify if the room[x,y] is green
+                        
+                        rand_index = rd.randint(0,len(gem_pool)-1) 
+                        act_item = gem_pool[rand_index] 
+
+                        if act_item != 0: 
+                            player.map.rooms_inventory[x][y]["gem"] += 1
+
+    def spread_items(self,item_to_spread, room_name):
+
+        item_pools = [0]*50
+        rarity_weights = {
+            "coin": 20,
+            "gem": 20,
+            "key": 20,
+            "dice": 10,
+        }
+
+        if not(item_pools.has_key(item_to_spread)):
+            raise TypeError(f"{item_to_spread} is not in rarity_wight")
+
+
+
+        item_pools.extend([item_to_spread]*rarity_weights[item_to_spread]) 
+        
+
+
+        for y in range(9):
+            for x in range(5):
+                if player.map.rooms_inventory[x][y]:
+                    for i in range(4):
+                        rand_index = rd.randint(0,len(item_pools)-1)
+                        act_item = item_pools[rand_index]
+                        if act_item != 0:
+                            player.map.rooms_inventory[x][y][act_item] += 1
+
+
+
+
+                
 
         
