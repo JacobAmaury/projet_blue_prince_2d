@@ -27,20 +27,15 @@ class SelectionMenu(Screen):
         # Why not just return index ?
         class MenuHandler(EventHandler):
             @staticmethod
-            def space():
-                MenuHandler.enter()    #not in the game specifications (easier debugg), can be removed later
-            @staticmethod
             def escape() : 
                 self.running=False
                 self.room_choice = -1
             @staticmethod
             def left():
-                if self.room_choice > 0:
-                    self.room_choice -= 1 
+                self.room_choice = (self.room_choice - 1) % 4 
             @staticmethod
             def right():
-                if self.room_choice < 3:
-                    self.room_choice += 1 
+                self.room_choice = (self.room_choice + 1)  %4
             @staticmethod
             def enter() : 
                 if self.room_choice != 3 :
@@ -49,7 +44,16 @@ class SelectionMenu(Screen):
                     if self.dice_count >= 1 :
                         self.running = False  #close menu to rerun selection_menu
                         return 3
-                    
+            ##optionnal handlers : not in the game specifications (easier debugg), can be removed later
+            @staticmethod
+            def space():
+                MenuHandler.enter()
+            @staticmethod
+            #cancel if go back or up
+            def down():
+                MenuHandler.escape()
+            def up():
+                MenuHandler.escape()
         self.event_handler = MenuHandler
         event_listener = self.window.ui.event_listener
         self.running = True

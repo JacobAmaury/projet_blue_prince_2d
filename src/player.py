@@ -52,7 +52,7 @@ class Room :
         self.name = name
         self.rotation = rotation
         self.data = database.rooms[name]
-        self.doors = self.data['doors']
+        self.doors = [door for door in self.data['doors']]  #copy by value if room has multiple insntances
         #self.inventory ?
 
 class Map :
