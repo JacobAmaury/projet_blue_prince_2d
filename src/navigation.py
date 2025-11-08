@@ -206,11 +206,13 @@ class Nav :
             no_wall = (0 <= next_x < 5) and (0 <= next_y < 9)
             if no_wall:
                 if cls.map.room_exists(next_x, next_y):
-                    # r = (r+2) % 4 #Change the player rotation when entering a room
-                    cls.inventory.change_consumable('steps', -1)
-                    if cls.inventory.consumables['steps'] <= 0:
-                        cls.player.game_over()
-                    cls.player.move(next_x, next_y, r)
+                    next_room_has_a_door = cls.map.rooms[next_x][next_y].doors[(r+2)%4] == 1
+                    if next_room_has_a_door :
+                        # r = (r+2) % 4 #Change the player rotation when entering a room
+                        cls.inventory.change_consumable('steps', -1)
+                        if cls.inventory.consumables['steps'] <= 0:
+                            cls.player.game_over()
+                        cls.player.move(next_x, next_y, r)
                 else:
                     reroll = 3; cancel = -1
                     new_room_id = 3 #reroll value

@@ -27,6 +27,9 @@ class SelectionMenu(Screen):
         # Why not just return index ?
         class MenuHandler(EventHandler):
             @staticmethod
+            def space():
+                MenuHandler.enter()    #not in the game specifications (easier debugg), can be removed later
+            @staticmethod
             def escape() : 
                 self.running=False
                 self.room_choice = -1
