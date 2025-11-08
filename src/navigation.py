@@ -41,7 +41,7 @@ class Nav :
         cls.inventory, cls.map = cls.player.inventory, cls.player.map
         cls.ui.screen.event_handler = NavHandlers
 
-        cls.three_rooms = []  # rooms[0, 1, 2]
+        cls.three_rooms = [[[] for y in range(9)] for x in range(5)]  #x, y, rooms[0, 1, 2]
         cls.pool = cls.map.init_pool()
         cls.proba_pool = cls.map.update_proba_pool()
 
@@ -65,23 +65,23 @@ class Nav :
         Returns:
             dict: Rooms mapped to their valid rotations.
         """
-        if cls.three_rooms == [] : 
+        if cls.three_rooms[next_x][next_y] == [] : 
             attempts = 0
             max_attempts = 1000
-            while len(cls.three_rooms) < 3  and attempts < max_attempts:
+            while len(cls.three_rooms[next_x][next_y]) < 3  and attempts < max_attempts:
                 new_room_name = cls.pool_room(cls.proba_pool)
                 doors = database.rooms[new_room_name]['doors']
                 room_doors_valid, rotation = cls.map.doors_layout(doors, next_x, next_y, r)
 
-                if room_doors_valid and (new_room_name not in cls.three_rooms):  
-                    cls.three_rooms.append(Room(new_room_name,rotation)) 
+                if room_doors_valid and (new_room_name not in [room.name for room in cls.three_rooms[next_x][next_y]]):  
+                    cls.three_rooms[next_x][next_y].append(Room(new_room_name,rotation)) 
                 attempts += 1 
             if attempts >= max_attempts:
                 raise RuntimeError(
                     f"Cannot find a valid room for ({next_x}, {next_y}). "
-                    f"Only found {len(cls.three_rooms)} valid rooms."
+                    f"Only found {len(cls.three_rooms[next_x][next_y])} valid rooms."
                 )
-        return cls.three_rooms
+        return cls.three_rooms[next_x][next_y]
     
     @classmethod
     def open_room(cls, next_x, next_y, new_room):
@@ -93,7 +93,7 @@ class Nav :
         """
         _, _, r = cls.player.position
 
-        cls.three_rooms = []
+        cls.three_rooms[next_x][next_y] = []
         next_position = (next_x, next_y)
 
         #rotate and level up the doors of the new room
@@ -215,17 +215,17 @@ class Nav :
                     reroll = 3; cancel = -1
                     new_room_id = 3 #reroll value
                     while(new_room_id == reroll):
-                        three_rooms = cls.three_room_choice(next_x, next_y, r)
-                        new_room_id = cls.ui.screen.room_select_menu(three_rooms)
+                        cls.three_rooms[next_x][next_y] = cls.three_room_choice(next_x, next_y, r)
+                        new_room_id = cls.ui.screen.room_select_menu(cls.three_rooms[next_x][next_y])
 
                         if new_room_id != reroll and  new_room_id != cancel:
-                            new_room = three_rooms[new_room_id]
+                            new_room = cls.three_rooms[next_x][next_y][new_room_id]
                             if cls.enough_consumables(new_room.name):
                                 cls.change_player_consumables(new_room, next_x, next_y)
                                 cls.open_room(next_x, next_y, new_room)
 
                         if new_room_id == reroll:
-                            cls.three_rooms = []
+                            cls.three_rooms[next_x][next_y] = []
 
                         
 
