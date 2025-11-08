@@ -1,6 +1,6 @@
 import pygame
 
-from .image import ImageFull, ImageTransparant, ImageSticker
+from .image import ImageSimple, ImageReapeated
 from .event_handler import EventHandler
 from .window import Screen
 
@@ -20,9 +20,9 @@ class SelectionMenu(Screen):
         self.rooms = rooms
         self.room_choice = 0
         #import images from loadscreen
-        self.bg_image = ImageTransparant(Screen.selectionmenu_bg_img)
-        self.dice_image = ImageTransparant(Screen.consumable_imgs['dice'])
-        self.gem_image = ImageSticker(Screen.consumable_imgs['gem'])
+        self.bg_image = ImageSimple(Screen.selectionmenu_bg_img)
+        self.dice_image = ImageSimple(Screen.consumable_imgs['dice'])
+        self.gem_image = ImageReapeated(Screen.consumable_imgs['gem'])
         self.build_selection_menu()
 
     def selection(self):
@@ -80,12 +80,12 @@ class SelectionMenu(Screen):
         gem_image.scale((int(W * SIZE_GEM), int(W * SIZE_GEM)))
         self.gem_texts = []
         #image building
-        self.bg_image.scale((W, H))
+        self.bg_image.smoothscale((W, H))
         for id,room in enumerate(self.rooms):
             room_img = Screen.room_imgs[room.name]
             room_img = pygame.transform.rotate(room_img, room.rotation*90)
-            room_image = ImageFull(room_img)
-            room_image.scale((int(W * SIZE_ROOM), int(H * SIZE_ROOM * 16/9)))
+            room_image = ImageSimple(room_img)
+            room_image.smoothscale((int(W * SIZE_ROOM), int(H * SIZE_ROOM * 16/9)))
             room_image.position = (W * (X_ROOMS + X_STEP*id), H * Y_ROOMS)
             self.room_images[id]=(room_image)
             #gem sticker

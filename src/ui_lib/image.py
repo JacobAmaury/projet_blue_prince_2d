@@ -21,20 +21,14 @@ class Image:    #abstract
 
 
 
-class ImageFull(Image):
+class ImageSimple(Image):
     def __init__(self,loaded_image) : 
         Image.__init__(self,loaded_image)
+        self.scaled = None
+        self.position = None
     
-    def scale(self,size):
+    def smoothscale(self,size):
         self.scaled = pygame.transform.smoothscale(self.loaded,size)
-
-    def blit(self,buffer):
-        buffer.blit(self.scaled, self.position)  
-
-
-class ImageTransparant(Image):
-    def __init__(self,loaded_image) : 
-        Image.__init__(self,loaded_image)
 
     def scale(self,size):
         self.scaled = pygame.transform.scale(self.loaded,size)
@@ -43,22 +37,23 @@ class ImageTransparant(Image):
         buffer.blit(self.scaled, self.position)  
 
 
-class ImageSticker(Image):    #abstract
+class ImageReapeated(Image):    #abstract
     #constructors
     def __init__(self,loaded_image) : 
         Image.__init__(self,loaded_image)
         self.positions=[]
+        self.scaled = None
 
     def scale(self,size):
         self.scaled = pygame.transform.scale(self.loaded,size)
 
 
 
-class ImageRoom(Image):    #transparant with rotations
+class ImageRoom(Image):    #reapeated and rotations
     def __init__(self,loaded_image):
         Image.__init__(self,loaded_image)
-        self.scaled = [None]*4  #[0:0°,1:90°,2,180°,3:-90°]
         self.positions=[]
+        self.scaled = [None]*4  #[0:0°,1:90°,2,180°,3:-90°]
     
     def scale(self,room_size):
         (w_size,h_size) = room_size

@@ -1,12 +1,12 @@
 import pygame
-from .image import ImageTransparant
+from .image import ImageSimple
 
 
 class Consumable_row :
     TEXT_COLOR = (255, 255, 255)
     def __init__(self, name,image):
         self.name = name
-        self.image = ImageTransparant(image)
+        self.image = ImageSimple(image)
         self.txt = None
     
     def render_txt(self,font,msg):

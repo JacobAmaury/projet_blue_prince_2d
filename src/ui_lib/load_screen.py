@@ -1,7 +1,7 @@
 import pygame
 import database
 
-from .image import ImageFull,ImageTransparant, Image
+from .image import Image, ImageSimple
 from .window import Screen
 
 
@@ -13,8 +13,8 @@ class LoadScreen(Screen) :
         #load images
         bg_path="../images/background/BluePrince_Start.jpg"
         logo_path="../images/Logo_Blue_Prince.png"
-        self.bg_image = ImageFull(Image.loadFull(bg_path))
-        self.logo_image = ImageTransparant(Image.loadTransparent(logo_path))
+        self.bg_image = ImageSimple(Image.loadFull(bg_path))
+        self.logo_image = ImageSimple(Image.loadTransparent(logo_path))
         #show window (was Hidden)
         self.window.show_window()
         self.refresh()
@@ -26,9 +26,9 @@ class LoadScreen(Screen) :
         W,H = self.window.size
         self.size = W,H
         #images
-        self.bg_image.scale((W,H))
+        self.bg_image.smoothscale((W,H))
         self.bg_image.position = (0,0)
-        self.logo_image.scale((W//3, H//3))
+        self.logo_image.smoothscale((W//3, H//3))
         self.logo_image.position = (W//3 - self.logo_image.scaled.get_width()//2, H//20)
         #text
         self.text_rendered = font.render("Loading game ...", True, (255, 255, 255))
@@ -71,3 +71,11 @@ class LoadScreen(Screen) :
         #image menu
         bg_menu_path = "../images/background/selection_menu.png"
         Screen.selectionmenu_bg_img = Image.loadTransparent(bg_menu_path)
+
+        #door status
+        path = "../images/items/doors/closed_door.png"
+        Screen.closed_door_img = Image.loadTransparent(path)
+        path = "../images/items/doors/opened_door.png"
+        Screen.opened_door_img = Image.loadTransparent(path)
+        path = "../images/items/doors/plant.png"
+        Screen.plant_img = Image.loadTransparent(path)

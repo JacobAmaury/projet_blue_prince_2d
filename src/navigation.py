@@ -216,31 +216,29 @@ class Nav :
 
             # print("Inventaire salle", cls.map.rooms_inventory[x][y])
             
-            no_wall = (0 <= next_x < 5) and (0 <= next_y < 9)
-            if no_wall:
-                if cls.map.room_exists(next_x, next_y):
-                    next_room_has_a_door = cls.map.rooms[next_x][next_y].doors[(r+2)%4] == 1
-                    if next_room_has_a_door :
-                        # r = (r+2) % 4 #Change the player rotation when entering a room
-                        cls.inventory.change_consumable('steps', -1)
-                        if cls.inventory.consumables['steps'] <= 0:
-                            cls.player.game_over()
-                        cls.player.move(next_x, next_y, r)
-                else:
-                    reroll = 3; cancel = -1
-                    new_room_id = 3 #reroll value
-                    while(new_room_id == reroll):
-                        cls.three_rooms[next_x][next_y] = cls.three_room_choice(next_x, next_y, r)
-                        new_room_id = cls.ui.screen.room_select_menu(cls.three_rooms[next_x][next_y])
+            if cls.map.room_exists(next_x, next_y):
+                next_room_has_a_door = cls.map.rooms[next_x][next_y].doors[(r+2)%4] == 1
+                if next_room_has_a_door :
+                    # r = (r+2) % 4 #Change the player rotation when entering a room
+                    cls.inventory.change_consumable('steps', -1)
+                    if cls.inventory.consumables['steps'] <= 0:
+                        cls.player.game_over()
+                    cls.player.move(next_x, next_y, r)
+            else:
+                reroll = 3; cancel = -1
+                new_room_id = 3 #reroll value
+                while(new_room_id == reroll):
+                    cls.three_rooms[next_x][next_y] = cls.three_room_choice(next_x, next_y, r)
+                    new_room_id = cls.ui.screen.room_select_menu(cls.three_rooms[next_x][next_y])
 
-                        if new_room_id != reroll and  new_room_id != cancel:
-                            new_room = cls.three_rooms[next_x][next_y][new_room_id]
-                            if cls.enough_consumables(new_room.name):
-                                cls.change_player_consumables(new_room, next_x, next_y)
-                                cls.open_room(next_x, next_y, new_room)
+                    if new_room_id != reroll and  new_room_id != cancel:
+                        new_room = cls.three_rooms[next_x][next_y][new_room_id]
+                        if cls.enough_consumables(new_room.name):
+                            cls.change_player_consumables(new_room, next_x, next_y)
+                            cls.open_room(next_x, next_y, new_room)
 
-                        if new_room_id == reroll:
-                            cls.three_rooms[next_x][next_y] = []
+                    if new_room_id == reroll:
+                        cls.three_rooms[next_x][next_y] = []
 
                         
 

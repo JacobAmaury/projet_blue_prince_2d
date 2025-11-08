@@ -7,11 +7,13 @@ class Player :
         self.map = Map()
         self.inventory = Inventory()
         self.position = (2,0,0) #(x,y,r)
+        self.door_status = 0
 
     def move(self,x,y,r): #move_player_position
         """(0,0,0) : (bottom,left,0°)  rot:(0:0°,1:90°,2:180°,3:-90°)"""
         #position : (x,y,r) with x in [0,4], y in [0,8], r in [0,3]
         self.position = x,y,r
+        self.door_status = self.map.rooms[x][y].doors[r]    # 0:opened, 1:closed, 2:1_lock, 3: 2_lock 
         Player.ui.screen.update_door()
 
     def game_won(self):

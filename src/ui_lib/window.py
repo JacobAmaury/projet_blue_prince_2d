@@ -62,5 +62,3 @@ class Screen :  #abstract
     consumable_imgs = {}
     permanant_imgs = {}
     room_imgs = {}
-    main_bg_img = None
-    selectionmenu_bg_img = None
