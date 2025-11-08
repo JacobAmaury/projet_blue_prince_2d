@@ -35,3 +35,9 @@ src/__pycache__/navigation.cpython-314.pyc
 src/__pycache__/options.cpython-314.pyc
 src/__pycache__/player.cpython-314.pyc
 src/__pycache__/ui.cpython-314.pyc
+src/ui_lib/__pycache__/event_handler.cpython-313.pyc
+src/ui_lib/__pycache__/grids.cpython-313.pyc
+src/ui_lib/__pycache__/image.cpython-313.pyc
+src/ui_lib/__pycache__/main_screen.cpython-313.pyc
+src/ui_lib/__pycache__/selection_menu.cpython-313.pyc
+src/ui_lib/__pycache__/window.cpython-313.pyc

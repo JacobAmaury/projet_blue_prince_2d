@@ -306,9 +306,9 @@ class Effect:
 
             for y in range(9):
                 for x in range(5):
-                    if room_exists(x,y) == None:
+                    if not room_exists(x,y):
                         continue
-                    if database.rooms[room_exists(x,y)]['color'] == 'green': #verify if the room[x,y] is green
+                    if database.rooms[Nav.map.rooms[x][y].name]['color'] == 'green': #verify if the room[x,y] is green
                         
                         rand_index = rd.randint(0,len(apple_pool)-1) 
                         act_item = apple_pool[rand_index] 
@@ -322,9 +322,9 @@ class Effect:
             gem_pool.extend(['gem']*20)
             for y in range(9):
                 for x in range(5):
-                    if room_exists(x,y) == None:
+                    if not room_exists(x,y):
                         continue
-                    if database.rooms[room_exists(x,y)]['color'] == 'green': #verify if the room[x,y] is green
+                    if database.rooms[Nav.map.rooms[x][y].name]['color'] == 'green': #verify if the room[x,y] is green
                         
                         rand_index = rd.randint(0,len(gem_pool)-1) 
                         act_item = gem_pool[rand_index] 
