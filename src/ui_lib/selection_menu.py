@@ -1,14 +1,18 @@
 import pygame
 
-from .image import ImageFull, ImageTransparant
+from .image import ImageFull, ImageTransparant, ImageSticker
 from .event_handler import EventHandler
 from .window import Screen
 
 class SelectionMenu(Screen):
     room_images = [None]*3
-    X_RATIO = 0.309     #ratio of W
-    Y_RATIO = 0.173     #ratio of H
-    X_STEP_RATIO = 0.187
+    X_ROOMS = 0.309     #ratio of W
+    Y_ROOMS = 0.173     #ratio of H
+    X_STEP = 0.187
+    X_OFF_GEM = 0.7   #ratio of case W
+    Y_OFF_GEM = 0.01   #ratio of case W
+    SIZE_GEM = 0.035 #ratio of W
+    SIZE_ROOM = 0.173
 
     def __init__(self,rooms):
         Screen.__init__(self)
@@ -18,6 +22,7 @@ class SelectionMenu(Screen):
         #import images from loadscreen
         self.bg_image = ImageTransparant(Screen.selectionmenu_bg_img)
         self.dice_image = ImageTransparant(Screen.consumable_imgs['dice'])
+        self.gem_image = ImageSticker(Screen.consumable_imgs['gem'])
         self.build_selection_menu()
 
     def selection(self):
@@ -66,16 +71,27 @@ class SelectionMenu(Screen):
     def build_selection_menu(self):
         self.size = self.window.size
         W, H = self.size
-        Y_RATIO = self.Y_RATIO ; X_RATIO = self.X_RATIO ; X_STEP_RATIO = self.X_STEP_RATIO
+        Y_ROOMS = self.Y_ROOMS ; X_ROOMS = self.X_ROOMS ; X_STEP = self.X_STEP
+        SIZE_ROOM = self.SIZE_ROOM
+        X_OFF_GEM = self.X_OFF_GEM; Y_OFF_GEM = self.Y_OFF_GEM; SIZE_GEM = self.SIZE_GEM
+        font = pygame.font.Font(None, int(H * 0.05))
+        #gem cost sticker
+        gem_image = self.gem_image
+        gem_image.scale((int(W * SIZE_GEM), int(W * SIZE_GEM)))
+        self.gem_texts = []
         #image building
         self.bg_image.scale((W, H))
         for id,room in enumerate(self.rooms):
             room_img = Screen.room_imgs[room.name]
             room_img = pygame.transform.rotate(room_img, room.rotation*90)
             room_image = ImageFull(room_img)
-            room_image.scale((int(W * 0.173), int(H * 0.173 * 16/9)))
-            room_image.position = (W * (X_RATIO + X_STEP_RATIO*id), H * Y_RATIO)
+            room_image.scale((int(W * SIZE_ROOM), int(H * SIZE_ROOM * 16/9)))
+            room_image.position = (W * (X_ROOMS + X_STEP*id), H * Y_ROOMS)
             self.room_images[id]=(room_image)
+            #gem sticker
+            if(room.data['gem'] < 0):
+                gem_image.positions.append((W * (X_ROOMS + X_STEP*(id + X_OFF_GEM)), H *(Y_ROOMS + Y_OFF_GEM)))
+                self.gem_texts.append(font.render(str(- room.data['gem']), True, (255, 255, 255)))
         
         #black filter
         dark_overlay = pygame.Surface((W, H), pygame.SRCALPHA)
@@ -90,31 +106,36 @@ class SelectionMenu(Screen):
         dice_x, dice_y = dice_image.position
         self.dice_count_position = (dice_x + W * 0.05, dice_y + H * 0.005)
         self.dice_count = self.mainscreen.player.inventory.consumables["dice"]
-        font = pygame.font.Font(None, int(H * 0.05))
         self.dice_text = font.render(str(self.dice_count), True, (255, 255, 255))
+
     
     def blit_selection_menu(self):
         W, H = self.size
-        Y_RATIO = self.Y_RATIO ; X_RATIO = self.X_RATIO ; X_STEP_RATIO = self.X_STEP_RATIO
+        Y_ROOMS = self.Y_ROOMS ; X_ROOMS = self.X_ROOMS ; X_STEP = self.X_STEP
         buffer = self.buffer
         self.mainscreen.blit() #draw mainscreen
         buffer.blit(self.dark_overlay, (0, 0))
         buffer.blit(self.bg_image.scaled, (0, 0))
         for room_image in self.room_images:
             room_image.blit(buffer)
+        for id,gem_text in enumerate(self.gem_texts):
+            position = self.gem_image.positions[id]
+            buffer.blit(self.gem_image.scaled, position)  
+            buffer.blit(gem_text, (position[0] - W*0.008, position[1] + H*0.0125))  
+            
         #dice display
         self.dice_image.blit(buffer)
         buffer.blit(self.dice_text, self.dice_count_position)
         #white rectangle : recalculate position (and size for dice) if move
         if self.room_choice != 3:
             id = self.room_choice
-            self.rect = pygame.Rect(W * (X_RATIO + X_STEP_RATIO*id), H * Y_RATIO, int(W * 0.174), int(W * 0.174))
+            self.rect = pygame.Rect(W * (X_ROOMS + X_STEP*id), H * Y_ROOMS, int(W * 0.174), int(H * 0.174 * 16/9))
         else:
-            self.rect = pygame.Rect(W * 0.87, H * 0.2, int(W * 0.04), int(W * 0.04))
+            self.rect = pygame.Rect(W * 0.87, H * 0.2, int(W * 0.04), int(H * 0.04 * 16/9))
         pygame.draw.rect(buffer, (255, 255, 255), self.rect, width=4)
     
     def refresh(self):
         self.mainscreen.build()
-        self.build_selection_menu(self.room_names)
+        self.build_selection_menu()
         self.blit_selection_menu()
 

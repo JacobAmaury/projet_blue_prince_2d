@@ -8,8 +8,7 @@ class Image:    #abstract
     #methods
     def scale(self,size):    #abstract
         pass
-    def blit(self,buffer):
-        buffer.blit(self.scaled, self.position)  
+    #def blit abstract ?
 
     #static
     @staticmethod
@@ -29,6 +28,9 @@ class ImageFull(Image):
     def scale(self,size):
         self.scaled = pygame.transform.smoothscale(self.loaded,size)
 
+    def blit(self,buffer):
+        buffer.blit(self.scaled, self.position)  
+
 
 class ImageTransparant(Image):
     def __init__(self,loaded_image) : 
@@ -36,6 +38,20 @@ class ImageTransparant(Image):
 
     def scale(self,size):
         self.scaled = pygame.transform.scale(self.loaded,size)
+
+    def blit(self,buffer):
+        buffer.blit(self.scaled, self.position)  
+
+
+class ImageSticker(Image):    #abstract
+    #constructors
+    def __init__(self,loaded_image) : 
+        Image.__init__(self,loaded_image)
+        self.positions=[]
+
+    def scale(self,size):
+        self.scaled = pygame.transform.scale(self.loaded,size)
+
 
 
 class ImageRoom(Image):    #transparant with rotations
