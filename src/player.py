@@ -54,6 +54,13 @@ class Room :
         self.data = database.rooms[name]
         self.doors = [door for door in self.data['doors']]  #copy by value if room has multiple insntances
         #self.inventory ?
+    
+    def __str__(self):
+        return (
+            f"Room('{self.name}', rotation={self.rotation})\n"
+            f"  Doors: {self.doors}\n"
+            f"  Data: {self.data}"
+        )
 
 class Map :
     def __init__(self):
@@ -192,9 +199,9 @@ class Map :
         allowed_doors = [-1, -1, -1, -1]
 
         #Check walls
-        if x == -2:
+        if x == 0:
             allowed_doors[3] = 0
-        if x == 2:
+        if x == 4:
             allowed_doors[1] = 0
         if y == 0:
             allowed_doors[0] = 0
@@ -223,37 +230,81 @@ class Map :
             if doors_valid:
                 return True, r  # Found a valid rotation
 
-        # If no valid rotation found
+        # If no valid rotation found      
         return False, None
 
 
     def level_up_door(self, doors, y):
         """
-        Assigne un niveau de verrouillage (0, 1 ou 2) aux portes selon la progression.
+        Assigns a lock level (0, 1, 2, or 3) to each door based on progression through the mansion.
 
         Args:
-            doors (list[int]): liste des portes (ex : [1, 1, 0, 1]) où 1 = porte présente.
-            y (int): indice de la ligne actuelle dans le manoir.
+            doors (list[int]): list of doors (e.g., [1, 1, 0, 1]) where 1 = existing door.
+            y (int): current row index in the mansion.
         
         Returns:
-            list[int]: liste mise à jour avec niveaux de porte.
+            list[int]: updated list with door lock levels.
         """
         if y == 0:
+            # First row → keep doors as they are (unlocked)
             return doors
-        elif y == 8:   # dernière rangée
-            return [3 if door != 0 else 0 for door in doors] #change les 1 en 3
+        elif y == 8:   # last row
+            # Last row → all existing doors become level 3 (fully locked)
+            return [3 if door != 0 else 0 for door in doors]
         
         new_doors = []
-        p = y / 8 * 0.6 #level up too fast without 0.6
+        # Difficulty below 1 slows down the lock progression
+        difficulty = 0.6  # doors level up too fast without this factor
+        p = y / 8 * difficulty 
+
         for d in doors:
             if d == 0:
                 new_doors.append(0)
             else:
                 r = rd.random()
-                if r < 1 - p:      
-                    new_doors.append(1)
-                elif r < 1 - p/2:     
-                    new_doors.append(2)
-                else:                 
-                    new_doors.append(3)
+                if r < 1 - p:
+                    new_doors.append(1)   # low-level lock
+                elif r < 1 - p / 2:
+                    new_doors.append(2)   # medium lock
+                else:
+                    new_doors.append(3)   # high-level lock
+
+        return new_doors
+
+    def block_door(self, doors, x, y):
+        """
+        Args:
+            doors (list[int]): list of doors (e.g., [1, 1, 0, 1]) where 1 = existing door.
+            x (int): current colomn index in the mansion.
+            y (int): current row index in the mansion.
+        
+        Returns:
+            list[int]: updated list with door blocked if wall from a room near the location
+            and block the door of the room near the location
+        """
+        # Neighboring rooms ordered as [up, left, right, down]
+        near_rooms = [
+            [x, y - 1],    # down
+            [x + 1, y],   # right
+            [x, y + 1],   # up
+            [x - 1, y]   # left
+        ]
+
+        new_doors = doors[:]
+        
+
+        for room_r, (x_near, y_near) in enumerate(near_rooms):
+            in_map = (0 <= x_near < 5) and (0 <= y_near < 9)
+            if in_map :
+                if self.room_exists(x_near, y_near):
+                    room = self.rooms[x_near][y_near]
+
+                    # ex: if the room_r is up look for the bottom door
+                    rotation = (room_r + 2) % 4
+
+                    #block door both ways
+                    if room.doors[rotation] == 0:
+                        new_doors[room_r] = 0
+                    if doors[room_r] == 0 :
+                        room.doors[rotation] = 0
         return new_doors

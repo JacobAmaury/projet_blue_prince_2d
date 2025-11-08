@@ -98,6 +98,7 @@ class Nav :
 
         #rotate and level up the doors of the new room
         new_room.doors = cls.map.rot_doors(new_room.doors, new_room.rotation)
+        new_room.doors = cls.map.block_door(new_room.doors, next_x, next_y)
         new_room.doors = cls.map.level_up_door(new_room.doors, next_y)
 
         #create room with items and add doors to map 
