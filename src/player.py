@@ -87,6 +87,36 @@ class Map :
         return self.rooms[next_x][next_y] != 0
 
 
+    def room_placement_condition(self, name, x, y):
+        """
+        Returns True if the given room can be placed at (x, y)
+        according to known Blue Prince floorplan restrictions.
+
+        Args:
+            name (str): room name
+            x (int): column (0–4)
+            y (int): row (0–8)
+
+        Returns:
+            bool: True if placement is allowed, False otherwise
+        """
+        max_x=4; max_y=8
+        edge_y = (y == 0 or y == max_y)
+        edge_x = (x == 0 or x == max_x)
+        corner = (x in [0, max_x] and y in [0, max_y])
+        
+        conditions = {
+            "Veranda": edge_y or edge_x,
+            "Patio": edge_x,
+            "Solarium": edge_y,
+            "WestWingHall": x == 0,
+            "EastWingHall": x == max_x
+        }
+
+        if name in conditions:
+            return conditions[name]
+        return True  # default: no restriction
+
     def init_pool(self):
         #add one time every rooms
         self.pool = [name for name in database.rooms.keys()]

@@ -50,6 +50,13 @@ class Nav :
         return random.choice(proba_pool)
 
     @classmethod
+    def all_cost_gems(cls, three_rooms):
+        for room in three_rooms:
+            if room.data['gem'] >= 0:
+                return False
+        return True
+    
+    @classmethod
     def three_room_choice(cls, next_x, next_y, r):
         """
         Chooses up to three valid rooms for the given map position.
@@ -74,7 +81,12 @@ class Nav :
                 room_doors_valid, rotation = cls.map.doors_layout(doors, next_x, next_y, r)
 
                 if room_doors_valid and (new_room_name not in [room.name for room in cls.three_rooms[next_x][next_y]]):  
-                    cls.three_rooms[next_x][next_y].append(Room(new_room_name,rotation)) 
+                    if cls.map.room_placement_condition(new_room_name, next_x, next_y):
+                        cls.three_rooms[next_x][next_y].append(Room(new_room_name,rotation)) 
+                                    
+                if len(cls.three_rooms[next_x][next_y]) == 3 and cls.all_cost_gems(cls.three_rooms[next_x][next_y]):
+                    cls.three_rooms[next_x][next_y] = []
+
                 attempts += 1 
             if attempts >= max_attempts:
                 raise RuntimeError(
