@@ -12,7 +12,6 @@ class Nav :
 
     @classmethod
     def new_game(cls):
-        player= Player(cls.ui)      # creates inventory,map,...
-        cls.ui.set_player(player)   # ui displays data from this player
-        cls.ui.mainScreen()             # creates and blits main_screen
-        cls.inventory, cls.map = player.inventory, player.map
+        cls.player= Player(cls.ui)      # creates inventory,map,...
+        cls.ui.mainScreen(cls.player)             # creates and blits main_screen
+        cls.inventory, cls.map = cls.player.inventory, cls.player.map

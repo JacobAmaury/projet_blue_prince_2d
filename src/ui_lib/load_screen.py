@@ -1,57 +1,73 @@
 import pygame
+import database
+
+from .image import ImageFull,ImageTransparant, Image
+from .window import Screen
 
 
-##private
-class Image:
-    #this class should be reworked : see inventory_grid
-    ##constructors
-    def __init__(self,loaded_image) : 
-        self.loaded = loaded_image
-        self.position = (0,0)
+class LoadScreen(Screen) :
+    #convention : image = instance of Image, img = Surface
 
-    @classmethod
-    def from_path_no_convertion(cls,bg_path):
-        return cls(pygame.image.load(bg_path))
+    def __init__(self):
+        Screen.__init__(self)
+        #load images
+        bg_path="../images/background/BluePrince_Start.jpg"
+        logo_path="../images/Logo_Blue_Prince.png"
+        self.bg_image = ImageFull(Image.loadFull(bg_path))
+        self.logo_image = ImageTransparant(Image.loadTransparent(logo_path))
+        #show window (was Hidden)
+        self.window.show_window()
+        self.refresh()
 
-    ##methods
-    def smoothscale(self,W,H):
-        self.scaled = pygame.transform.smoothscale(self.loaded,(W, H))
-    def scale(self,W,H):
-        self.scaled = pygame.transform.scale(self.loaded,(W, H))
-    def set_position(self,x,y):
-        self.position = x,y
-    def image_blit(self,screen):
-        screen.blit(self.scaled, self.position)  
 
-##public
-class loadScreen :
-    @classmethod
-    def __init__(cls,bg_path,logo_path):
-        #load images : cannot convert before set_mode()
-        cls.bg_image = Image.from_path_no_convertion(bg_path)
-        cls.logo_image = Image.from_path_no_convertion(logo_path)
-
-    @classmethod
-    def convert_loaded(cls):
-        #optimize blit
-        cls.bg_image.loaded = cls.bg_image.loaded.convert()
-        cls.logo_image.loaded= cls.logo_image.loaded.convert_alpha()
-
-    @classmethod
-    def build_and_blit(cls,W,H,font,screen):
+    def refresh(self):
+        font,buffer = self.window.font,self.window.buffer
         ##build_load_screen
+        W,H = self.window.size
+        self.size = W,H
         #images
-        cls.bg_image.smoothscale(W,H)
-        cls.logo_image.scale(W//3, H//3)
-        cls.logo_image.set_position(W//3 - cls.logo_image.scaled.get_height()//2, H//20)    #get_width ?
+        self.bg_image.scale((W,H))
+        self.bg_image.position = (0,0)
+        self.logo_image.scale((W//3, H//3))
+        self.logo_image.position = (W//3 - self.logo_image.scaled.get_width()//2, H//20)
         #text
-        cls.text_rendered = font.render("Loading game ...", True, (255, 255, 255))
-        cls.text_position = (W //2 - cls.text_rendered.get_width()//2, H * 0.95)
+        self.text_rendered = font.render("Loading game ...", True, (255, 255, 255))
+        self.text_position = (W //2 - self.text_rendered.get_width()//2, H * 0.95)
 
         ##blit_load_screen
-        #create load_screen
-        cls.bg_image.image_blit(screen)
-        #Logo
-        cls.logo_image.image_blit(screen)   
+        #images
+        self.bg_image.blit(buffer)
+        self.logo_image.blit(buffer)   
         #text
-        screen.blit(cls.text_rendered, cls.text_position)
+        buffer.blit(self.text_rendered, self.text_position)
+        
+        ##flip
+        pygame.display.flip()
+
+
+
+    def load_images(self):
+        #background image mainscreen
+        path = "../images/background/bg_image.png"
+        Screen.main_bg_img = Image.loadFull(path)
+
+        #consumables
+        for name in database.consumables :
+            path = "../images/items/consumables/"+ name +"_icon.png"
+            Screen.consumable_imgs[name] = Image.loadTransparent(path)
+
+        #permanent objects
+        for name in database.permanents:
+            path = "../images/items/permanents/"+ name +"_White_Icon.png"
+            Screen.permanant_imgs[name] = Image.loadTransparent(path)
+
+        #rooms : import all rooms by names from Rooms_db.rooms
+        event_listener = self.window.ui.event_listener
+        for name,room_data in database.rooms.items():
+            path = "../images/rooms/"+ room_data['color'] +'/'+ name +'.png'
+            Screen.room_imgs[name] = Image.loadFull(path)
+            event_listener() #room loading may be long : handles user input
+
+        #image menu
+        bg_menu_path = "../images/background/selection_menu.png"
+        Screen.selectionmenu_bg_img = Image.loadTransparent(bg_menu_path)

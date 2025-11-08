@@ -6,12 +6,13 @@ class Player :
         Player.ui = ui
         self.map = Map()
         self.inventory = Inventory()
+        self.position = (2,0,0) #(x,y,r)
 
-    def move_player_position(self,y,x,r):
-        """(0,0,0) : (bottom,center,0°), rot:(0:0°,1:90°,2:180°,3:-90°)"""
-        r = r % 4 ; y = y % 9 ; x = (x+2) % 5 -2   #protection overflow 
-        self.map.player_position = (y,x,r)
-        Player.ui.update_player_position()
+    def move(self,x,y,r): #move_player_position
+        """(0,0,0) : (bottom,left,0°)  rot:(0:0°,1:90°,2:180°,3:-90°)"""
+        #position : (x,y,r) with x in [0,4], y in [0,8], r in [0,3]
+        self.position = x,y,r
+        Player.ui.screen.update_door()
 
     def game_won(self):
         print("You won!!!")
@@ -21,13 +22,43 @@ class Player :
         print("You lost...")
         Player.ui.quit_game()
 
+class Inventory:
+    def __init__(self):
+        self.consumables = {'steps': 70, 'coin': 0, 'gem': 40, 'key': 10, 'dice': 0}
+        self.permanents = []    #sets display order
+
+    def change_consumable(self,name,increment):
+        self.consumables[name] += increment
+        Player.ui.screen.update_consumables()
+
+    def add_permanent(self,name):
+        if name not in database.permanents :
+            raise ValueError('name not in database')
+        self.permanents.append(name)
+        Player.ui.screen.update_permanents()
+
+    #used for UI_testing
+    def change_perm(self,name,isinside):
+        if name not in database.permanents :
+            raise ValueError('name not in database')
+        if isinside:
+            self.permanents.append(name)
+        else :
+            self.permanents.remove(name)
+        Player.ui.screen.update_permanents()
+
+class Room :
+    def __init__(self, name, rotation=0):
+        self.name = name
+        self.rotation = rotation
+        self.data = database.rooms[name]
+        self.doors = self.data['doors']
+        #self.inventory ?
 
 class Map :
     def __init__(self):
-        self.rooms = { 'EntranceHall': [(0,0,0)] } #y, x
-        self.doors_map = [[[] for y in range(9)] for x in range(5)]  #x, y, doors[]
-        self.doors_map[2][0] = [0, 1, 1, 1]
-        self.player_position = (0,0,0)
+        self.rooms = [[0 for y in range(9)] for x in range(5)]  #x, y
+        self.rooms[2][0] = Room('EntranceHall')
         self.rooms_inventory =  [[{
             "coin": 0,
             "gem": 0,
@@ -37,6 +68,17 @@ class Map :
             "Shovel": 0,
             "Lockpick_Kit": 0
         } for y in range(9)] for x in range(5)]  #x, y, database_element
+
+    def add_room(self,room,position):
+        x, y = position
+        #position : (x,y)
+        # x in [0,4], y in [0,8]
+        self.rooms[x][y] = room
+        Player.ui.screen.update_map()
+
+    def room_exists(self, next_x, next_y):
+        return self.rooms[next_x][next_y] != 0
+
 
     def init_pool(self):
         #add one time every rooms
@@ -77,7 +119,7 @@ class Map :
                     continue
 
                 if item_pool[rand_index] != 0:
-                    self.rooms_inventory[x][y][act_item] += 1
+                    self.rooms_inventory[x][y] += 1
             
 
         else:
@@ -117,7 +159,6 @@ class Map :
             2: 3,    # unusual
             3: 1     # rare
         }
-
         for name in self.pool:
             data = database.rooms[name]
             rarity = data["rarity"]
@@ -126,6 +167,7 @@ class Map :
                 self.proba_pool.extend([name] * weight)
 
         return self.proba_pool
+
 
 
     def rot_doors(self, room, n=1):
@@ -138,7 +180,7 @@ class Map :
         """
         n = n % len(room)  #protection overflow 
         return room[-n:] + room[:-n]
-
+    
     def doors_layout(self, room_doors, x, y, player_r):
         """
         doors = [bottom, right, top, left]
@@ -183,7 +225,8 @@ class Map :
 
         # If no valid rotation found
         return False, None
-    
+
+
     def level_up_door(self, doors, y):
         """
         Assigne un niveau de verrouillage (0, 1 ou 2) aux portes selon la progression.
@@ -214,50 +257,3 @@ class Map :
                 else:                 
                     new_doors.append(3)
         return new_doors
-    
-
-    def add_room(self,name,position, doors):
-        y, x, r = position
-        r = r % 4; y = y % 9 ; x = (x+2) % 5 -2   #protection overflow
-
-        if name in self.rooms :
-            self.rooms[name] += [(y, x, r)]
-        else:
-            self.rooms[name] = [(y, x, r)]
-
-        index_x = x + 2
-        self.doors_map[index_x][y] = doors 
-        
-        Player.ui.update_map()
-
-class Inventory:
-    def __init__(self):
-        self.consumables = {'steps': 70, 'coin': 0, 'gem': 40, 'key': 10, 'dice': 0}
-        self.permanents = []    #sets display order
-
-
-    def change_consumable(self,name,increment):
-        self.consumables[name] += increment
-        Player.ui.update_consumables()
-
-    def add_permanent(self,name):
-        if name not in database.permanents :
-            raise ValueError('name not in database')
-        self.permanents.append(name)
-        Player.ui.update_permanents()
-
-    def remove_permanent(self,name):
-        if name not in database.permanents :
-            raise ValueError('name not in database')
-        self.permanents.remove(name)
-        Player.ui.update_permanents()
-
-    def change_perm(self,name,isinside):
-        if name not in database.permanents :
-            raise ValueError('name not in database')
-        if isinside:
-            self.permanents.append(name)
-        else :
-            self.permanents.remove(name)
-        Player.ui.update_permanents()
-

@@ -2,8 +2,8 @@ import __src_path   # set path ../src
 
 import pygame
 from ui import UI                   # pyright: ignore[reportMissingImports]
-from options import Options         # pyright: ignore[reportMissingImports]
 from navigation import Nav           # pyright: ignore[reportMissingImports]
+from player import Room           # pyright: ignore[reportMissingImports]
 
 # test variables
 t = 0
@@ -22,7 +22,7 @@ while True:
 
     t += clock.get_time()
     if t > 3000:
-        choix = UI.selection_menu(["LockerRoom", "Vault", "MusicRoom"])
+        choix = UI.screen.room_select_menu([Room("LockerRoom"), Room("Vault"), Room("Office")])
         t = 0
 
 

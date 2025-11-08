@@ -1,9 +1,32 @@
 from player import Player
+from ui_lib.event_handler import EventHandler
+from player import Room
 import random
 import database
 import player
 import random as rd
 
+class NavHandlers(EventHandler):
+    @staticmethod
+    def space():
+        Nav.player_move()
+    @staticmethod
+    def up():
+        x, y, _ = Nav.player.position
+        Nav.player.move(x, y, 2)
+    @staticmethod
+    def down():
+        x, y, _ = Nav.player.position
+        Nav.player.move(x, y, 0)
+    @staticmethod
+    def left():
+        x, y, _ = Nav.player.position
+        Nav.player.move(x, y, 3)
+    @staticmethod
+    def right():
+        x, y, _ = Nav.player.position
+        Nav.player.move(x, y, 1)
+        
 class Nav :
     @classmethod
     def ini(cls,UI):            #initialise the class
@@ -13,77 +36,18 @@ class Nav :
 
     @classmethod
     def new_game(cls):
-        cls.player = Player(cls.ui)      # creates inventory,map,...
-        cls.ui.set_player(cls.player)   # ui displays data from this player
-        cls.ui.mainScreen()             # creates and blits main_screen
+        cls.player= Player(cls.ui)                  # creates inventory,map,...
+        cls.ui.mainScreen(cls.player)               # creates and blits main_screen with data of player
         cls.inventory, cls.map = cls.player.inventory, cls.player.map
+        cls.ui.screen.event_handler = NavHandlers
 
-        cls.menu = "map"
-        cls.three_rooms = [[[] for y in range(9)] for x in range(5)]  #x, y, rooms[0, 1, 2]
-        cls.three_rotations = [[{} for y in range(9)] for x in range(5)]  #x, y, rotation{0, 1, 2}
+        cls.three_rooms = []  # rooms[0, 1, 2]
         cls.pool = cls.map.init_pool()
         cls.proba_pool = cls.map.update_proba_pool()
-        cls.room_inventory = cls.map.rooms_inventory
 
-        cls.ui.event_handler.space = cls.player_move
-        cls.ui.event_handler.up = cls.up
-        cls.ui.event_handler.down = cls.down
-        cls.ui.event_handler.left = cls.left
-        cls.ui.event_handler.right = cls.right
-
-    @classmethod
-    def up(cls):
-        if cls.menu == "map":
-            y, x, r = cls.map.player_position
-            cls.player.move_player_position(y, x , 2)
-        elif cls.menu == "item selection": 
-            pass
-
-    @classmethod
-    def down(cls):
-        if cls.menu == "map":
-            y, x, r = cls.map.player_position
-            cls.player.move_player_position(y, x , 0)
-        elif cls.menu == "item selection": 
-            pass
-
-    @classmethod
-    def left(cls):
-        if cls.menu == "map":
-            y, x, r = cls.map.player_position
-            cls.player.move_player_position(y, x , 3)
-        elif cls.menu == "room selection":
-            if cls.ui.room_choice > 0:
-                cls.ui.room_choice -= 1 
-        elif cls.menu == "item selection": 
-            pass
-
-    @classmethod
-    def right(cls):
-        if cls.menu == "map":
-            y, x, r = cls.map.player_position
-            cls.player.move_player_position(y, x , 1)
-        elif cls.menu == "room selection":
-            if cls.ui.room_choice < 3:
-                cls.ui.room_choice += 1 
-        elif cls.menu == "item selection": 
-            pass
-    
     @classmethod
     def pool_room(cls, proba_pool):
         return random.choice(proba_pool)
-    
-    @classmethod
-    def room_exist(cls, next_x, next_y):
-        rooms = cls.map.rooms
-        room_exist = False
-        for coords_list in rooms.values():
-            for c in coords_list:
-                if (c[0], c[1]) == (next_y, next_x):
-                    room_exist = True
-                    break
-        return room_exist
-
 
     @classmethod
     def three_room_choice(cls, next_x, next_y, r):
@@ -101,64 +65,59 @@ class Nav :
         Returns:
             dict: Rooms mapped to their valid rotations.
         """
-        index_next_x = next_x + 2
-        if cls.three_rooms[index_next_x][next_y] == [] : 
+        if cls.three_rooms == [] : 
             attempts = 0
             max_attempts = 1000
-            while len(cls.three_rooms[index_next_x][next_y]) < 3  and attempts < max_attempts:
-                new_room = cls.pool_room(cls.proba_pool)
-                doors = database.rooms[new_room]["doors"]
+            while len(cls.three_rooms) < 3  and attempts < max_attempts:
+                new_room_name = cls.pool_room(cls.proba_pool)
+                doors = database.rooms[new_room_name]['doors']
                 room_doors_valid, rotation = cls.map.doors_layout(doors, next_x, next_y, r)
 
-                if room_doors_valid and (new_room not in cls.three_rooms[index_next_x][next_y]):
-                    cls.three_rooms[index_next_x][next_y].append(new_room) 
-                    cls.three_rotations[index_next_x][next_y][new_room] = rotation
+                if room_doors_valid and (new_room_name not in cls.three_rooms):  
+                    cls.three_rooms.append(Room(new_room_name,rotation)) 
                 attempts += 1 
             if attempts >= max_attempts:
                 raise RuntimeError(
                     f"Cannot find a valid room for ({next_x}, {next_y}). "
-                    f"Only found {len(cls.three_rooms[index_next_x][next_y])} valid rooms."
+                    f"Only found {len(cls.three_rooms)} valid rooms."
                 )
-        return cls.three_rotations[index_next_x][next_y]
+        return cls.three_rooms
     
     @classmethod
-    def open_room(cls, next_x, next_y, rotations, new_room_name):
+    def open_room(cls, next_x, next_y, new_room):
         """
         Opens and places a new room at the given coordinates.
 
         Updates the map, room inventory, and player state, removing the room 
         from the pool and adjusting probabilities.
         """
-        _, _, r = cls.map.player_position
-        index_next_x = next_x + 2
+        _, _, r = cls.player.position
 
-        cls.three_rooms[index_next_x][next_y] = []
-        next_position = (next_y, next_x, rotations[new_room_name])
+        cls.three_rooms = []
+        next_position = (next_x, next_y)
 
         #rotate and level up the doors of the new room
-        doors = database.rooms[new_room_name]["doors"]
-        doors = cls.map.rot_doors(doors, rotations[new_room_name])
-        doors = cls.map.level_up_door(doors, next_y)
-
+        new_room.doors = cls.map.rot_doors(new_room.doors, new_room.rotation)
+        new_room.doors = cls.map.level_up_door(new_room.doors, next_y)
 
         #create room with items and add doors to map 
-        cls.map.add_room(new_room_name, next_position, doors)
-        cls.map.item_randmon_room(new_room_name, next_x, next_y)
+        cls.map.add_room(new_room, next_position)
+        cls.map.item_randmon_room(new_room.name, next_x, next_y)
 
         #Unlock the front door
         front = (r+2) % 4 #Change the rotation to the front of the room
-        cls.map.doors_map[index_next_x][next_y][front] = 1
+        cls.map.rooms[next_x][next_y].doors[front] = 1
         
         # print(new_room_name)
-        Effect().apply_effect(new_room_name)
+        Effect().apply_effect(new_room.name)
 
         # remove room from the pool_room
-        if new_room_name in cls.pool : 
-            cls.pool.remove(new_room_name)
+        if new_room.name in cls.pool : 
+            cls.pool.remove(new_room.name)
             cls.proba_pool = cls.map.update_proba_pool()
 
         #move the player and check if he lost
-        cls.player.move_player_position(next_y, next_x, r)
+        cls.player.move(next_x, next_y, r)
         cls.inventory.change_consumable('steps', -1)
         if cls.inventory.consumables['steps'] <= 0:
             cls.player.game_over()
@@ -166,7 +125,8 @@ class Nav :
         # #open item_selection_menu
         # cls.menu = "item selection"
         # new_room_name = cls.ui.item_selection_menu()
-        # cls.menu = "map"  
+        # cls.menu = "map"
+
 
     @classmethod
     def door_level_check(cls, door):
@@ -199,21 +159,19 @@ class Nav :
         return True
     
     @classmethod
-    def change_player_consumables(cls, new_room_name, index_next_x, next_y):
+    def change_player_consumables(cls, new_room, next_x, next_y):
         """
         Apply the room's consumable effects to the player:
         - Subtract if the room costs items
         - Add if the room gives rewards
         """
-        room_consumables = database.rooms[new_room_name]
+        room_consumables = database.rooms[new_room.name]
         for consumable, increment in room_consumables.items():
             if consumable in database.consumables:
                 cls.inventory.change_consumable(consumable, increment)
-
                 # Update room inventory for positive gains (except 'steps')
                 if increment > 0 and consumable != 'steps':
-                    cls.map.rooms_inventory[index_next_x][next_y][consumable] += increment
-
+                    cls.map.rooms_inventory[next_x][next_y][consumable] += increment
     @classmethod
     def player_move(cls):
         """
@@ -222,56 +180,52 @@ class Nav :
         Moves the player forward if possible or triggers room selection when 
         entering an unexplored area.
         """
-        if cls.menu == "map":
-            #(0,0,0) : (bottom,center,0°), rot:(0:0°,1:90°,2:180°,3:-90°)
-            y, x, r = cls.map.player_position
-            next_y, next_x = y, x
+        #(0,0,0) : (left,bottom,0°), rot:(0:0°,1:90°,2:180°,3:-90°)
+        x, y, r = cls.player.position
+        next_y, next_x = y, x
 
-            if r == 0 : #bottom
-                next_y = y - 1 
-            elif r == 1: #right
-                next_x = x + 1
-            elif r == 2 : #top
-                next_y = y + 1 
-            elif r == 3: #left
-                next_x = x - 1
+        if r == 0 : #bottom
+            next_y = y - 1 
+        elif r == 1: #right
+            next_x = x + 1
+        elif r == 2 : #top
+            next_y = y + 1 
+        elif r == 3: #left
+            next_x = x - 1
 
-            doors_open = cls.door_level_check(cls.map.doors_map[x+2][y][r])
-            if doors_open: 
-                #unlock door
-                cls.map.doors_map[x+2][y][r] = 1
+        doors_open = cls.door_level_check(cls.map.rooms[x][y].doors[r])
+        if doors_open: 
+            #unlock door
+            cls.map.rooms[x][y].doors[r] = 1
 
-                if next_x == 0 and next_y == 8:
-                    cls.player.game_won()
+            if next_x == 2 and next_y == 8:
+                cls.player.game_won()
 
-                # print("Inventaire salle", cls.map.rooms_inventory[x][y])
-                
-                if cls.room_exist(next_x, next_y):
+            # print("Inventaire salle", cls.map.rooms_inventory[x][y])
+            
+            no_wall = (0 <= next_x < 5) and (0 <= next_y < 9)
+            if no_wall:
+                if cls.map.room_exists(next_x, next_y):
                     # r = (r+2) % 4 #Change the player rotation when entering a room
                     cls.inventory.change_consumable('steps', -1)
                     if cls.inventory.consumables['steps'] <= 0:
                         cls.player.game_over()
-                    cls.player.move_player_position(next_y, next_x, r)
+                    cls.player.move(next_x, next_y, r)
                 else:
-                    index_next_x = next_x + 2
+                    reroll = 3; cancel = -1
+                    new_room_id = 3 #reroll value
+                    while(new_room_id == reroll):
+                        three_rooms = cls.three_room_choice(next_x, next_y, r)
+                        new_room_id = cls.ui.screen.room_select_menu(three_rooms)
 
-                    new_room_name = "Reroll"
-                    while(new_room_name == "Reroll"):
+                        if new_room_id != reroll and  new_room_id != cancel:
+                            new_room = three_rooms[new_room_id]
+                            if cls.enough_consumables(new_room.name):
+                                cls.change_player_consumables(new_room, next_x, next_y)
+                                cls.open_room(next_x, next_y, new_room)
 
-                        rotations = cls.three_room_choice(next_x, next_y, r)
-
-                        cls.menu = "room selection"
-                        new_room_name = cls.ui.room_select_menu(cls.three_rooms[index_next_x][next_y], rotations)
-                        cls.menu = "map"
-
-                        if new_room_name not in (None, "Reroll"):
-                            if cls.enough_consumables(new_room_name):
-                                cls.change_player_consumables(new_room_name, index_next_x, next_y)
-                                cls.open_room(next_x, next_y, rotations, new_room_name)
-
-                        if new_room_name == "Reroll":
-                            cls.three_rooms[index_next_x][next_y] = []
-                            cls.three_rotations[index_next_x][next_y] = {}
+                        if new_room_id == reroll:
+                            cls.three_rooms = []
 
                         
 
@@ -340,20 +294,11 @@ class Effect:
 
     def modify_proba_item_6(self, room_name):
         player.Map.effect_6 = True
-
-
-    @classmethod
-    def room_ex(cls, next_x, next_y):
-        rooms = Nav.player.map.rooms
-        for name, coords_list in rooms.items():
-            for c in coords_list:
-                if (c[0], c[1]) == (next_y, next_x):
-                    return name
-        return None
     
 
     def spread_green_room_1_and_4(self, room_name):
         """take the room name if the room name is patio spread gems in all green room"""
+        room_exists = Nav.map.room_exists
 
         if room_name == 'SecretGarden':
             apple_pool = [0]*50
@@ -361,9 +306,9 @@ class Effect:
 
             for y in range(9):
                 for x in range(5):
-                    if self.room_ex(x,y) == None:
+                    if room_exists(x,y) == None:
                         continue
-                    if database.rooms[self.room_ex(x,y)]['color'] == 'green': #verify if the room[x,y] is green
+                    if database.rooms[room_exists(x,y)]['color'] == 'green': #verify if the room[x,y] is green
                         
                         rand_index = rd.randint(0,len(apple_pool)-1) 
                         act_item = apple_pool[rand_index] 
@@ -377,9 +322,9 @@ class Effect:
             gem_pool.extend(['gem']*20)
             for y in range(9):
                 for x in range(5):
-                    if self.room_ex(x,y) == None:
+                    if room_exists(x,y) == None:
                         continue
-                    if database.rooms[self.room_ex(x,y)]['color'] == 'green': #verify if the room[x,y] is green
+                    if database.rooms[room_exists(x,y)]['color'] == 'green': #verify if the room[x,y] is green
                         
                         rand_index = rd.randint(0,len(gem_pool)-1) 
                         act_item = gem_pool[rand_index] 
@@ -410,9 +355,3 @@ class Effect:
                             Nav.player.map.rooms_inventory[x][y][act_item] += 1
         
 
-
-
-
-                
-
-        
