@@ -13,7 +13,7 @@ class LoadScreen(Screen) :
         #load images
         bg_path="../images/background/BluePrince_Start.jpg"
         logo_path="../images/Logo_Blue_Prince.png"
-        self.bg_image = ImageSimple(Image.loadFull(bg_path))
+        Screen.bg_image = ImageSimple(Image.loadFull(bg_path))
         self.logo_image = ImageSimple(Image.loadTransparent(logo_path))
         #show window (was Hidden)
         self.window.show_window()
@@ -26,8 +26,8 @@ class LoadScreen(Screen) :
         W,H = self.window.size
         self.size = W,H
         #images
-        self.bg_image.smoothscale((W,H))
-        self.bg_image.position = (0,0)
+        Screen.bg_image.smoothscale((W,H))
+        Screen.bg_image.position = (0,0)
         self.logo_image.smoothscale((W//3, H//3))
         self.logo_image.position = (W//3 - self.logo_image.scaled.get_width()//2, H//20)
 
@@ -48,6 +48,8 @@ class LoadScreen(Screen) :
         #background image mainscreen
         path = "../images/background/bg_image.png"
         Screen.main_bg_img = Image.loadFull(path)
+        path = "../images/background/shop.jpg"
+        Screen.shop = ImageSimple(Image.loadFull(path))
 
         #consumables
         for name in database.consumables :

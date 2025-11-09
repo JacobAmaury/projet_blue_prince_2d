@@ -4,6 +4,7 @@ from ui_lib.window import Window
 from ui_lib.load_screen import LoadScreen
 from ui_lib.main_screen import MainScreen
 from ui_lib.select_room import SelectRoom
+from ui_lib.shop import Shop
 
 class UI :
     fps = 60
@@ -27,6 +28,7 @@ class UI :
 
     @classmethod
     def show_mainScreen(cls,player, event_handler):
+        cls.player = player
         cls.screen = MainScreen(player)
         cls.screen.event_handler = event_handler
 
@@ -53,23 +55,23 @@ class UI :
         """
         return cls.select_from_menu(SelectRoom(rooms))
 
-    # @classmethod
-    # def select_item_from_shop(cls, items):
-    #     """
-    #     Display a selection menu for choosing items in shop.
-    #     items = list of item objects
-    #     Returns the rank of the selected item, -1 if cancelled
-    #     """
-    #     return cls.select_from_menu(SelectItemShop(items))
+    @classmethod
+    def shop(cls, items):
+        """
+        Display a selection menu for choosing items in shop.
+        items = list[(name,coin_cost)]
+        Returns the rank of the selected item, -1 if cancelled
+        """
+        return cls.select_from_menu(Shop(items))
     
     # @classmethod
-    # def select_item_from_garden(cls, items):
+    # def explore(cls, items):
     #     """
-    #     Display a selection menu for choosing items in garden.
-    #     items = list of item objects
+    #     Display a selection menu for choosing items in shop.
+    #     items = list[name]
     #     Returns the rank of the selected item, -1 if cancelled
     #     """
-    #     return cls.select_from_menu(SelectItemGarden(items))
+    #     return cls.select_from_menu(Explore(items))
 
     @staticmethod
     def quit_game():

@@ -23,9 +23,9 @@ class MainScreen(Screen) :
         self.player = player
         #import images from loadscreen
         self.bg_image = ImageSimple(Screen.main_bg_img)
-        self.consumable_rows = []  #list : order on screen
+        Screen.consumable_rows = []  #list : order on screen
         for name,image in zip(database.consumables,Screen.consumable_imgs.values()):
-            self.consumable_rows.append(Consumable_row(name,image))   #keep database order for display
+            Screen.consumable_rows.append(Consumable_row(name,image))   #keep database order for display
         self.permanent_images = {}
         for name,image in Screen.permanant_imgs.items():
             self.permanent_images[name] = ImageSimple(image)   # no preset order

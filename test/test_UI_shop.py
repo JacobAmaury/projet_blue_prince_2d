@@ -21,8 +21,8 @@ while True:
     pygame.display.update()
 
     t += clock.get_time()
-    if t > 3000:
-        choix = UI.select_room([Room("LockerRoom"), Room("Vault"), Room("Office")])
+    if t > 1000:
+        choix = UI.shop([("apple",3), ("banana",1), ("cake",5)])
         t = 0
 
 

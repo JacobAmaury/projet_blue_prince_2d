@@ -23,7 +23,7 @@ class SelectRoom(Screen):
         self.bg_image = ImageSimple(Screen.selectionmenu_bg_img)
         self.dice_image = ImageSimple(Screen.consumable_imgs['dice'])
         self.gem_image = ImageReapeated(Screen.consumable_imgs['gem'])
-        self.build_selection_menu()
+        self.build()
 
     def selection(self):
         """
@@ -63,12 +63,12 @@ class SelectRoom(Screen):
         event_listener = self.window.ui.event_listener
         self.running = True
         while self.running:
-            self.blit_selection_menu()
+            self.blit()
             event_listener()
             pygame.display.flip()
         return self.room_choice
 
-    def build_selection_menu(self):
+    def build(self):
         self.size = self.window.size
         W, H = self.size
         Y_ROOMS = self.Y_ROOMS ; X_ROOMS = self.X_ROOMS ; X_STEP = self.X_STEP
@@ -109,7 +109,7 @@ class SelectRoom(Screen):
         self.dice_text = font.render(str(self.dice_count), True, (255, 255, 255))
 
     
-    def blit_selection_menu(self):
+    def blit(self):
         W, H = self.size
         Y_ROOMS = self.Y_ROOMS ; X_ROOMS = self.X_ROOMS ; X_STEP = self.X_STEP
         buffer = self.buffer
@@ -134,7 +134,7 @@ class SelectRoom(Screen):
             self.rect = pygame.Rect(W * 0.87, H * 0.2, int(W * 0.04), int(H * 0.04 * 16/9))
         pygame.draw.rect(buffer, (255, 255, 255), self.rect, width=4)
     
-    def refresh(self):
+    def update(self):
         self.mainscreen.build()
         self.build_selection_menu()
         self.blit_selection_menu()

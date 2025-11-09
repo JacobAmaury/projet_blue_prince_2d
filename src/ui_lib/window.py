@@ -52,14 +52,20 @@ class Screen :  #abstract
         _,h = self.size
         self.font = pygame.font.SysFont(self.FONT, int(h * self.FONT_SIZE))
 
-    def update(self):
-        pass
-
     def screen_print(self,msg):
         txt = self.font.render(msg, True, (255, 255, 255))
         X, Y = self.TXT_POSITION ; w, h = self.size ; txt_w, txt_h = txt.get_size()
         position = (X*w - txt_w/2, Y*h + txt_h/2 )
         self.buffer.blit(txt, position)
+
+    def update(self):
+        self.build()
+        self.blit()
+
+    def buid(self):
+        pass
+    def blit(self):
+        pass
 
     #loaded raw images
     consumable_imgs = {}

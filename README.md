@@ -53,3 +53,4 @@ Image ressources:
 - permanant objects icon : https://blue-prince.fandom.com/wiki/Power_Hammer
 - Menu background image : https://www.blueprincegame.com/
 - Logo : https://fr.wikipedia.org/wiki/Blue_Prince
+- other : https://www.vecteezy.com under Creative Commons Attribution License (CC BY)
