@@ -4,7 +4,6 @@ import database
 from .image import Image, ImageSimple
 from .window import Screen
 
-
 class LoadScreen(Screen) :
     #convention : image = instance of Image, img = Surface
 
@@ -48,8 +47,10 @@ class LoadScreen(Screen) :
         #background image mainscreen
         path = "../images/background/bg_image.png"
         Screen.main_bg_img = Image.loadFull(path)
+        #shop bg
         path = "../images/background/shop.jpg"
         Screen.shop = ImageSimple(Image.loadFull(path))
+        #explore bbg
         colors = ['violet']
         for color in colors:
             path = f"../images/background/{color}_room.jpeg"
@@ -63,11 +64,14 @@ class LoadScreen(Screen) :
         for name in database.consumables :
             path = "../images/items/consumables/"+ name +"_icon.png"
             Screen.consumable_imgs[name] = Image.loadTransparent(path)
-
         #permanent objects
         for name in database.permanents:
             path = "../images/items/permanents/"+ name +"_White_Icon.png"
             Screen.permanant_imgs[name] = Image.loadTransparent(path)
+        #other objects
+        for name in database.others:
+            path = f"../images/items/others/{name}.png"
+            Screen.other_imgs[name] = Image.loadTransparent(path)
 
         #rooms : import all rooms by names from Rooms_db.rooms
         event_listener = self.window.ui.event_listener

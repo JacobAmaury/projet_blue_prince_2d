@@ -72,3 +72,4 @@ class Screen :  #abstract
     permanant_imgs = {}
     room_imgs = {}
     bg_color_images = {}
+    other_imgs = {}

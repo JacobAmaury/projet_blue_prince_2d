@@ -2,6 +2,7 @@
 
 consumables = ['steps', 'coin', 'gem', 'key', 'dice'] #sets the order on screen
 permanents = ['Shovel','Lockpick_Kit','Lucky_Rabbits_Foot','Metal_Detector','Power_Hammer']
+others = ['apple', 'banana', 'cake', 'coffer', 'locker', 'meal', 'sandwich', 'soil']
 
 #|-2-|
 #3   1          doors = [0,1,2,3]

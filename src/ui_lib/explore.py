@@ -27,7 +27,9 @@ class Explore(Screen):
         self.images = [None]*length
         self.counts = [None]*length
         self.txt_positions = [None]*length
-        categories = {'consumable':Screen.consumable_imgs, 'permanent': Screen.permanant_imgs}
+        categories = {'consumable':Screen.consumable_imgs, 
+                      'permanent':Screen.permanant_imgs,
+                      'other':Screen.other_imgs}
         for id,(name,nb,category) in enumerate(items):
             self.images[id] = ImageSimple(categories[category][name])
             self.counts[id] = nb
