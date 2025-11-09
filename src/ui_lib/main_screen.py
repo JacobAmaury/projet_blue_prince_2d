@@ -51,7 +51,8 @@ class MainScreen(Screen) :
         self.build_items()
         self.build_rooms()
         door.build(self.player.position)
-        self.build_status()
+        self.build_current_room()
+        self.build_door_status()
 
     def blit(self):
         self.blit_bg_screen()
@@ -75,6 +76,7 @@ class MainScreen(Screen) :
 
     def update_door(self):
         door.build(self.player.position)
+        self.build_current_room()
         self.update_map()
 
     ## builds, blits
@@ -140,7 +142,7 @@ class MainScreen(Screen) :
                 self.buffer.blit(room_image.scaled[rot], map_grid.get_position_case(col,row))
 
 
-    def build_status(self):
+    def build_current_room(self):
         w,h = self.size
         #build current room
         SIZE = self.SIZE_CURRENT_ROOM
@@ -150,6 +152,9 @@ class MainScreen(Screen) :
         current_room_image.smoothscale((SIZE * w, SIZE * h * 16/9))
         current_room_image.position = (X * w, Y * h)
         self.current_room_image = current_room_image
+
+    def build_door_status(self):
+        w,h = self.size
         # build all door_status images
         DOOR_X,DOOR_Y = self.DOOR_POSITION; DOOR_SIZE = self.DOOR_SIZE; KEY_SIZE = self.KEY_SIZE
         #plant
@@ -192,11 +197,11 @@ class MainScreen(Screen) :
         self.current_room_image.blit(buffer)
         # blit current doom_status
         door_status = self.player.door_status
-        # if door_status == ? :      #front door
-        #     self.front_door_image.blit(buffer)
-        # if door_status == ? :      #opened door
-        #     self.opened_door_image.blit(buffer)
-        if door_status == 0:        #wall
+        if door_status == -2 :      #front door
+            self.front_door_image.blit(buffer)
+        elif door_status == -1 :    #opened door
+            self.opened_door_image.blit(buffer)
+        elif door_status == 0:      #wall
             self.plant_image.blit(buffer)
         elif door_status > 0 :      #closed door
             self.closed_door_image.blit(buffer)

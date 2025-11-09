@@ -13,8 +13,7 @@ class Player :
         """(0,0,0) : (bottom,left,0°)  rot:(0:0°,1:90°,2:180°,3:-90°)"""
         #position : (x,y,r) with x in [0,4], y in [0,8], r in [0,3]
         self.position = x,y,r
-        # door_status =  ?:exit_door, ?:opened, 0:wall, 1:closed, 2:1_lock, 3:2_lock
-        # ? -> set values in blit_status() in mainscreen.py
+        # door_status =  -2:front_door, -1:opened, 0:wall, 1:closed, 2:1_lock, 3:2_lock
         self.door_status = self.map.rooms[x][y].doors[r]
         Player.ui.screen.update_door()
 
