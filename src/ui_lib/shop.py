@@ -23,13 +23,15 @@ class Shop(Screen):
         #import images from loadscreen
         self.bg_image = Screen.shop
         self.coin_image = ImageSimple(Screen.consumable_imgs['coin'])
-        self.build()
+        self.update()
 
     def build(self):
+        self.size = self.window.size
         w, h = self.size
         #back ground image
         self.bg_image.smoothscale((w, h))
         self.bg_image.position = (0,0)
+        Consumable_row.set_grid(w,h)
         #scale all consumable images
         for id,consumable_row in enumerate(self.consumable_rows):
             consumable_row.scale_image()
@@ -114,11 +116,9 @@ class Shop(Screen):
             @staticmethod
             def up():
                 self.selected = (self.selected - 1) % self.len
-                self.update_products()
             @staticmethod
             def down():
                 self.selected = (self.selected + 1)  % self.len
-                self.update_products()
             @staticmethod
             def enter() : 
                 self.running = False  #close menu with selection
@@ -137,7 +137,7 @@ class Shop(Screen):
 
         self.running = True
         while self.running:
-            self.blit()
+            self.update_products()
             event_listener()
             pygame.display.flip()
         return self.selected

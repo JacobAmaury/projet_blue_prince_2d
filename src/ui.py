@@ -5,6 +5,7 @@ from ui_lib.load_screen import LoadScreen
 from ui_lib.main_screen import MainScreen
 from ui_lib.select_room import SelectRoom
 from ui_lib.shop import Shop
+from ui_lib.explore import Explore
 
 class UI :
     fps = 60
@@ -43,7 +44,7 @@ class UI :
         cls.screen = menu    #set as current screen
         selected = menu.selection()
         cls.screen = mainscreen    #set as current screen
-        cls.screen.blit()
+        cls.screen.update()
         return selected
 
     @classmethod
@@ -60,18 +61,20 @@ class UI :
         """
         Display a selection menu for choosing items in shop.
         items = list[(name,coin_cost)]
-        Returns the rank of the selected item, -1 if cancelled
+        Returns the rank of the selected item, -1 if cancelled, len(items) if all (on space)
         """
         return cls.select_from_menu(Shop(items))
     
-    # @classmethod
-    # def explore(cls, items):
-    #     """
-    #     Display a selection menu for choosing items in shop.
-    #     items = list[name]
-    #     Returns the rank of the selected item, -1 if cancelled
-    #     """
-    #     return cls.select_from_menu(Explore(items))
+    @classmethod
+    def explore(cls, items, color):
+        """
+        Display a selection menu for choosing items in shop.
+        - color : room color (cannot be yellow)
+        - items = list[(name,nb,category)]
+        with category in {'consumable, 'permanent', 'other'}
+        Returns the rank of the selected item, -1 if cancelled, len(items) if all (in space)
+        """
+        return cls.select_from_menu(Explore(items, color))
 
     @staticmethod
     def quit_game():

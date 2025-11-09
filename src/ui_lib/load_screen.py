@@ -50,6 +50,14 @@ class LoadScreen(Screen) :
         Screen.main_bg_img = Image.loadFull(path)
         path = "../images/background/shop.jpg"
         Screen.shop = ImageSimple(Image.loadFull(path))
+        colors = ['violet']
+        for color in colors:
+            path = f"../images/background/{color}_room.jpeg"
+            Screen.bg_color_images[color] = ImageSimple(Image.loadFull(path))
+        colors = ['blue','orange', 'red', 'green']
+        for color in colors:
+            path = f"../images/background/{color}_room.jpg"
+            Screen.bg_color_images[color] = ImageSimple(Image.loadFull(path))
 
         #consumables
         for name in database.consumables :

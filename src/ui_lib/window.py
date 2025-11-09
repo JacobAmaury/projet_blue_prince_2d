@@ -10,7 +10,7 @@ class Window :
         #window size
         self.desk_W, self.desk_H = pygame.display.get_desktop_sizes()[0]    #import display_size
         W, H = self.window_try_size(self.default_window_size)
-        self.set_window_size(W,H)
+        self.size = W,H
         #window creation
         pygame.display.set_caption("Blue prince 2D")
         blueprince_icon = pygame.image.load("../images/blueprince_icon.jpeg")
@@ -71,3 +71,4 @@ class Screen :  #abstract
     consumable_imgs = {}
     permanant_imgs = {}
     room_imgs = {}
+    bg_color_images = {}

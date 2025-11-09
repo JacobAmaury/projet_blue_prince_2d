@@ -136,6 +136,6 @@ class SelectRoom(Screen):
     
     def update(self):
         self.mainscreen.build()
-        self.build_selection_menu()
-        self.blit_selection_menu()
+        self.build()
+        self.blit()
 

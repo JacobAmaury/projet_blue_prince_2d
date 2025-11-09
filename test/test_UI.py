@@ -9,7 +9,7 @@ x,y,r = 1,0,0
 #main
 import pygame
 from ui import UI                   # pyright: ignore[reportMissingImports]
-from basic_nav import Nav           # pyright: ignore[reportMissingImports]
+from navigation import Nav           # pyright: ignore[reportMissingImports]
 from player import Room           # pyright: ignore[reportMissingImports]
 
 pygame.init()                       #ini pygame
