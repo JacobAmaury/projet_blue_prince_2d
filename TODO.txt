@@ -1,0 +1,19 @@
+
+Game mechanics :
+    Inventory checks :
+        - display message if can't afford : use ui.disp_print)
+            ex: Nav.ui.disp_print("Can't open door : Not enough keys !")
+    Player_move :
+        - must check if next room has a wall after room selection in case player
+            re-enters selection menu from an other door => cannot enter if wall but can choose room
+
+        Optionnal :
+        - call player.move() on current position when cancelling room_selection()
+            to actualise door_status on display if it was unlocked before room_selection()
+        - use door values :
+            -1 for opened_door, -2 for front_door (or else we have a planted_pot on the display)
+            => need to set doors to opened_door on both sides
+            Note : can change values => report changes in main_screen.py -> blit_status()
+    
+UI :
+    - Selection Menu for items

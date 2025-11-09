@@ -17,11 +17,11 @@ class LoadScreen(Screen) :
         self.logo_image = ImageSimple(Image.loadTransparent(logo_path))
         #show window (was Hidden)
         self.window.show_window()
-        self.refresh()
+        self.update()
 
 
-    def refresh(self):
-        font,buffer = self.window.font,self.window.buffer
+    def update(self):
+        buffer = self.window.buffer
         ##build_load_screen
         W,H = self.window.size
         self.size = W,H
@@ -30,16 +30,14 @@ class LoadScreen(Screen) :
         self.bg_image.position = (0,0)
         self.logo_image.smoothscale((W//3, H//3))
         self.logo_image.position = (W//3 - self.logo_image.scaled.get_width()//2, H//20)
-        #text
-        self.text_rendered = font.render("Loading game ...", True, (255, 255, 255))
-        self.text_position = (W //2 - self.text_rendered.get_width()//2, H * 0.95)
 
         ##blit_load_screen
         #images
         self.bg_image.blit(buffer)
         self.logo_image.blit(buffer)   
-        #text
-        buffer.blit(self.text_rendered, self.text_position)
+        #text (build and blit)
+        self.screen_print("Loading game ...")
+
         
         ##flip
         pygame.display.flip()

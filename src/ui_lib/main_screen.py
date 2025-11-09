@@ -1,16 +1,21 @@
+import pygame
 
 from .window import Screen
 from .image import ImageRoom, ImageSimple, ImageReapeated
 from .grids import Consumable_row, door, permanent_grid, map_grid
-from .room_menu import RoomMenu
 import database
 
 class MainScreen(Screen) :
     SIZE_CURRENT_ROOM = 0.1823
     CURRENT_ROOM_POSITION = (0.3645,0.177)
+    CURRENT_ROOM_MSG_SIZE = 1     #relative to FONT_SIZE
+    CURRENT_ROOM_MSG_POSITION = (0.665,0.77)  #center of text
     DOOR_POSITION = (0.38,0.762)
     DOOR_SIZE = 0.09
     KEY_SIZE = DOOR_SIZE / 2
+    #screen print
+    MSG_SIZE = 0.95     #relative to FONT_SIZE
+    MSG_POSITION = (0.727,0.22)    #center_position
 
     def __init__(self,player):
         Screen.__init__(self)
@@ -31,21 +36,23 @@ class MainScreen(Screen) :
         self.key_image = ImageReapeated(Screen.consumable_imgs['key'])
         self.key_image.positions = [None]*3
         #display
-        self.refresh()
+        self.update()
 
-    def set_all_relatives(self):
-        """recalculates all the coordinates relatives to window.size"""
-        W, H = self.size
-        map_grid.set_grid(W,H)
-        Consumable_row.set_grid(W,H)
-        permanent_grid.set_grid(W,H)
-
-    def refresh(self):
+    def update(self):
         self.build()
         self.blit()
 
     def build(self):
         self.size = self.window.size
+        w,h = self.size
+        f = self.FONT_SIZE
+        #set fonts
+        txt_size = f * self.MSG_SIZE
+        self.msg = pygame.font.SysFont(self.FONT, int(h * txt_size))
+        self.msg.italic = True
+        txt_size = f * self.CURRENT_ROOM_MSG_SIZE
+        self.room_msg_font = pygame.font.SysFont(self.FONT, int(h * txt_size))
+        self.font = pygame.font.Font(None, int(0.045*h) )
         self.set_all_relatives()
         self.build_bg_screen()
         self.build_items()
@@ -61,7 +68,21 @@ class MainScreen(Screen) :
         door.draw(self.buffer)
         self.blit_status()
 
-    ## updates
+    def screen_print(self,msg):
+        txt = self.msg.render(msg, True, (255, 255, 255))
+        X, Y = self.MSG_POSITION ; w, h = self.size ; txt_w, txt_h = txt.get_size()
+        position = (X*w - txt_w/2, Y*h + txt_h/2 )
+        self.buffer.blit(txt, position)
+
+    
+## updates
+    def set_all_relatives(self):
+        """recalculates all the coordinates relatives to window.size"""
+        W, H = self.size
+        map_grid.set_grid(W,H)
+        Consumable_row.set_grid(W,H)
+        permanent_grid.set_grid(W,H)
+
     def update_consumables(self):
         self.build_items()
         self.blit()
@@ -74,12 +95,13 @@ class MainScreen(Screen) :
         self.build_rooms()
         self.blit() # overkill if we cannot remove a room
 
-    def update_door(self):
+    def update_player_position(self):
         door.build(self.player.position)
         self.build_current_room()
         self.update_map()
 
-    ## builds, blits
+
+## builds, blits
     def build_bg_screen(self):
         #bg_screen is invariant => don't recalcul when items change
         W, H = self.size
@@ -125,7 +147,7 @@ class MainScreen(Screen) :
         self.room_images = {}
         for col,col_rooms in enumerate(self.player.map.rooms):
             for row,room in enumerate(col_rooms):
-                if room != 0 :
+                if room is not None :
                     name = room.name
                     if name not in self.room_images :
                         room_image = ImageRoom(Screen.room_imgs[name])  #store only rooms in map
@@ -152,6 +174,14 @@ class MainScreen(Screen) :
         current_room_image.smoothscale((SIZE * w, SIZE * h * 16/9))
         current_room_image.position = (X * w, Y * h)
         self.current_room_image = current_room_image
+        #build enter_message
+        X,Y = self.CURRENT_ROOM_MSG_POSITION
+        current_room_txt = self.player.map.rooms[x][y].message
+        if current_room_txt is not None:
+            current_room_txt = self.room_msg_font.render(str(current_room_txt), True, (255, 255, 255))
+            txt_w,txt_h = current_room_txt.get_size()
+            self.current_room_txt_position = (X*w - txt_w/2, Y*h + txt_h/2)
+        self.current_room_txt = current_room_txt
 
     def build_door_status(self):
         w,h = self.size
@@ -195,6 +225,8 @@ class MainScreen(Screen) :
         buffer = self.buffer
         #blit current room
         self.current_room_image.blit(buffer)
+        if self.current_room_txt is not None:
+            buffer.blit(self.current_room_txt,self.current_room_txt_position)
         # blit current doom_status
         door_status = self.player.door_status
         if door_status == -2 :      #front door
@@ -210,18 +242,3 @@ class MainScreen(Screen) :
             elif door_status == 3:  #locked2 door
                 self.key_image.blit_single(buffer,1)
                 self.key_image.blit_single(buffer,2)
-
-
-    ##selection menu
-    def room_select_menu(self, rooms):
-        """
-        Display a selection menu for choosing one of three rooms.
-        Returns the rank of the selected room, -1 if cancelled, 3 if reroll
-        """ # what of the dice ? Why not return index ?
-        menu =  RoomMenu(rooms)
-        self.window.ui.screen = menu    #set as current screen
-        selected = menu.selection()
-        self.window.ui.screen = self    #set as current screen
-        self.blit()          # redraw main screen
-        return selected
-

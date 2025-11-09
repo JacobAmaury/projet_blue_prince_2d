@@ -4,7 +4,7 @@ from .image import ImageSimple, ImageReapeated
 from .event_handler import EventHandler
 from .window import Screen
 
-class RoomMenu(Screen):
+class SelectRoom(Screen):
     room_images = [None]*3
     X_ROOMS = 0.309     #ratio of W
     Y_ROOMS = 0.173     #ratio of H

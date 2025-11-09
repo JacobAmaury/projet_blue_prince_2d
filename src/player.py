@@ -6,8 +6,9 @@ class Player :
         Player.ui = ui
         self.map = Map()
         self.inventory = Inventory()
-        self.position = (2,0,0) #(x,y,r)
-        self.door_status = 0
+        self.position = (2,0,0)
+        x,y,r = self.position
+        self.door_status = self.map.rooms[x][y].doors[r]
 
     def move(self,x,y,r): #move_player_position
         """(0,0,0) : (bottom,left,0°)  rot:(0:0°,1:90°,2:180°,3:-90°)"""
@@ -15,7 +16,7 @@ class Player :
         self.position = x,y,r
         # door_status =  -2:front_door, -1:opened, 0:wall, 1:closed, 2:1_lock, 3:2_lock
         self.door_status = self.map.rooms[x][y].doors[r]
-        Player.ui.screen.update_door()
+        Player.ui.screen.update_player_position()
 
     def game_won(self):
         print("You won!!!")
@@ -56,6 +57,8 @@ class Room :
         self.rotation = rotation
         self.data = database.rooms[name]
         self.doors = self.data['doors'][:]  #copy by value if room has multiple insntances
+        self.message = None # displayed msg to invite player to press Enter for shop, explore,...
+        #   ex : 'Press Enter to open the Shop'   'Press Enter to explore'
         #self.inventory ?
     
     def __str__(self):
@@ -67,7 +70,7 @@ class Room :
 
 class Map :
     def __init__(self):
-        self.rooms = [[0 for y in range(9)] for x in range(5)]  #x, y
+        self.rooms = [[None for y in range(9)] for x in range(5)]  #x, y
         self.rooms[2][0] = Room('EntranceHall')
         self.rooms_inventory =  [[{
             "coin": 0,
@@ -87,7 +90,7 @@ class Map :
         Player.ui.screen.update_map()
 
     def room_exists(self, next_x, next_y):
-        return self.rooms[next_x][next_y] != 0
+        return self.rooms[next_x][next_y] is not None
 
 
     def room_placement_condition(self, name, x, y):

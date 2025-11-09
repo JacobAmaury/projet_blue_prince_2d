@@ -6,7 +6,7 @@ import database
 import player
 import random as rd
 
-class NavHandlers(EventHandler):
+class NavHandler(EventHandler):
     @staticmethod
     def space():
         Nav.player_move()
@@ -31,15 +31,15 @@ class Nav :
     @classmethod
     def ini(cls,UI):            #initialise the class
         cls.ui = UI.ini()
+        cls.ui.loadgame()
         cls.new_game()          #start a new game
         return cls
 
     @classmethod
     def new_game(cls):
-        cls.player= Player(cls.ui)                  # creates inventory,map,...
-        cls.ui.mainScreen(cls.player)               # creates and blits main_screen with data of player
+        cls.player= Player(cls.ui)                      # creates inventory,map,...
+        cls.ui.show_mainScreen(cls.player, NavHandler)  # creates and blits main_screen with data of player
         cls.inventory, cls.map = cls.player.inventory, cls.player.map
-        cls.ui.screen.event_handler = NavHandlers
 
         cls.three_rooms = [[[] for y in range(9)] for x in range(5)]  #x, y, rooms[0, 1, 2]
         cls.pool = cls.map.init_pool()
@@ -229,7 +229,7 @@ class Nav :
                 new_room_id = 3 #reroll value
                 while(new_room_id == reroll):
                     cls.three_rooms[next_x][next_y] = cls.three_room_choice(next_x, next_y, r)
-                    new_room_id = cls.ui.screen.room_select_menu(cls.three_rooms[next_x][next_y])
+                    new_room_id = cls.ui.select_room(cls.three_rooms[next_x][next_y])
 
                     if new_room_id != reroll and  new_room_id != cancel:
                         new_room = cls.three_rooms[next_x][next_y][new_room_id]
