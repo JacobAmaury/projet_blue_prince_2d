@@ -47,6 +47,9 @@ class ImageReapeated(Image):    #abstract
     def scale(self,size):
         self.scaled = pygame.transform.scale(self.loaded,size)
 
+    def blit_single(self,buffer,id):
+        buffer.blit(self.scaled, self.positions[id])  
+
 
 
 class ImageRoom(Image):    #reapeated and rotations

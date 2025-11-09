@@ -79,3 +79,5 @@ class LoadScreen(Screen) :
         Screen.opened_door_img = Image.loadTransparent(path)
         path = "../images/items/doors/plant.png"
         Screen.plant_img = Image.loadTransparent(path)
+        path = "../images/items/doors/front_doors.png"
+        Screen.front_door_img = Image.loadTransparent(path)

@@ -13,7 +13,9 @@ class Player :
         """(0,0,0) : (bottom,left,0°)  rot:(0:0°,1:90°,2:180°,3:-90°)"""
         #position : (x,y,r) with x in [0,4], y in [0,8], r in [0,3]
         self.position = x,y,r
-        self.door_status = self.map.rooms[x][y].doors[r]    # 0:opened, 1:closed, 2:1_lock, 3: 2_lock 
+        # door_status =  ?:exit_door, ?:opened, 0:wall, 1:closed, 2:1_lock, 3:2_lock
+        # ? -> set values in blit_status() in mainscreen.py
+        self.door_status = self.map.rooms[x][y].doors[r]
         Player.ui.screen.update_door()
 
     def game_won(self):
@@ -54,7 +56,7 @@ class Room :
         self.name = name
         self.rotation = rotation
         self.data = database.rooms[name]
-        self.doors = [door for door in self.data['doors']]  #copy by value if room has multiple insntances
+        self.doors = self.data['doors'][:]  #copy by value if room has multiple insntances
         #self.inventory ?
     
     def __str__(self):
