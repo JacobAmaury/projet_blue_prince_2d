@@ -41,7 +41,7 @@ class Nav :
         cls.ui.show_mainScreen(cls.player, NavHandler)  # creates and blits main_screen with data of player
         cls.inventory, cls.map = cls.player.inventory, cls.player.map
 
-        cls.three_rooms = [[[] for y in range(9)] for x in range(5)]  #x, y, rooms[0, 1, 2]
+        cls.three_rooms = [[[[]for r in range(4)] for y in range(9)] for x in range(5)]  #x, y, rooms[0, 1, 2]
         cls.pool = cls.map.init_pool()
         cls.proba_pool = cls.map.update_proba_pool()
 
@@ -72,28 +72,28 @@ class Nav :
         Returns:
             dict: Rooms mapped to their valid rotations.
         """
-        if cls.three_rooms[next_x][next_y] == [] : 
+        if cls.three_rooms[next_x][next_y][r] == [] : 
             attempts = 0
             max_attempts = 1000
-            while len(cls.three_rooms[next_x][next_y]) < 3  and attempts < max_attempts:
+            while len(cls.three_rooms[next_x][next_y][r]) < 3  and attempts < max_attempts:
                 new_room_name = cls.pool_room(cls.proba_pool)
                 doors = database.rooms[new_room_name]['doors']
                 room_doors_valid, rotation = cls.map.doors_layout(doors, next_x, next_y, r)
 
-                if room_doors_valid and (new_room_name not in [room.name for room in cls.three_rooms[next_x][next_y]]):  
+                if room_doors_valid and (new_room_name not in [room.name for room in cls.three_rooms[next_x][next_y][r]]):  
                     if cls.map.room_placement_condition(new_room_name, next_x, next_y):
-                        cls.three_rooms[next_x][next_y].append(Room(new_room_name,rotation)) 
+                        cls.three_rooms[next_x][next_y][r].append(Room(new_room_name,rotation)) 
                                     
-                if len(cls.three_rooms[next_x][next_y]) == 3 and cls.all_cost_gems(cls.three_rooms[next_x][next_y]):
-                    cls.three_rooms[next_x][next_y] = []
+                if len(cls.three_rooms[next_x][next_y][r]) == 3 and cls.all_cost_gems(cls.three_rooms[next_x][next_y][r]):
+                    cls.three_rooms[next_x][next_y][r] = []
 
                 attempts += 1 
             if attempts >= max_attempts:
                 raise RuntimeError(
                     f"Cannot find a valid room for ({next_x}, {next_y}). "
-                    f"Only found {len(cls.three_rooms[next_x][next_y])} valid rooms."
+                    f"Only found {len(cls.three_rooms[next_x][next_y][r])} valid rooms."
                 )
-        return cls.three_rooms[next_x][next_y]
+        return cls.three_rooms[next_x][next_y][r]
     
     @classmethod
     def open_room(cls, next_x, next_y, new_room):
@@ -144,20 +144,19 @@ class Nav :
     @classmethod
     def door_level_check(cls, door):
         player_got_key = cls.inventory.consumables["key"] >= 1
-        if player_got_key != 1 :
+        if not(player_got_key):
             cls.ui.disp_print("I can't open ! Bring me a hammer !")
-        doors_open = False
         if door == 1 or door == -1:
-            doors_open = True
+            return True
         elif door == 2 and ('Lockpick_Kit' in cls.inventory.permanents):
-            doors_open = True
+            return True
         elif door == 2 and player_got_key:
             cls.inventory.change_consumable('key', -1)
-            doors_open = True
+            return True
         elif door == 3 and player_got_key:
             cls.inventory.change_consumable('key', -1)
-            doors_open = True
-        return doors_open   
+            return True
+        return False   
 
     @classmethod
     def enough_consumables(cls, new_room_name):
@@ -232,16 +231,17 @@ class Nav :
                 REROLL = 3; CANCEL = -1 ; INI = 4
                 new_room_id = INI
                 while(new_room_id == REROLL or new_room_id == INI):
-                    cls.three_rooms[next_x][next_y] = []
-                    cls.three_rooms[next_x][next_y] = cls.three_room_choice(next_x, next_y, r)
-                    menu = cls.ui.select_room(cls.three_rooms[next_x][next_y])
                     if new_room_id == REROLL:
-                        cls.ui.disp_print('One dice used, one dice returned ! Happy gaming :)')
+                        cls.inventory.change_consumable('dice', -1)
+                        cls.ui.exit_menu()
+                    cls.three_rooms[next_x][next_y][r] = []
+                    cls.three_room_choice(next_x, next_y, r)
+                    menu = cls.ui.select_room(cls.three_rooms[next_x][next_y][r])
                     new_room_id = menu.select()
 
                 cls.ui.exit_menu()
                 if new_room_id != CANCEL:
-                    new_room = cls.three_rooms[next_x][next_y][new_room_id]
+                    new_room = cls.three_rooms[next_x][next_y][r][new_room_id]
                     if cls.enough_consumables(new_room.name):
                         cls.change_player_consumables(new_room, next_x, next_y)
                         cls.open_room(next_x, next_y, new_room)

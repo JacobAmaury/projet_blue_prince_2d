@@ -11,11 +11,3 @@ Todo (bug solutions):
                 re-enters selection menu from an other door => cannot enter if wall but can choose room
     UI :
         - Position on disp_print on menus to improve
-
-
-
-Bugs :
-    - When opening 2_lock door -> cost == 1 key instead of 2
-    - Dice counter doesn't go down
-    - Can go through wall if room_choice made and re-enter room_choice from an other door
-        see Game mechanics/Player_move/1st
