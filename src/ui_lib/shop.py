@@ -103,7 +103,7 @@ class Shop(Screen):
         self.buffer.blit(self.price_title,self.price_title_pos)
         self.update_products()
 
-    def selection(self):
+    def select(self):
         """
         Returns the rank, -1 if cancelled
         """ 

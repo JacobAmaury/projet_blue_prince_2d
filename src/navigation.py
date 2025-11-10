@@ -144,8 +144,9 @@ class Nav :
     @classmethod
     def door_level_check(cls, door):
         player_got_key = cls.inventory.consumables["key"] >= 1
-        if door == 0:
-            doors_open = False
+        if player_got_key != 1 :
+            cls.ui.disp_print("I can't open ! Bring me a hammer !")
+        doors_open = False
         if door == 1 or door == -1:
             doors_open = True
         elif door == 2 and ('Lockpick_Kit' in cls.inventory.permanents):
@@ -168,6 +169,7 @@ class Nav :
             if consumable in database.consumables:
                 if increment < 0:
                     if (cls.inventory.consumables[consumable] + increment) < 0:
+                        cls.ui.disp_print("Not enough consumables ?")
                         return False
         return True
     
@@ -227,20 +229,23 @@ class Nav :
                         cls.player.game_over()
                     cls.player.move(next_x, next_y, r)
             else:
-                reroll = 3; cancel = -1
-                new_room_id = 3 #reroll value
-                while(new_room_id == reroll):
+                REROLL = 3; CANCEL = -1 ; INI = 4
+                new_room_id = INI
+                while(new_room_id == REROLL or new_room_id == INI):
+                    cls.three_rooms[next_x][next_y] = []
                     cls.three_rooms[next_x][next_y] = cls.three_room_choice(next_x, next_y, r)
-                    new_room_id = cls.ui.select_room(cls.three_rooms[next_x][next_y])
+                    menu = cls.ui.select_room(cls.three_rooms[next_x][next_y])
+                    if new_room_id == REROLL:
+                        cls.ui.disp_print('One dice used, one dice returned ! Happy gaming :)')
+                    new_room_id = menu.select()
 
-                    if new_room_id != reroll and  new_room_id != cancel:
-                        new_room = cls.three_rooms[next_x][next_y][new_room_id]
-                        if cls.enough_consumables(new_room.name):
-                            cls.change_player_consumables(new_room, next_x, next_y)
-                            cls.open_room(next_x, next_y, new_room)
+                cls.ui.exit_menu()
+                if new_room_id != CANCEL:
+                    new_room = cls.three_rooms[next_x][next_y][new_room_id]
+                    if cls.enough_consumables(new_room.name):
+                        cls.change_player_consumables(new_room, next_x, next_y)
+                        cls.open_room(next_x, next_y, new_room)
 
-                    if new_room_id == reroll:
-                        cls.three_rooms[next_x][next_y] = []
 
                         
 

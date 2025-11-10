@@ -32,38 +32,39 @@ class UI :
         cls.player = player
         cls.screen = MainScreen(player)
         cls.screen.event_handler = event_handler
+        cls.root_screen = cls.screen    #set as root_screen for menus
 
     @classmethod
-    def select_from_menu(cls, menu):
+    def exit_menu(cls):
         """
-        Display a selection menu for choosing items in shop.
-        Returns the rank of the selected item, -1 if cancelled
+        Refresh Mainscreen (exit menu)
         """
-        mainscreen = cls.screen
-        menu =  menu
-        cls.screen = menu    #set as current screen
-        selected = menu.selection()
-        cls.screen = mainscreen    #set as current screen
+        cls.screen = cls.root_screen    #set root_screen as current screen
         cls.screen.update()
-        return selected
-
+    
     @classmethod
     def select_room(cls, rooms):
         """
         Display a selection menu for choosing one of three rooms.
         rooms = list of Room objects
-        Returns the rank of the selected room, -1 if cancelled, 3 if reroll
+        Retuns the screen => use screen.select() to return :
+             the rank of the selected room, -1 if cancelled, 3 if reroll
         """
-        return cls.select_from_menu(SelectRoom(rooms))
+        menu = SelectRoom(rooms)
+        cls.screen = menu    #set as current screen
+        return menu
 
     @classmethod
     def shop(cls, items):
         """
         Display a selection menu for choosing items in shop.
         items = list[(name,coin_cost)]
-        Returns the rank of the selected item, -1 if cancelled, len(items) if all (on space)
+        Retuns the screen => use screen.select() to return :
+             the rank of the selected room, -1 if cancelled
         """
-        return cls.select_from_menu(Shop(items))
+        menu = Shop(items)
+        cls.screen = menu    #set as current screen
+        return menu
     
     @classmethod
     def explore(cls, items, color):
@@ -72,9 +73,12 @@ class UI :
         - color : room color (cannot be yellow)
         - items = list[(name,nb,category)]
         with category in {'consumable, 'permanent', 'other'}
-        Returns the rank of the selected item, -1 if cancelled, len(items) if all (in space)
+        Retuns the screen => use screen.select() to return :
+             the rank of the selected room, -1 if cancelled, len(items) if select all (on 'space')
         """
-        return cls.select_from_menu(Explore(items, color))
+        menu = Explore(items, color)
+        cls.screen = menu    #set as current screen
+        return menu
 
     @staticmethod
     def quit_game():

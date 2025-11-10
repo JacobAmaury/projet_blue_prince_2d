@@ -95,7 +95,7 @@ class Explore(Screen):
 
 
 
-    def selection(self):
+    def select(self):
         """
         Returns the rank, -1 if cancelled
         """ 

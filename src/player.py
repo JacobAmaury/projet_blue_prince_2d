@@ -18,7 +18,7 @@ class Player :
         # door_status =  -1:opened, 0:wall, 1:closed, 2:1_lock, 3:2_lock
         self.current_room = self.map.rooms[x][y]
         self.door_status = self.map.rooms[x][y].doors[r]
-        Player.ui.screen.update_player_position()
+        Player.ui.root_screen.update_player_position()
 
     def game_won(self):
         print("You won!!!")
@@ -30,18 +30,18 @@ class Player :
 
 class Inventory:
     def __init__(self):
-        self.consumables = {'steps': 70, 'coin': 0, 'gem': 40, 'key': 10, 'dice': 0}
+        self.consumables = {'steps': 70, 'coin': 0, 'gem': 40, 'key': 0, 'dice': 4}
         self.permanents = []    #sets display order
 
     def change_consumable(self,name,increment):
         self.consumables[name] += increment
-        Player.ui.screen.update_consumables()
+        Player.ui.root_screen.update_consumables()
 
     def add_permanent(self,name):
         if name not in database.permanents :
             raise ValueError('name not in database')
         self.permanents.append(name)
-        Player.ui.screen.update_permanents()
+        Player.ui.root_screen.update_permanents()
 
     #used for UI_testing
     def change_perm(self,name,isinside):
@@ -51,7 +51,7 @@ class Inventory:
             self.permanents.append(name)
         else :
             self.permanents.remove(name)
-        Player.ui.screen.update_permanents()
+        Player.ui.root_screen.update_permanents()
 
 class Room :
     def __init__(self, name, rotation=0):

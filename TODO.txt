@@ -10,14 +10,12 @@ Todo (bug solutions):
             - must check if next room has a wall after room selection in case player
                 re-enters selection menu from an other door => cannot enter if wall but can choose room
     UI :
-        - Issue with disp_print on menus 
-            -> will need to call a quit() function to exit menus
+        - Position on disp_print on menus to improve
 
 
 
 Bugs :
-    - Bug with Chapel : sometimes can't be chosen
-        why ?
+    - When opening 2_lock door -> cost == 1 key instead of 2
+    - Dice counter doesn't go down
     - Can go through wall if room_choice made and re-enter room_choice from an other door
         see Game mechanics/Player_move/1st
-    - When opening 2_lock door -> cost == 1 key instead of 2

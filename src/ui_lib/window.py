@@ -43,7 +43,7 @@ class Window :
 class Screen :  #abstract
     window = None #set by window
     FONT_SIZE = 0.035
-    TXT_POSITION = (0.5,0.91)    #center_position
+    TXT_POSITION = (0.5,0.875)    #center_position
     FONT = 'Arial'
     def __init__(self):
         self.size = Screen.window.size

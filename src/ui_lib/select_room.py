@@ -16,16 +16,16 @@ class SelectRoom(Screen):
 
     def __init__(self,rooms):
         Screen.__init__(self)
-        self.mainscreen = self.window.ui.screen
+        self.mainscreen = self.window.ui.root_screen
         self.rooms = rooms
         self.room_choice = 0
         #import images from loadscreen
         self.bg_image = ImageSimple(Screen.selectionmenu_bg_img)
         self.dice_image = ImageSimple(Screen.consumable_imgs['dice'])
         self.gem_image = ImageReapeated(Screen.consumable_imgs['gem'])
-        self.build()
+        self.update()
 
-    def selection(self):
+    def select(self):
         """
         Returns the rank of the selected room, -1 if cancelled, 3 if reroll
         """ 
@@ -35,20 +35,23 @@ class SelectRoom(Screen):
             def escape() : 
                 self.running=False
                 self.room_choice = -1
+                self.blit()
             @staticmethod
             def left():
                 self.room_choice = (self.room_choice - 1) % 4 
+                self.blit()
             @staticmethod
             def right():
                 self.room_choice = (self.room_choice + 1)  %4
+                self.blit()
             @staticmethod
             def enter() : 
                 if self.room_choice != 3 :
-                    self.running = False  #close menu with selection
+                    self.running = False  #return selection
                 else : 
                     if self.dice_count >= 1 :
                         self.running = False  #close menu to rerun selection_menu
-                        return 3
+                        return 3           # return 3
             ##optionnal handlers : not in the game specifications (easier debugg), can be removed later
             @staticmethod
             def space():
@@ -63,7 +66,6 @@ class SelectRoom(Screen):
         event_listener = self.window.ui.event_listener
         self.running = True
         while self.running:
-            self.blit()
             event_listener()
             pygame.display.flip()
         return self.room_choice
