@@ -9,26 +9,15 @@ Todo (bug solutions):
         Player_move :
             - must check if next room has a wall after room selection in case player
                 re-enters selection menu from an other door => cannot enter if wall but can choose room
-            - call player.move() on current position when cancelling room_selection()
-                to actualise door_status on display if it was unlocked before room_selection()
-            Optionnal :
-            - use door values :
-                -1 for opened_door, -2 for front_door (or else we have a planted_pot on the display)
-                => need to set doors to opened_door on both sides
-                Note : can change values => report changes in main_screen.py -> blit_status()
     UI :
-        - Selection Menu for items
+        - Issue with disp_print on menus 
+            -> will need to call a quit() function to exit menus
 
 
 
 Bugs :
-    - Chapel can't be choosen
-        ?
+    - Bug with Chapel : sometimes can't be chosen
+        why ?
     - Can go through wall if room_choice made and re-enter room_choice from an other door
         see Game mechanics/Player_move/1st
-    - When cancelling room_choice : ui doesn't actualise door state (remains locked)
-        see Game mechanics/Player_move/2nd
     - When opening 2_lock door -> cost == 1 key instead of 2
-
-Improvements :
-    - Front door is a potted plant : weird => see Game mechanics/Player_move/Optionnal/1st

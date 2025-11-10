@@ -169,14 +169,13 @@ class MainScreen(Screen) :
         #build current room
         SIZE = self.SIZE_CURRENT_ROOM
         X,Y = self.CURRENT_ROOM_POSITION
-        x,y,_ = self.player.position
-        current_room_image = ImageSimple(Screen.room_imgs[self.player.map.rooms[x][y].name])
+        current_room_image = ImageSimple(Screen.room_imgs[self.player.current_room.name])
         current_room_image.smoothscale((SIZE * w, SIZE * h * 16/9))
         current_room_image.position = (X * w, Y * h)
         self.current_room_image = current_room_image
         #build enter_message
         X,Y = self.CURRENT_ROOM_MSG_POSITION
-        current_room_txt = self.player.map.rooms[x][y].message
+        current_room_txt = self.player.current_room.message
         if current_room_txt is not None:
             current_room_txt = self.room_msg_font.render(str(current_room_txt), True, (255, 255, 255))
             txt_w,txt_h = current_room_txt.get_size()
@@ -229,12 +228,10 @@ class MainScreen(Screen) :
             buffer.blit(self.current_room_txt,self.current_room_txt_position)
         # blit current doom_status
         door_status = self.player.door_status
-        if door_status == -2 :      #front door
-            self.front_door_image.blit(buffer)
+        if door_status == 0 :   #wall
+            return
         elif door_status == -1 :    #opened door
             self.opened_door_image.blit(buffer)
-        elif door_status == 0:      #wall
-            self.plant_image.blit(buffer)
         elif door_status > 0 :      #closed door
             self.closed_door_image.blit(buffer)
             if door_status == 2 :   #locked1 door
@@ -242,3 +239,8 @@ class MainScreen(Screen) :
             elif door_status == 3:  #locked2 door
                 self.key_image.blit_single(buffer,1)
                 self.key_image.blit_single(buffer,2)
+        # elif door_status == 0:      #wall
+        #     if self.player.current_room.name == 'EntranceHall':
+        #         self.front_door_image.blit(buffer)
+        #     else:
+        #         self.plant_image.blit(buffer)

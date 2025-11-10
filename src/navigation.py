@@ -119,7 +119,7 @@ class Nav :
 
         #Unlock the front door
         front = (r+2) % 4 #Change the rotation to the front of the room
-        cls.map.rooms[next_x][next_y].doors[front] = 1
+        cls.map.rooms[next_x][next_y].doors[front] = -1 #set to opened
         
         # print(new_room_name)
         Effect().apply_effect(new_room.name)
@@ -146,7 +146,7 @@ class Nav :
         player_got_key = cls.inventory.consumables["key"] >= 1
         if door == 0:
             doors_open = False
-        if door == 1:
+        if door == 1 or door == -1:
             doors_open = True
         elif door == 2 and ('Lockpick_Kit' in cls.inventory.permanents):
             doors_open = True
@@ -206,19 +206,21 @@ class Nav :
         elif r == 3: #left
             next_x = x - 1
 
-        doors_open = cls.door_level_check(cls.map.rooms[x][y].doors[r])
-        if doors_open: 
-            #unlock door
-            cls.map.rooms[x][y].doors[r] = 1
+        door_can_be_opened = cls.door_level_check(cls.map.rooms[x][y].doors[r])
+        if door_can_be_opened: 
+            #unlock door # -> open_door
+            cls.map.rooms[x][y].doors[r] = -1    #set to opened
 
             if next_x == 2 and next_y == 8:
                 cls.player.game_won()
 
+            cls.player.move(x,y,r)  #acctualise door_status on ui
             # print("Inventaire salle", cls.map.rooms_inventory[x][y])
             
             if cls.map.room_exists(next_x, next_y):
-                next_room_has_a_door = cls.map.rooms[next_x][next_y].doors[(r+2)%4] == 1
+                next_room_has_a_door = cls.map.rooms[next_x][next_y].doors[(r+2)%4] != 0
                 if next_room_has_a_door :
+                    cls.map.rooms[next_x][next_y].doors[(r+2)%4] = -1 #set to opened
                     # r = (r+2) % 4 #Change the player rotation when entering a room
                     cls.inventory.change_consumable('steps', -1)
                     if cls.inventory.consumables['steps'] <= 0:
