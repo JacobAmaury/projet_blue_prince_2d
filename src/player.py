@@ -37,26 +37,19 @@ class Inventory:
     def change_consumable(self,name,increment):
         self.consumables[name] += increment
         Player.ui.screen.update_consumables()
+        
         # Player.ui.screen.print(f"{name} : {increment}")
         # pygame.time.wait(150)
 
     def add_permanent(self,name):
         if name not in database.permanents :
             raise ValueError('name not in database')
-        self.permanents.append(name)
-        Player.ui.screen.update_permanents()
-        Player.ui.screen.print(f"{name} added to inventory")
-        pygame.time.wait(150)
-
-    #used for UI_testing
-    def change_perm(self,name,isinside):
-        if name not in database.permanents :
-            raise ValueError('name not in database')
-        if isinside:
+        if name not in [name for name in self.permanents]:
             self.permanents.append(name)
-        else :
-            self.permanents.remove(name)
         Player.ui.screen.update_permanents()
+
+        # Player.ui.screen.print(f"{name} added to inventory")
+        # pygame.time.wait(150)
 
 class Room :
     def __init__(self, name, rotation=0):
@@ -91,8 +84,7 @@ class Map :
 
     def add_room(self,room,position):
         x, y = position
-        #position : (x,y)
-        # x in [0,4], y in [0,8]
+        #position : (x,y), x in [0,4], y in [0,8]
         self.rooms[x][y] = room
         Player.ui.screen.update_map()
 

@@ -25,11 +25,11 @@ while True:
     t += UI.clock.get_time()
     if t > 1000:
         nav.inventory.change_consumable("steps",-1)
-        nav.inventory.change_perm("Lockpick_Kit",not("Lockpick_Kit" in nav.inventory.permanents))
-        nav.inventory.change_perm("Shovel",not("Shovel" in nav.inventory.permanents))
-        nav.inventory.change_perm("Lucky_Rabbits_Foot",not("Lucky_Rabbits_Foot" in nav.inventory.permanents))
-        nav.inventory.change_perm("Power_Hammer",not("Power_Hammer" in nav.inventory.permanents))
-        nav.inventory.change_perm("Metal_Detector",not("Metal_Detector" in nav.inventory.permanents))
+        nav.inventory.add_permanent("Lockpick_Kit")
+        nav.inventory.add_permanent("Shovel")
+        nav.inventory.add_permanent("Lucky_Rabbits_Foot")
+        nav.inventory.add_permanent("Power_Hammer")
+        nav.inventory.add_permanent("Metal_Detector")
         nav.map.add_room(Room("Passageway",2),(0, 0))
         room = Room("MusicRoom",r) ; room.message = "my room's message"
         nav.map.add_room(room,(x, y))   #add room (will fill the map)
@@ -40,3 +40,4 @@ while True:
         t = 0
     
 
+#Note doors are not rotated though the room is => weird, but works in main
