@@ -239,6 +239,7 @@ class Nav :
                     if new_room_id == REROLL:
                         cls.inventory.change_consumable('dice', -1)
                         cls.three_rooms[next_x][next_y][r] = []
+                        cls.print_msg = None
 
                 if new_room_id != CANCEL:
                     new_room = cls.three_rooms[next_x][next_y][r][new_room_id]

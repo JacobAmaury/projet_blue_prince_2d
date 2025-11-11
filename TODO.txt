@@ -1,12 +1,26 @@
-Todo (bug solutions):
-    Game mechanics :
+To implement:
+        Player enters Shop/Explore :
+            - see ui for nav implementation (similar to select_room)
+
         Display messages :
             - display messages with ui.screen.print()
                 ex: Nav.ui.disp_print("Can't open door : Not enough keys !")
             - display messages in menus with <menu>(args, print_msg)
-        Room message:
-            - Rooms must display a message to invite to press Enter:
+
+        Room messages :
+            - Rooms must display a message to invite to press Enter (if Shop/Explore available):
                 Can be done by setting player.message with the message (None if no message)
-        Player_move :
-            - must check if next room has a wall after room selection in case player
-                re-enters selection menu from an other door => cannot enter if wall but can choose room
+		(Note : Screen is updated on player.move())
+            - can also be used to display room effects
+
+        Room choice when cancelling choice and re-openning from an other door:
+            - Solution 1 : cannot enter if wall but can still choose room
+            - Solution 2 (implmented) : rotate rooms in choice to match
+		=> what happens if open multiple doors before choice ? (Should match all opened doors)
+		=> what happens if no match found ? (Solution : Game over : Tou broke the manor)
+
+	UI : Game over/You won screen
+
+Bugs:
+	- 2_Locked_doors still opened with 1 key
+	- When choosing 'Chapel' : obscure message if not enough coins
