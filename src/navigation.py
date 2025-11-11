@@ -41,7 +41,7 @@ class Nav :
         cls.ui.show_mainScreen(cls.player, NavHandler)  # creates and blits main_screen with data of player
         cls.inventory, cls.map = cls.player.inventory, cls.player.map
 
-        cls.three_rooms = [[[[]for r in range(4)] for y in range(9)] for x in range(5)]  #x, y, rooms[0, 1, 2]
+        cls.three_rooms = [[[[]for r in range(4)] for y in range(5)] for x in range(9)]  #x, y, rooms[0, 1, 2]
         cls.pool = cls.map.init_pool()
         cls.proba_pool = cls.map.update_proba_pool()
 
@@ -143,19 +143,22 @@ class Nav :
 
     @classmethod
     def door_level_check(cls, door):
+        cls.print_msg = None
         player_got_key = cls.inventory.consumables["key"] >= 1
-        if not(player_got_key):
-            cls.ui.disp_print("I can't open ! Bring me a hammer !")
         if door == 1 or door == -1:
             return True
         elif door == 2 and ('Lockpick_Kit' in cls.inventory.permanents):
             return True
         elif door == 2 and player_got_key:
             cls.inventory.change_consumable('key', -1)
+            cls.print_msg = '1 key used'
             return True
         elif door == 3 and player_got_key:
             cls.inventory.change_consumable('key', -1)
+            cls.print_msg = '1 key used for 2 locks, such an exploit !'
             return True
+        if door != 0 : #not a wall
+            cls.ui.screen.print("Can't open, not enough keys !")
         return False   
 
     @classmethod
@@ -168,7 +171,7 @@ class Nav :
             if consumable in database.consumables:
                 if increment < 0:
                     if (cls.inventory.consumables[consumable] + increment) < 0:
-                        cls.ui.disp_print("Not enough consumables ?")
+                        cls.ui.screen.print("Not enough consumables ?")
                         return False
         return True
     
@@ -228,23 +231,23 @@ class Nav :
                         cls.player.game_over()
                     cls.player.move(next_x, next_y, r)
             else:
-                REROLL = 3; CANCEL = -1 ; INI = 4
-                new_room_id = INI
-                while(new_room_id == REROLL or new_room_id == INI):
-                    if new_room_id == REROLL:
-                        cls.inventory.change_consumable('dice', -1)
-                        cls.ui.exit_menu()
-                    cls.three_rooms[next_x][next_y][r] = []
-                    cls.three_room_choice(next_x, next_y, r)
-                    menu = cls.ui.select_room(cls.three_rooms[next_x][next_y][r])
-                    new_room_id = menu.select()
+                REROLL = 3; CANCEL = -1
+                new_room_id = 3 #reroll value
+                while(new_room_id == REROLL):
+                    cls.three_rooms[next_x][next_y] = cls.three_room_choice(next_x, next_y, r)
+                    new_room_id = cls.ui.select_room(cls.three_rooms[next_x][next_y], cls.print_msg)
 
-                cls.ui.exit_menu()
-                if new_room_id != CANCEL:
-                    new_room = cls.three_rooms[next_x][next_y][r][new_room_id]
-                    if cls.enough_consumables(new_room.name):
-                        cls.change_player_consumables(new_room, next_x, next_y)
-                        cls.open_room(next_x, next_y, new_room)
+                    if new_room_id != REROLL and  new_room_id != CANCEL:
+                        new_room = cls.three_rooms[next_x][next_y][new_room_id]
+                        if cls.enough_consumables(new_room.name):
+                            cls.change_player_consumables(new_room, next_x, next_y)
+                            cls.open_room(next_x, next_y, new_room)
+
+                    if new_room_id == REROLL:
+                        cls.three_rooms[next_x][next_y] = []
+                        cls.inventory.change_consumable('dice', -1)
+                        if cls.inventory.consumables['dice']<0 :
+                            cls.print_msg = 'Infinite dice ! Happy gaming :)'
 
 
                         

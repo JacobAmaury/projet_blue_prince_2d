@@ -22,7 +22,8 @@ while True:
 
     t += clock.get_time()
     if t > 3000:
-        choix = UI.select_room([Room("LockerRoom"), Room("Vault"), Room("Office")])
+        choix = UI.select_room([Room("LockerRoom"), Room("Vault"), Room("Office")], 'message ...')
+        nav.ui.screen.print('This is a test, no kidding')
         t = 0
 
 

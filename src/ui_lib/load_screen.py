@@ -35,8 +35,7 @@ class LoadScreen(Screen) :
         self.bg_image.blit(buffer)
         self.logo_image.blit(buffer)   
         #text (build and blit)
-        self.screen_print("Loading game ...")
-
+        self.print("Loading game ...")
         
         ##flip
         pygame.display.flip()
@@ -50,7 +49,7 @@ class LoadScreen(Screen) :
         #shop bg
         path = "../images/background/shop.jpg"
         Screen.shop = ImageSimple(Image.loadFull(path))
-        #explore bbg
+        #explore bg
         colors = ['violet']
         for color in colors:
             path = f"../images/background/{color}_room.jpeg"
@@ -89,7 +88,3 @@ class LoadScreen(Screen) :
         Screen.closed_door_img = Image.loadTransparent(path)
         path = "../images/items/doors/opened_door.png"
         Screen.opened_door_img = Image.loadTransparent(path)
-        path = "../images/items/doors/plant.png"
-        Screen.plant_img = Image.loadTransparent(path)
-        path = "../images/items/doors/front_doors.png"
-        Screen.front_door_img = Image.loadTransparent(path)

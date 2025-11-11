@@ -29,18 +29,12 @@ class MainScreen(Screen) :
         self.permanent_images = {}
         for name,image in Screen.permanant_imgs.items():
             self.permanent_images[name] = ImageSimple(image)   # no preset order
-        self.front_door_image = ImageSimple(Screen.front_door_img)
         self.closed_door_image = ImageSimple(Screen.closed_door_img)
         self.opened_door_image = ImageSimple(Screen.opened_door_img)
-        self.plant_image = ImageSimple(Screen.plant_img)
         self.key_image = ImageReapeated(Screen.consumable_imgs['key'])
         self.key_image.positions = [None]*3
         #display
         self.update()
-
-    def update(self):
-        self.build()
-        self.blit()
 
     def build(self):
         self.size = self.window.size
@@ -68,11 +62,12 @@ class MainScreen(Screen) :
         door.draw(self.buffer)
         self.blit_status()
 
-    def screen_print(self,msg):
+    def print(self,msg):
         txt = self.msg.render(msg, True, (255, 255, 255))
         X, Y = self.MSG_POSITION ; w, h = self.size ; txt_w, txt_h = txt.get_size()
         position = (X*w - txt_w/2, Y*h + txt_h/2 )
         self.buffer.blit(txt, position)
+        pygame.display.flip()
 
     
 ## updates
@@ -186,18 +181,6 @@ class MainScreen(Screen) :
         w,h = self.size
         # build all door_status images
         DOOR_X,DOOR_Y = self.DOOR_POSITION; DOOR_SIZE = self.DOOR_SIZE; KEY_SIZE = self.KEY_SIZE
-        #plant
-        image = self.plant_image
-        image.smoothscale((DOOR_SIZE*0.7 * w, DOOR_SIZE*0.7 * h * 16/9))
-        offset_x = DOOR_SIZE/2 - DOOR_SIZE*0.7/2
-        offset_y = DOOR_SIZE - DOOR_SIZE*0.7
-        image.position = ((DOOR_X + offset_x) * w, (DOOR_Y + offset_y * 16/9)* h)
-        self.plant_image = image
-        #front_door
-        image = self.front_door_image
-        image.smoothscale((DOOR_SIZE * w, DOOR_SIZE * h * 16/9))
-        image.position = (DOOR_X * w, DOOR_Y * h)
-        self.front_door_image = image
         #opened_door
         image = self.opened_door_image
         image.smoothscale((DOOR_SIZE * w, DOOR_SIZE * h * 16/9))
@@ -239,8 +222,3 @@ class MainScreen(Screen) :
             elif door_status == 3:  #locked2 door
                 self.key_image.blit_single(buffer,1)
                 self.key_image.blit_single(buffer,2)
-        # elif door_status == 0:      #wall
-        #     if self.player.current_room.name == 'EntranceHall':
-        #         self.front_door_image.blit(buffer)
-        #     else:
-        #         self.plant_image.blit(buffer)

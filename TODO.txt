@@ -1,13 +1,12 @@
 Todo (bug solutions):
     Game mechanics :
-        Inventory checks :
-            - display message if can't afford : use ui.disp_print()
+        Display messages :
+            - display messages with ui.screen.print()
                 ex: Nav.ui.disp_print("Can't open door : Not enough keys !")
-        Items selection menu:
-            - Rooms must display a message to invite to press Enter if it has an Item Selection Menu:
+            - display messages in menus with <menu>(args, print_msg)
+        Room message:
+            - Rooms must display a message to invite to press Enter:
                 Can be done by setting player.message with the message (None if no message)
         Player_move :
             - must check if next room has a wall after room selection in case player
                 re-enters selection menu from an other door => cannot enter if wall but can choose room
-    UI :
-        - Position on disp_print on menus to improve

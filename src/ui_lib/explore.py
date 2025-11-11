@@ -14,9 +14,11 @@ class Explore(Screen):
     TXT_OFFSET = (0.025,0.007)
     WHITE = (255,255,255)
     SIZE_TXT = 0.07
+    PRINT_TXT_POSITION = (.5, .1)
 
     def __init__(self, items, color):
         Screen.__init__(self)
+        items = items[:6]
         self.items = items
         self.length = len(items)
         length = self.length
@@ -33,8 +35,7 @@ class Explore(Screen):
         for id,(name,nb,category) in enumerate(items):
             self.images[id] = ImageSimple(categories[category][name])
             self.counts[id] = nb
-
-        self.build()
+        self.update()
 
     def build(self):
         self.size = self.window.size
@@ -94,6 +95,12 @@ class Explore(Screen):
             buffer.blit(self.count_font.render(str(counts[id]),True, color), txt_positions[id])
 
 
+    def print(self,msg):
+        txt = self.font.render(msg, True, (255, 255, 255))
+        X, Y = self.PRINT_TXT_POSITION ; w, h = self.size ; txt_w, txt_h = txt.get_size()
+        position = (X*w - txt_w/2, Y*h + txt_h/2 )
+        self.buffer.blit(txt, position)
+        pygame.display.flip()
 
     def select(self):
         """
@@ -108,9 +115,11 @@ class Explore(Screen):
             @staticmethod
             def left():
                 self.selected = (self.selected - 1) % self.length
+                self.blit()
             @staticmethod
             def right():
                 self.selected = (self.selected + 1)  % self.length
+                self.blit()
             @staticmethod
             def enter() : 
                 self.running = False  #close menu with selection
@@ -131,7 +140,6 @@ class Explore(Screen):
 
         self.running = True
         while self.running:
-            self.blit()
             event_listener()
             pygame.display.flip()
         return self.selected

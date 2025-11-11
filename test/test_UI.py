@@ -31,8 +31,10 @@ while True:
         nav.inventory.change_perm("Power_Hammer",not("Power_Hammer" in nav.inventory.permanents))
         nav.inventory.change_perm("Metal_Detector",not("Metal_Detector" in nav.inventory.permanents))
         nav.map.add_room(Room("Passageway",2),(0, 0))
-        nav.map.add_room(Room("MusicRoom",r),(x, y))   #add room (will fill the map)
+        room = Room("MusicRoom",r) ; room.message = "my room's message"
+        nav.map.add_room(room,(x, y))   #add room (will fill the map)
         nav.player.move(x,y,r)
+        nav.ui.screen.print('testing ... testing ... testing ...')
         x+=1; y+=1; r+=1
         r = r % 4 ; y = y % 9 ; x = x % 5   #protection overflow 
         t = 0

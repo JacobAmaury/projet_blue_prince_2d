@@ -1,5 +1,6 @@
 import database
 import random as rd
+import pygame
 
 class Player :
     def __init__(self,ui):
@@ -18,7 +19,7 @@ class Player :
         # door_status =  -1:opened, 0:wall, 1:closed, 2:1_lock, 3:2_lock
         self.current_room = self.map.rooms[x][y]
         self.door_status = self.map.rooms[x][y].doors[r]
-        Player.ui.root_screen.update_player_position()
+        Player.ui.screen.update_player_position()
 
     def game_won(self):
         print("You won!!!")
@@ -35,13 +36,17 @@ class Inventory:
 
     def change_consumable(self,name,increment):
         self.consumables[name] += increment
-        Player.ui.root_screen.update_consumables()
+        Player.ui.screen.update_consumables()
+        # Player.ui.screen.print(f"{name} : {increment}")
+        # pygame.time.wait(150)
 
     def add_permanent(self,name):
         if name not in database.permanents :
             raise ValueError('name not in database')
         self.permanents.append(name)
-        Player.ui.root_screen.update_permanents()
+        Player.ui.screen.update_permanents()
+        Player.ui.screen.print(f"{name} added to inventory")
+        pygame.time.wait(150)
 
     #used for UI_testing
     def change_perm(self,name,isinside):
@@ -51,7 +56,7 @@ class Inventory:
             self.permanents.append(name)
         else :
             self.permanents.remove(name)
-        Player.ui.root_screen.update_permanents()
+        Player.ui.screen.update_permanents()
 
 class Room :
     def __init__(self, name, rotation=0):

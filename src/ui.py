@@ -22,63 +22,57 @@ class UI :
         cls.screen.load_images()    #pseudo-async : (event_listener loop)
     
     @classmethod
-    def disp_print(cls,msg):
-        """prints a message on screen until next buffer.blit()
-        """
-        cls.screen.screen_print(msg)
-
-    @classmethod
     def show_mainScreen(cls,player, event_handler):
         cls.player = player
         cls.screen = MainScreen(player)
         cls.screen.event_handler = event_handler
-        cls.root_screen = cls.screen    #set as root_screen for menus
+ 
+    @classmethod
+    def select_from_menu(cls, menu, print_msg):
+        """
+        Display a selection menu for choosing items in shop.
+        Returns the rank of the selected item, -1 if cancelled
+        """
+        mainscreen = cls.screen
+        menu =  menu
+        cls.screen = menu    #set as current screen
+        if print_msg is not None :
+            cls.screen.print(print_msg)
+        selected = menu.select()
+        cls.screen = mainscreen    #set as current screen
+        cls.screen.update()
+        return selected
 
     @classmethod
-    def exit_menu(cls):
-        """
-        Refresh Mainscreen (exit menu)
-        """
-        cls.screen = cls.root_screen    #set root_screen as current screen
-        cls.screen.update()
-    
-    @classmethod
-    def select_room(cls, rooms):
+    def select_room(cls, rooms, print_msg = None):
         """
         Display a selection menu for choosing one of three rooms.
         rooms = list of Room objects
-        Retuns the screen => use screen.select() to return :
-             the rank of the selected room, -1 if cancelled, 3 if reroll
+        Returns the rank of the selected room, -1 if cancelled, 3 if reroll
         """
-        menu = SelectRoom(rooms)
-        cls.screen = menu    #set as current screen
-        return menu
+        return cls.select_from_menu(SelectRoom(rooms), print_msg)
 
     @classmethod
-    def shop(cls, items):
+    def shop(cls, items, print_msg = None):
         """
         Display a selection menu for choosing items in shop.
         items = list[(name,coin_cost)]
-        Retuns the screen => use screen.select() to return :
-             the rank of the selected room, -1 if cancelled
+        Returns the rank of the selected item, -1 if cancelled, len(items) if all (on space)
+        Note only the 9 first elements are displayed and selectable
         """
-        menu = Shop(items)
-        cls.screen = menu    #set as current screen
-        return menu
+        return cls.select_from_menu(Shop(items), print_msg)
     
     @classmethod
-    def explore(cls, items, color):
+    def explore(cls, items, color, print_msg = None):
         """
         Display a selection menu for choosing items in shop.
         - color : room color (cannot be yellow)
         - items = list[(name,nb,category)]
         with category in {'consumable, 'permanent', 'other'}
-        Retuns the screen => use screen.select() to return :
-             the rank of the selected room, -1 if cancelled, len(items) if select all (on 'space')
+        Returns the rank of the selected item, -1 if cancelled, len(items) if all (in space)
+        Note only the 6 first elements are displayed and selectable
         """
-        menu = Explore(items, color)
-        cls.screen = menu    #set as current screen
-        return menu
+        return cls.select_from_menu(Explore(items, color), print_msg)
 
     @staticmethod
     def quit_game():

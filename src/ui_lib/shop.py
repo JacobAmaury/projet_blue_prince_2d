@@ -16,6 +16,7 @@ class Shop(Screen):
 
     def __init__(self, items):
         Screen.__init__(self)
+        items = items[:9]
         self.items = items
         self.len = len(items)
         self.player = self.window.ui.player
@@ -116,9 +117,11 @@ class Shop(Screen):
             @staticmethod
             def up():
                 self.selected = (self.selected - 1) % self.len
+                self.blit()
             @staticmethod
             def down():
                 self.selected = (self.selected + 1)  % self.len
+                self.blit()
             @staticmethod
             def enter() : 
                 self.running = False  #close menu with selection
@@ -137,7 +140,6 @@ class Shop(Screen):
 
         self.running = True
         while self.running:
-            self.update_products()
             event_listener()
             pygame.display.flip()
         return self.selected

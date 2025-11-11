@@ -16,7 +16,7 @@ class SelectRoom(Screen):
 
     def __init__(self,rooms):
         Screen.__init__(self)
-        self.mainscreen = self.window.ui.root_screen
+        self.mainscreen = self.window.ui.screen
         self.rooms = rooms
         self.room_choice = 0
         #import images from loadscreen

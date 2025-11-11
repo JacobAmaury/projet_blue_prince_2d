@@ -22,7 +22,13 @@ while True:
 
     t += clock.get_time()
     if t > 1000:
-        choix = UI.shop([("apple",3), ("banana",1), ("cake",5)])
+        choix = UI.shop([("apple",3), ("banana",1), ("cake",5),
+                         ("apple",3), ("banana",1), ("cake",5),
+                         ("apple",3), ("banana",1), ("cake",5),
+                         ("apple",3), ("banana",1), ("cake",5),
+                         ("apple",3), ("banana",1), ("cake",5),
+                         ("apple",3), ("banana",1), ("cake",5)
+                         ], 'testing ... testing ... testing ...')
         t = 0
 
 
