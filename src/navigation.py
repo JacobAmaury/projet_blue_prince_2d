@@ -41,7 +41,7 @@ class Nav :
         cls.ui.show_mainScreen(cls.player, NavHandler)  # creates and blits main_screen with data of player
         cls.inventory, cls.map = cls.player.inventory, cls.player.map
 
-        cls.three_rooms = [[[[]for r in range(4)] for y in range(5)] for x in range(9)]  #x, y, rooms[0, 1, 2]
+        cls.three_rooms = [[[[]for r in range(4)] for y in range(9)] for x in range(5)]  #x, y, rooms[0, 1, 2]
         cls.pool = cls.map.init_pool()
         cls.proba_pool = cls.map.update_proba_pool()
 
@@ -232,25 +232,23 @@ class Nav :
                     cls.player.move(next_x, next_y, r)
             else:
                 REROLL = 3; CANCEL = -1
-                new_room_id = 3 #reroll value
+                new_room_id = REROLL
                 while(new_room_id == REROLL):
-                    cls.three_rooms[next_x][next_y] = cls.three_room_choice(next_x, next_y, r)
-                    new_room_id = cls.ui.select_room(cls.three_rooms[next_x][next_y], cls.print_msg)
-
-                    if new_room_id != REROLL and  new_room_id != CANCEL:
-                        new_room = cls.three_rooms[next_x][next_y][new_room_id]
-                        if cls.enough_consumables(new_room.name):
-                            cls.change_player_consumables(new_room, next_x, next_y)
-                            cls.open_room(next_x, next_y, new_room)
-
+                    cls.three_room_choice(next_x, next_y, r)
+                    new_room_id = cls.ui.select_room(cls.three_rooms[next_x][next_y][r], cls.print_msg)
                     if new_room_id == REROLL:
-                        cls.three_rooms[next_x][next_y] = []
                         cls.inventory.change_consumable('dice', -1)
-                        if cls.inventory.consumables['dice']<0 :
-                            cls.print_msg = 'Infinite dice ! Happy gaming :)'
+                        cls.three_rooms[next_x][next_y][r] = []
+
+                if new_room_id != CANCEL:
+                    new_room = cls.three_rooms[next_x][next_y][r][new_room_id]
+                    if cls.enough_consumables(new_room.name):
+                        cls.change_player_consumables(new_room, next_x, next_y)
+                        cls.open_room(next_x, next_y, new_room)
 
 
-                        
+
+
 
                         
 

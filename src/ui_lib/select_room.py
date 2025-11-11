@@ -52,6 +52,8 @@ class SelectRoom(Screen):
                     if self.dice_count >= 1 :
                         self.running = False  #close menu to rerun selection_menu
                         return 3           # return 3
+                    else :
+                        self.print("Can't reroll, no dice left !")
             ##optionnal handlers : not in the game specifications (easier debugg), can be removed later
             @staticmethod
             def space():
