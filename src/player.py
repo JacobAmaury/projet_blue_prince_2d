@@ -32,7 +32,7 @@ class Player :
 class Inventory:
     def __init__(self):
         self.consumables = {'steps': 70, 'coin': 0, 'gem': 40, 'key': 0, 'dice': 4}
-        self.permanents = ['Shovel']    #sets display order
+        self.permanents = []    #sets display order
 
     def change_consumable(self,name,increment):
         self.consumables[name] += increment
@@ -61,6 +61,7 @@ class Room :
         #   ex : 'Press Enter to open the Shop'   'Press Enter to explore'
         #self.inventory ?
         self.dig = False
+        self.opened_coffer = False
     
     def __str__(self):
         return (
@@ -80,7 +81,9 @@ class Map :
             "dice": 0,
             "apple":0,
             "Shovel": 0,
-            "Lockpick_Kit": 0
+            "Power_Hammer": 0,
+            "Lockpick_Kit": 0,
+            "coffer" : 0
         } for y in range(9)] for x in range(5)]  #x, y, database_element
 
     def add_room(self,room,position):
@@ -148,7 +151,9 @@ class Map :
                 "apple": 40,
                 "dice": 20,
                 "Shovel": 10,
-                "Lockpick_Kit": 10
+                "Lockpick_Kit": 10,
+                "Power_Hammer": 10,
+                "coffer":70
             }
             
             for name, weight in rarity_weights.items():
@@ -162,7 +167,7 @@ class Map :
                     continue
 
                 if item_pool[rand_index] != 0:
-                    self.rooms_inventory[x][y] += 1
+                    self.rooms_inventory[x][y][act_item] += 1
             
 
         else:
@@ -174,7 +179,9 @@ class Map :
                 "apple": 20,
                 "dice": 10,
                 "Shovel": 2,
-                "Lockpick_Kit": 2
+                "Lockpick_Kit": 2,
+                "Power_Hammer": 60,
+                "coffer": 70
             }
             
             for name, weight in rarity_weights.items():

@@ -37,6 +37,11 @@ class NavHandler(EventHandler):
             x, y = Nav.dig_room
             Nav.dig(x, y)
             return
+        
+        if Nav.coffer_room is not None:
+            x, y = Nav.coffer_room
+            Nav.open_coffer(x, y)
+            return
 
         
 class Nav :
@@ -314,6 +319,8 @@ class Nav :
         cls.map.rooms_inventory[x][y][name] = 0
 
     shop_room = None
+    coffer_room = None
+
     @classmethod
     def check_room_actions(cls, x, y):
         room = cls.map.rooms[x][y]
@@ -331,6 +338,14 @@ class Nav :
         if color == "green" and "Shovel" in cls.inventory.permanents and not room.dig:
             room.message = "Press Enter to dig"
             cls.dig_room = (x, y)
+
+        if cls.map.rooms_inventory[x][y]["coffer"] > 0 and not room.opened_coffer:
+            if cls.inventory.consumables["key"] > 0 or "Power_Hammer" in cls.inventory.permanents:
+                room.message = "Press Enter to open the coffer"
+                cls.coffer_room = (x, y)
+            else:
+                room.message = "You need a key to open a coffer"
+
 
         # refresh screen
         cls.ui.screen.build_current_room()
@@ -382,8 +397,8 @@ class Nav :
         cls.dig_room = None
 
         loot_table = [
+            ("coin", 2),
             ("coin", 5),
-            ("coin", 10),
             ("gem", 1),
             ("key", 1),
             ("apple", 1),
@@ -403,6 +418,44 @@ class Nav :
                 cls.inventory.change_consumable("steps", 2) 
 
         cls.ui.screen.print(f"You found {amount} {loot} !")
+
+
+    @classmethod
+    def open_coffer(cls, x, y):
+        room = cls.map.rooms[x][y]
+        room.opened_coffer = True
+        cls.coffer_room = None
+        room.message = None
+
+        if "Power_Hammer" not in cls.inventory.permanents:
+            cls.inventory.change_consumable("key", -1)
+            
+        cls.map.rooms_inventory[x][y]["coffer"] = 0  
+
+        import random
+        loot_table = [
+            ("gem", 2),
+            ("coin", 3),
+            ("key", 1),
+            ("dice", 1),
+            ("apple", 1),
+            ("Shovel", 1),
+            ("Lockpick_Kit", 1)
+        ]
+
+        loot, amount = random.choice(loot_table)
+
+        if loot in cls.inventory.consumables:
+            cls.inventory.change_consumable(loot, amount)
+        elif loot in database.permanents:
+            for _ in range(amount):
+                cls.inventory.add_permanent(loot)
+        else:
+            if loot == "apple":
+                cls.inventory.change_consumable("steps", 2 * amount)
+
+        cls.ui.screen.print(f"You found {amount} {loot} inside the coffer !")
+
 
 
 
