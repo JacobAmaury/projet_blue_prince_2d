@@ -31,7 +31,7 @@ class Player :
 
 class Inventory:
     def __init__(self):
-        self.consumables = {'steps': 70, 'coin': 0, 'gem': 40, 'key': 0, 'dice': 4}
+        self.consumables = {'steps': 70, 'coin': 0, 'gem': 0, 'key': 0, 'dice': 4}
         self.permanents = []    #sets display order
 
     def change_consumable(self,name,increment):
@@ -153,7 +153,7 @@ class Map :
                 "Shovel": 10,
                 "Lockpick_Kit": 10,
                 "Power_Hammer": 10,
-                "coffer":70
+                "coffer":5
             }
             
             for name, weight in rarity_weights.items():
@@ -180,8 +180,8 @@ class Map :
                 "dice": 10,
                 "Shovel": 2,
                 "Lockpick_Kit": 2,
-                "Power_Hammer": 60,
-                "coffer": 70
+                "Power_Hammer": 2,
+                "coffer": 5
             }
             
             for name, weight in rarity_weights.items():

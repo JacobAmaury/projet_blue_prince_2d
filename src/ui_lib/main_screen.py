@@ -8,7 +8,7 @@ import database
 class MainScreen(Screen) :
     SIZE_CURRENT_ROOM = 0.1823
     CURRENT_ROOM_POSITION = (0.3645,0.177)
-    CURRENT_ROOM_MSG_SIZE = 1     #relative to FONT_SIZE
+    CURRENT_ROOM_MSG_SIZE = 0.7     #relative to FONT_SIZE
     CURRENT_ROOM_MSG_POSITION = (0.665,0.77)  #center of text
     DOOR_POSITION = (0.38,0.762)
     DOOR_SIZE = 0.09

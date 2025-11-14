@@ -42,9 +42,15 @@ class NavHandler(EventHandler):
             x, y = Nav.coffer_room
             Nav.open_coffer(x, y)
             return
+    
 
         
 class Nav :
+    
+    shop_room = None
+    coffer_room = None
+    dig_room = None 
+    
     @classmethod
     def ini(cls,UI):            #initialise the class
         cls.ui = UI.ini()
@@ -318,8 +324,6 @@ class Nav :
 
         cls.map.rooms_inventory[x][y][name] = 0
 
-    shop_room = None
-    coffer_room = None
 
     @classmethod
     def check_room_actions(cls, x, y):
@@ -331,21 +335,25 @@ class Nav :
         cls.dig_room = None
         room.message = None  # clear message
 
+        message = ""
+
         if color == "yellow":
-            room.message = "Press Enter to open the shop"
+            message += "Press Enter to open the shop. "
             cls.shop_room = (x, y)
 
         if color == "green" and "Shovel" in cls.inventory.permanents and not room.dig:
-            room.message = "Press Enter to dig"
+            message += "Press Enter to dig. "
             cls.dig_room = (x, y)
 
-        if cls.map.rooms_inventory[x][y]["coffer"] > 0 and not room.opened_coffer:
+        if cls.map.rooms_inventory[x][y]["coffer"] > 0 and not room.opened_coffer and color != "yellow":
             if cls.inventory.consumables["key"] > 0 or "Power_Hammer" in cls.inventory.permanents:
-                room.message = "Press Enter to open the coffer"
+                message += "Press Enter to open the coffer. "
                 cls.coffer_room = (x, y)
             else:
-                room.message = "You need a key to open a coffer"
+                message += "You need a key to open a coffer. "
 
+
+        room.message = message
 
         # refresh screen
         cls.ui.screen.build_current_room()
