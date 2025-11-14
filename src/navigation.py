@@ -26,6 +26,18 @@ class NavHandler(EventHandler):
     def right():
         x, y, _ = Nav.player.position
         Nav.player.move(x, y, 1)
+
+    @staticmethod
+    def enter():
+        if Nav.shop_room is not None:
+            x, y = Nav.shop_room
+            Nav.open_shop(x, y)
+
+        if Nav.dig_room is not None:
+            x, y = Nav.dig_room
+            Nav.dig(x, y)
+            return
+
         
 class Nav :
     @classmethod
@@ -130,6 +142,7 @@ class Nav :
 
         #move the player and check if he lost
         cls.player.move(next_x, next_y, r)
+        cls.check_room_actions(next_x, next_y)
         cls.open_explore_menu(next_x, next_y)
         cls.inventory.change_consumable('steps', -1)
         if cls.inventory.consumables['steps'] <= 0:
@@ -224,6 +237,9 @@ class Nav :
                     if cls.inventory.consumables['steps'] <= 0:
                         cls.player.game_over()
                     cls.player.move(next_x, next_y, r)
+                    cls.check_room_actions(next_x, next_y)
+                    cls.open_explore_menu(next_x, next_y)
+
 
             else:
                 REROLL = 3; CANCEL = -1
@@ -296,6 +312,100 @@ class Nav :
 
 
         cls.map.rooms_inventory[x][y][name] = 0
+
+    shop_room = None
+    @classmethod
+    def check_room_actions(cls, x, y):
+        room = cls.map.rooms[x][y]
+        color = room.data["color"]
+
+        # Reset possible actions
+        cls.shop_room = None
+        cls.dig_room = None
+        room.message = None  # clear message
+
+        if color == "yellow":
+            room.message = "Press Enter to open the shop"
+            cls.shop_room = (x, y)
+
+        if color == "green" and "Shovel" in cls.inventory.permanents and not room.dig:
+            room.message = "Press Enter to dig"
+            cls.dig_room = (x, y)
+
+        # refresh screen
+        cls.ui.screen.build_current_room()
+        cls.ui.screen.blit()
+
+
+    
+    @classmethod
+    def open_shop(cls, x, y):
+        room = cls.map.rooms[x][y]
+
+        items_for_sale = [
+            ("key", 5),
+            ("gem", 10),
+            ("dice", 12),
+            ("Shovel", 25)
+        ]
+
+        choice = cls.ui.shop(items_for_sale)
+
+        if choice == -1:
+            return
+
+        # selected item
+        name, price = items_for_sale[choice]
+
+        # check coins
+        if cls.inventory.consumables["coin"] < price:
+            cls.ui.screen.print("Not enough coins !")
+            return
+
+        # buy
+        cls.inventory.change_consumable("coin", -price)
+
+        # add to inventory
+        if name in database.consumables:
+            cls.inventory.change_consumable(name, 1)
+        elif name in database.permanents:
+            cls.inventory.add_permanent(name)
+
+        cls.ui.screen.print(f"You bought {name} !")
+
+
+    @classmethod
+    def dig(cls, x, y):
+        room = cls.map.rooms[x][y]
+        room.message = None
+        room.dig = True 
+        cls.dig_room = None
+
+        loot_table = [
+            ("coin", 5),
+            ("coin", 10),
+            ("gem", 1),
+            ("key", 1),
+            ("apple", 1),
+            ("nothing", 0)
+        ]
+
+        loot, amount = random.choice(loot_table)
+
+        if loot == "nothing":
+            cls.ui.screen.print("You found nothing...")
+            return
+
+        if loot in cls.inventory.consumables:
+            cls.inventory.change_consumable(loot, amount)
+        else:
+            if loot == "apple":
+                cls.inventory.change_consumable("steps", 2) 
+
+        cls.ui.screen.print(f"You found {amount} {loot} !")
+
+
+
 
 
 

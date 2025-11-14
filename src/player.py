@@ -32,7 +32,7 @@ class Player :
 class Inventory:
     def __init__(self):
         self.consumables = {'steps': 70, 'coin': 0, 'gem': 40, 'key': 0, 'dice': 4}
-        self.permanents = []    #sets display order
+        self.permanents = ['Shovel']    #sets display order
 
     def change_consumable(self,name,increment):
         self.consumables[name] += increment
@@ -60,6 +60,7 @@ class Room :
         self.message = None # displayed msg to invite player to press Enter for shop, explore,...
         #   ex : 'Press Enter to open the Shop'   'Press Enter to explore'
         #self.inventory ?
+        self.dig = False
     
     def __str__(self):
         return (
