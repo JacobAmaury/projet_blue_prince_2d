@@ -56,7 +56,7 @@ class Room :
         self.name = name
         self.rotation = rotation
         self.data = database.rooms[name]
-        self.doors = self.data['doors'][:]  #copy by value if room has multiple insntances
+        self.doors = Map.rot_doors(self.data['doors'][:], rotation)  #copy by value if room has multiple insntances
         self.message = None # displayed msg to invite player to press Enter for shop, explore,...
         #   ex : 'Press Enter to open the Shop'   'Press Enter to explore'
         #self.inventory ?
@@ -210,9 +210,8 @@ class Map :
 
         return self.proba_pool
 
-
-
-    def rot_doors(self, room, n=1):
+    @staticmethod
+    def rot_doors(room, n=1):
         """
         Rotate the door list n times
         

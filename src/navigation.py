@@ -108,8 +108,7 @@ class Nav :
         cls.three_rooms[next_x][next_y] = []
         next_position = (next_x, next_y)
 
-        #rotate and level up the doors of the new room
-        new_room.doors = cls.map.rot_doors(new_room.doors, new_room.rotation)
+        #Block doors leading to a wall and level up the doors of the new room
         new_room.doors = cls.map.block_door(new_room.doors, next_x, next_y)
         new_room.doors = cls.map.level_up_door(new_room.doors, next_y)
 
@@ -135,8 +134,6 @@ class Nav :
         cls.inventory.change_consumable('steps', -1)
         if cls.inventory.consumables['steps'] <= 0:
             cls.player.game_over()
-
-        #open item_selection_menu
 
 
     @classmethod
