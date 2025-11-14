@@ -12,7 +12,7 @@ class Shop(Screen):
     H2 = 0.3 ; STEP = 0.06
     WHITE = (255, 255, 255) ; BLUE = (50,150,255) ; YELLOW = (255, 255, 0)
     SIZE_COIN = 0.052   #h ratio
-    X_COIN_OF = 0.018
+    X_COIN_OFFSET = 0.014
 
     def __init__(self, items):
         Screen.__init__(self)
@@ -74,14 +74,14 @@ class Shop(Screen):
             self.txt_products.append((product_font.render(name,True, color),
                                       product_font.render(str(price),True, color)))
         #blit rows
-        H = self.H2 ;  STEP = self.STEP ; X1 = self.X1 ; X2 = self.X2 ; x_coin_of = self.X_COIN_OF
+        H = self.H2 ;  STEP = self.STEP ; X1 = self.X1 ; X2 = self.X2 ; x_coin_of = self.X_COIN_OFFSET
         of_x1 = self.product_title.get_width()/2 ; of_x2 = self.price_title.get_width()/2
         for id,txt_product in enumerate(self.txt_products):
             self.buffer.blit(txt_product[0], (X1*w + of_x1, (H + STEP*id)*h))
-            of2_x2 = txt_product[1].get_width()/2
-            x = X2*w + of_x2 - of2_x2 ; y =  (H + STEP*id)*h
-            self.buffer.blit(txt_product[1], (x, y))
-            self.buffer.blit(self.coin_image.scaled, (x+ x_coin_of*w, y))
+            ofx_txt2 = txt_product[1].get_width()/2
+            x = X2*w + of_x2 ; y =  (H + STEP*id)*h
+            self.buffer.blit(txt_product[1], (x - ofx_txt2, y))
+            self.buffer.blit(self.coin_image.scaled, (x + x_coin_of*w, y))
 
 
 
