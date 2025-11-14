@@ -136,10 +136,7 @@ class Nav :
         if cls.inventory.consumables['steps'] <= 0:
             cls.player.game_over()
 
-        # #open item_selection_menu
-        # cls.menu = "item selection"
-        # new_room_name = cls.ui.item_selection_menu()
-        # cls.menu = "map"
+        #open item_selection_menu
 
 
     @classmethod
@@ -149,6 +146,7 @@ class Nav :
         if door == 1 or door == -1:
             return True
         elif door == 2 and ('Lockpick_Kit' in cls.inventory.permanents):
+            cls.print_msg = 'Lockpick kit used'
             return True
         elif door == 2 and player_got_key:
             cls.inventory.change_consumable('key', -1)
@@ -156,7 +154,7 @@ class Nav :
             return True
         elif door == 3 and player_got_key:
             cls.inventory.change_consumable('key', -1)
-            cls.print_msg = '1 key used for 2 locks, such an exploit !'
+            cls.print_msg = '1 key used'
             return True
         if door != 0 : #not a wall
             cls.ui.screen.print("Can't open, not enough keys !")
@@ -165,14 +163,14 @@ class Nav :
     @classmethod
     def enough_consumables(cls, new_room_name):
         """
-        return False if the player doesn't have enough 'steps', 'coin' or 'gem'
+        return False if the player doesn't have enough 'coin' or 'gem'
         """
         room_consumables = database.rooms[new_room_name]
         for consumable, increment in room_consumables.items():
-            if consumable in database.consumables:
+            if consumable in ['coin', 'gem']:
                 if increment < 0:
                     if (cls.inventory.consumables[consumable] + increment) < 0:
-                        cls.ui.screen.print("Not enough consumables ?")
+                        cls.ui.screen.print(f"Not enough {consumable}s ?")
                         return False
         return True
     
