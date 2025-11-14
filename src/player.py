@@ -139,7 +139,7 @@ class Map :
         self.effect_6 = False #modified in navigatio.py and in the class effect
 
         if (self.effect_6) and (database.rooms[room_name]['color'] == 'green'):
-            item_pool_green = [0]*50
+            item_pool_green = [0]*400
             rarity_weights_green = {
                 "coin": 40,
                 "gem": 40,
@@ -165,7 +165,7 @@ class Map :
             
 
         else:
-            item_pool = [0]*50
+            item_pool = [0]*400
             rarity_weights = {
                 "coin": 20,
                 "gem": 20,

@@ -131,6 +131,7 @@ class Nav :
 
         #move the player and check if he lost
         cls.player.move(next_x, next_y, r)
+        cls.open_explore_menu(next_x, next_y)
         cls.inventory.change_consumable('steps', -1)
         if cls.inventory.consumables['steps'] <= 0:
             cls.player.game_over()
@@ -230,6 +231,7 @@ class Nav :
                     if cls.inventory.consumables['steps'] <= 0:
                         cls.player.game_over()
                     cls.player.move(next_x, next_y, r)
+
             else:
                 REROLL = 3; CANCEL = -1
                 new_room_id = REROLL
@@ -246,6 +248,61 @@ class Nav :
                     if cls.enough_consumables(new_room.name):
                         cls.change_player_consumables(new_room, next_x, next_y)
                         cls.open_room(next_x, next_y, new_room)
+
+    @classmethod
+    def open_explore_menu(cls, x, y):
+
+        room_inv = cls.map.rooms_inventory[x][y]
+
+        #filter the objects
+        items = []
+        for name, count in room_inv.items():
+            if count > 0:
+                if name in database.consumables:
+                    category = "consumable"
+                elif name in database.permanents:
+                    category = "permanent"
+                else:
+                    category = "other"
+                items.append((name, count, category))
+
+        if not items:
+            return  
+
+        # color for the room display
+        color = cls.map.rooms[x][y].data["color"]
+        if color == 'yellow':
+            return
+
+        selected = cls.ui.explore(items, color)
+
+        if selected == -1:
+            return
+
+        if selected < len(items):
+            name, nb, category = items[selected]
+            cls.take_item(x, y, name, nb, category)
+
+        else:
+            for name, nb, category in items:
+                cls.take_item(x, y, name, nb, category)
+
+
+    @classmethod
+    def take_item(cls, x, y, name, nb, category):
+        inv = cls.player.inventory
+
+        if category == "consumable":
+            inv.change_consumable(name, nb)
+        elif category == "permanent":
+            for i in range(nb):
+                inv.add_permanent(name)
+        elif category == "other":
+            if name == "apple":
+                inv.change_consumable('steps', 2)
+
+
+        cls.map.rooms_inventory[x][y][name] = 0
 
 
 
