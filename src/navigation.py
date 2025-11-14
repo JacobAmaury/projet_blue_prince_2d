@@ -172,7 +172,7 @@ class Nav :
         return True
     
     @classmethod
-    def change_player_consumables(cls, new_room, next_x, next_y):
+    def change_player_consumables(cls, new_room):
         """
         Apply the room's consumable effects to the player:
         - Subtract if the room costs items
@@ -182,9 +182,7 @@ class Nav :
         for consumable, increment in room_consumables.items():
             if consumable in database.consumables:
                 cls.inventory.change_consumable(consumable, increment)
-                # Update room inventory for positive gains (except 'steps')
-                if increment > 0 and consumable != 'steps':
-                    cls.map.rooms_inventory[next_x][next_y][consumable] += increment
+
     @classmethod
     def player_move(cls):
         """
@@ -241,7 +239,7 @@ class Nav :
                 if new_room_id != CANCEL:
                     new_room = cls.three_rooms[next_x][next_y][r][new_room_id]
                     if cls.enough_consumables(new_room.name):
-                        cls.change_player_consumables(new_room, next_x, next_y)
+                        cls.change_player_consumables(new_room)
                         cls.open_room(next_x, next_y, new_room)
 
     @classmethod
