@@ -24,7 +24,7 @@ class Player :
 
 class Inventory:
     def __init__(self):
-        self.consumables = {'steps': 5, 'coin': 0, 'gem': 0, 'key': 0, 'dice': 4}
+        self.consumables = {'steps': 70, 'coin': 0, 'gem': 4, 'key': 0, 'dice': 4}
         self.permanents = []    #sets display order
 
     def change_consumable(self,name,increment):
@@ -77,6 +77,7 @@ class Map :
             "Power_Hammer": 0,
             'Lucky_Rabbits_Foot': 0,
             "Lockpick_Kit": 0,
+            "Metal_Detector":0,
             "coffer" : 0
         } for y in range(9)] for x in range(5)]  #x, y, database_element
 
@@ -134,24 +135,49 @@ class Map :
     def item_randmon_room(self, room_name, x, y):
         """ add random items in rooms_inventory """
         from navigation import Nav
+
+        rarity_weights = {
+            "coin": 20,
+            "gem": 20,
+            "key": 20,
+            "apple": 20,
+            "dice": 10,
+            "Shovel": 2,
+            "Lockpick_Kit": 2,
+            'Lucky_Rabbits_Foot': 2,
+            "Power_Hammer": 2,
+            "Metal_Detector":200,
+            "coffer": 1
+        }
+        rarity_weights_green = {
+            "coin": 40,
+            "gem": 40,
+            "key": 40,
+            "apple": 40,
+            "dice": 20,
+            "Shovel": 10,
+            "Lockpick_Kit": 10,
+            'Lucky_Rabbits_Foot': 0,
+            "Power_Hammer": 10,
+            "Metal_Detector":200,
+            "coffer":5
+        }
+        
+        if "Metal_Detector" in Nav.inventory.permanents:
+            rarity_weights["key"] = 40
+            rarity_weights["coin"] = 40
+            rarity_weights["Shovel"] = 4
+            rarity_weights["Lockpick_Kit"] = 4
+            rarity_weights_green["key"] = 50
+            rarity_weights_green["coin"] = 50
+            rarity_weights_green["Shovel"] = 15
+            rarity_weights_green["Lockpick_Kit"] = 15
+            
         self.effect_6 = False #modified in navigatio.py and in the class effect
-        if (
-            (self.effect_6 and database.rooms[room_name]['color'] == 'green') or ("Lucky_Rabbits_Foot" in Nav.inventory.permanents)):
+
+        if ((self.effect_6 and database.rooms[room_name]['color'] == 'green') or ("Lucky_Rabbits_Foot" in Nav.inventory.permanents)):
 
             item_pool_green = [0]*400
-            rarity_weights_green = {
-                "coin": 40,
-                "gem": 40,
-                "key": 40,
-                "apple": 40,
-                "dice": 20,
-                "Shovel": 10,
-                "Lockpick_Kit": 10,
-                'Lucky_Rabbits_Foot': 0,
-                "Power_Hammer": 10,
-                "coffer":5
-            }
-            
             for name, weight in rarity_weights_green.items():
                 item_pool_green.extend([name] * weight)
             
@@ -168,18 +194,6 @@ class Map :
 
         else:
             item_pool = [0]*400
-            rarity_weights = {
-                "coin": 20,
-                "gem": 20,
-                "key": 20,
-                "apple": 20,
-                "dice": 10,
-                "Shovel": 2,
-                "Lockpick_Kit": 2,
-                'Lucky_Rabbits_Foot': 2,
-                "Power_Hammer": 2,
-                "coffer": 1
-            }
             
             for name, weight in rarity_weights.items():
                 item_pool.extend([name] * weight)
@@ -193,6 +207,7 @@ class Map :
 
                 if item_pool[rand_index] != 0:
                     self.rooms_inventory[x][y][act_item] += 1
+        
             
 
 
