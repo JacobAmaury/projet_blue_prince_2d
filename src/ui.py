@@ -77,13 +77,21 @@ class UI :
 
     @classmethod
     def game_over(cls):
+        """ 
+        Displays game_over screen
+        returns 0:NEW_GAME ; 1:QUIT_GAME
+        """
         cls.screen = EndScreen('Game over !')
-        cls.screen.select()
+        return cls.screen.select()
         
     @classmethod
     def game_won(cls):
+        """ 
+        Displays you_won screen
+        returns 0:NEW_GAME ; 1:QUIT_GAME
+        """
         cls.screen = EndScreen('You won !!!')
-        cls.screen.select()
+        return cls.screen.select()
 
     @staticmethod
     def quit_game():

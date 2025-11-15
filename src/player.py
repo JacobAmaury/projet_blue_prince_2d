@@ -1,6 +1,5 @@
 import database
 import random as rd
-import pygame
 
 class Player :
     def __init__(self,ui):
@@ -24,15 +23,12 @@ class Player :
 
 class Inventory:
     def __init__(self):
-        self.consumables = {'steps': 70, 'coin': 0, 'gem': 4, 'key': 0, 'dice': 4}
+        self.consumables = {'steps': 7, 'coin': 0, 'gem': 4, 'key': 0, 'dice': 4}
         self.permanents = []    #sets display order
 
     def change_consumable(self,name,increment):
         self.consumables[name] += increment
         Player.ui.screen.update_consumables()
-        
-        # Player.ui.screen.print(f"{name} : {increment}")
-        # pygame.time.wait(150)
 
     def add_permanent(self,name):
         if name not in database.permanents :
@@ -41,17 +37,13 @@ class Inventory:
             self.permanents.append(name)
         Player.ui.screen.update_permanents()
 
-        # Player.ui.screen.print(f"{name} added to inventory")
-        # pygame.time.wait(150)
-
 class Room :
     def __init__(self, name, rotation=0):
         self.name = name
         self.rotation = rotation
         self.data = database.rooms[name]
-        self.doors = Map.rot_doors(self.data['doors'][:], rotation)  #copy by value if room has multiple insntances
-        self.message = None # displayed msg to invite player to press Enter for shop, explore,...
-        #   ex : 'Press Enter to open the Shop'   'Press Enter to explore'
+        self.doors = Map.rot_doors(self.data['doors'][:], rotation)  #copy by value if room has multiple instances
+        self.message = None # displayed msg : invite player to press Enter for shop, explore,...
         #self.inventory ?
         self.dig = False
         self.opened_coffer = False

@@ -72,14 +72,20 @@ class Nav :
         cls.proba_pool = cls.map.update_proba_pool()
 
     @classmethod
-    def game_won(self):
-        Nav.ui.game_won()
-        Nav.ui.quit_game()
-        
+    def game_won(cls):
+        NEW_GAME = 0    # QUIT_GAME = 1
+        if cls.ui.game_won() == NEW_GAME :
+            cls.new_game()
+        else :
+            cls.ui.quit_game()
+
     @classmethod
-    def game_over(self):
-        Nav.ui.game_over()
-        Nav.new_game()
+    def game_over(cls):
+        NEW_GAME = 0    # QUIT_GAME = 1
+        if cls.ui.game_over() == NEW_GAME :
+            cls.new_game()
+        else :
+            cls.ui.quit_game()
 
     @classmethod
     def pool_room(cls, proba_pool):
@@ -248,6 +254,7 @@ class Nav :
 
             if next_x == 2 and next_y == 8:
                 cls.game_won()
+                return
 
             cls.player.move(x,y,r)  #acctualise door_status on ui
             # print("Inventaire salle", cls.map.rooms_inventory[x][y])
@@ -260,6 +267,7 @@ class Nav :
                     cls.inventory.change_consumable('steps', -1)
                     if cls.inventory.consumables['steps'] <= 0:
                         cls.game_over()
+                        return
                     cls.player.move(next_x, next_y, r)
                     cls.check_room_actions(next_x, next_y)
                     cls.open_explore_menu(next_x, next_y)
