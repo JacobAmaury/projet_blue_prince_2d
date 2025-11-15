@@ -6,7 +6,7 @@ from ui_lib.main_screen import MainScreen
 from ui_lib.select_room import SelectRoom
 from ui_lib.shop import Shop
 from ui_lib.explore import Explore
-from ui_lib.end_game import DefeatScreen
+from ui_lib.end_game import EndScreen
 
 class UI :
     fps = 60
@@ -77,12 +77,12 @@ class UI :
 
     @classmethod
     def game_over(cls):
-        cls.screen = DefeatScreen('Game over !')
+        cls.screen = EndScreen('Game over !')
         cls.screen.select()
         
     @classmethod
     def game_won(cls):
-        cls.screen = DefeatScreen('You won !!!')
+        cls.screen = EndScreen('You won !!!')
         cls.screen.select()
 
     @staticmethod

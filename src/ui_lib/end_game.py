@@ -3,7 +3,7 @@ from .image import ImageSimple
 from .event_handler import EventHandler
 from .window import Screen
 
-class DefeatScreen(Screen):
+class EndScreen(Screen):
     TITLE_POSITION = (0.5,0.15) # bloc center
     TITLE_SIZE = 3   #relative to FONT_SIZE
     RED = (255, 0, 0)

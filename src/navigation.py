@@ -71,11 +71,13 @@ class Nav :
         cls.three_rooms = [[[[]for r in range(4)] for y in range(9)] for x in range(5)]  #x, y, rooms[0, 1, 2]
         cls.pool = cls.map.init_pool()
         cls.proba_pool = cls.map.update_proba_pool()
-        
+
+    @classmethod
     def game_won(self):
         Nav.ui.game_won()
         Nav.ui.quit_game()
-
+        
+    @classmethod
     def game_over(self):
         Nav.ui.game_over()
         Nav.new_game()
