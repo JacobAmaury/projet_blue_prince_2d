@@ -6,6 +6,7 @@ from ui_lib.main_screen import MainScreen
 from ui_lib.select_room import SelectRoom
 from ui_lib.shop import Shop
 from ui_lib.explore import Explore
+from ui_lib.end_game import DefeatScreen
 
 class UI :
     fps = 60
@@ -73,6 +74,16 @@ class UI :
         Note only the 6 first elements are displayed and selectable
         """
         return cls.select_from_menu(Explore(items, color), print_msg)
+
+    @classmethod
+    def game_over(cls):
+        cls.screen = DefeatScreen('Game over !')
+        cls.screen.select()
+        
+    @classmethod
+    def game_won(cls):
+        cls.screen = DefeatScreen('You won !!!')
+        cls.screen.select()
 
     @staticmethod
     def quit_game():

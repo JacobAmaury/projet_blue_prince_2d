@@ -35,14 +35,18 @@ class Explore(Screen):
         for id,(name,nb,category) in enumerate(items):
             self.images[id] = ImageSimple(categories[category][name])
             self.counts[id] = nb
-        self.build()
-        self.blit()
+        self.update()
 
     def build(self):
+        self.size = self.window.size
         w, h = self.size
         #back ground image
         self.bg_image.smoothscale((w, h))
         self.bg_image.position = (0,0)
+        #consumables
+        Consumable_grid.set_grid(w,h)
+        self.consumable_grid.scale_images()
+        self.consumable_grid.build_text(self.player)
         ###
         #items
         self.count_font = pygame.font.SysFont('Arial', int(self.SIZE_TXT*h) )
@@ -131,13 +135,3 @@ class Explore(Screen):
             pygame.display.flip()
         return self.selected
     
-
-    def update(self):
-        self.size = self.window.size
-        w, h = self.size
-        Consumable_grid.set_grid(w,h)
-        #scale all consumable images
-        self.consumable_grid.scale_images()
-        #consumable cpt 
-        self.consumable_grid.build_text(self.player)
-        return super().update()

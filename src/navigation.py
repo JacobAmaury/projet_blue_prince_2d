@@ -71,6 +71,14 @@ class Nav :
         cls.three_rooms = [[[[]for r in range(4)] for y in range(9)] for x in range(5)]  #x, y, rooms[0, 1, 2]
         cls.pool = cls.map.init_pool()
         cls.proba_pool = cls.map.update_proba_pool()
+        
+    def game_won(self):
+        Nav.ui.game_won()
+        Nav.ui.quit_game()
+
+    def game_over(self):
+        Nav.ui.game_over()
+        Nav.new_game()
 
     @classmethod
     def pool_room(cls, proba_pool):
@@ -161,7 +169,7 @@ class Nav :
         cls.open_explore_menu(next_x, next_y)
         cls.inventory.change_consumable('steps', -1)
         if cls.inventory.consumables['steps'] <= 0:
-            cls.player.game_over()
+            cls.game_over()
 
 
     @classmethod
@@ -238,7 +246,7 @@ class Nav :
             cls.map.rooms[x][y].doors[r] = -1    #set to opened
 
             if next_x == 2 and next_y == 8:
-                cls.player.game_won()
+                cls.game_won()
 
             cls.player.move(x,y,r)  #acctualise door_status on ui
             # print("Inventaire salle", cls.map.rooms_inventory[x][y])
@@ -250,7 +258,7 @@ class Nav :
                     # r = (r+2) % 4 #Change the player rotation when entering a room
                     cls.inventory.change_consumable('steps', -1)
                     if cls.inventory.consumables['steps'] <= 0:
-                        cls.player.game_over()
+                        cls.game_over()
                     cls.player.move(next_x, next_y, r)
                     cls.check_room_actions(next_x, next_y)
                     cls.open_explore_menu(next_x, next_y)

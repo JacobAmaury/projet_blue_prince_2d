@@ -24,14 +24,18 @@ class Shop(Screen):
         #import images from loadscreen
         self.bg_image = Screen.shop
         self.coin_image = ImageSimple(Screen.consumable_imgs['coin'])
-        self.build()
-        self.blit()
+        self.update()
 
     def build(self):
+        self.size = self.window.size
         w, h = self.size
         #back ground image
         self.bg_image.smoothscale((w, h))
         self.bg_image.position = (0,0)
+        #consumables
+        Consumable_grid.set_grid(w,h)
+        self.consumable_grid.scale_images()
+        self.consumable_grid.build_text(self.player)
         ###
         #Title
         title_font = pygame.font.SysFont('Arial', int(0.07*h) )
@@ -131,12 +135,3 @@ class Shop(Screen):
             pygame.display.flip()
         return self.selected
     
-    def update(self):
-        self.size = self.window.size
-        w, h = self.size
-        Consumable_grid.set_grid(w,h)
-        #scale all consumable images
-        self.consumable_grid.scale_images()
-        #consumable cpt 
-        self.consumable_grid.build_text(self.player)
-        return super().update()

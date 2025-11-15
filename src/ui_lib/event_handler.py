@@ -26,3 +26,6 @@ class EventHandler :
     @staticmethod
     def right():
         return
+    @staticmethod
+    def explore():
+        return

@@ -1,7 +1,6 @@
 import database
 import random as rd
 import pygame
-from ui_lib.defeat_screen import DefeatScreen
 
 class Player :
     def __init__(self,ui):
@@ -21,15 +20,6 @@ class Player :
         self.current_room = self.map.rooms[x][y]
         self.door_status = self.map.rooms[x][y].doors[r]
         Player.ui.screen.update_player_position()
-
-    def game_won(self):
-        print("You won!!!")
-        Player.ui.quit_game()
-
-    def game_over(self):
-        Player.ui.screen = DefeatScreen()
-        Player.ui.screen.select()
-
 
 
 class Inventory:
