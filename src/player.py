@@ -1,6 +1,7 @@
 import database
 import random as rd
 import pygame
+from ui_lib.defeat_screen import DefeatScreen
 
 class Player :
     def __init__(self,ui):
@@ -26,12 +27,14 @@ class Player :
         Player.ui.quit_game()
 
     def game_over(self):
-        print("You lost...")
-        Player.ui.quit_game()
+        Player.ui.screen = DefeatScreen()
+        Player.ui.screen.select()
+
+
 
 class Inventory:
     def __init__(self):
-        self.consumables = {'steps': 70, 'coin': 0, 'gem': 0, 'key': 0, 'dice': 4}
+        self.consumables = {'steps': 5, 'coin': 0, 'gem': 0, 'key': 0, 'dice': 4}
         self.permanents = []    #sets display order
 
     def change_consumable(self,name,increment):

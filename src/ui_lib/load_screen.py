@@ -46,6 +46,8 @@ class LoadScreen(Screen) :
         #background image mainscreen
         path = "../images/background/bg_image.png"
         Screen.main_bg_img = Image.loadFull(path)
+        #defeat screen
+        Screen.defeat_img = Image.loadFull("../images/background/defeat.png")
         #shop bg
         path = "../images/background/shop.jpg"
         Screen.shop = ImageSimple(Image.loadFull(path))
