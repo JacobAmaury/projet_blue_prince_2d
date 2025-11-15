@@ -60,6 +60,7 @@ class Screen :  #abstract
         pygame.display.flip()
 
     def update(self):
+        self.size = self.window.size
         self.build()
         self.blit()
 

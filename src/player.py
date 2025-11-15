@@ -44,7 +44,7 @@ class Inventory:
     def add_permanent(self,name):
         if name not in database.permanents :
             raise ValueError('name not in database')
-        if name not in [name for name in self.permanents]:
+        if name not in self.permanents:
             self.permanents.append(name)
         Player.ui.screen.update_permanents()
 

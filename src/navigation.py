@@ -191,7 +191,7 @@ class Nav :
             if consumable in ['coin', 'gem']:
                 if increment < 0:
                     if (cls.inventory.consumables[consumable] + increment) < 0:
-                        cls.ui.screen.print(f"Not enough {consumable}s ?")
+                        cls.ui.screen.print(f"Not enough {consumable}s !")
                         return False
         return True
     
@@ -356,8 +356,7 @@ class Nav :
         room.message = message
 
         # refresh screen
-        cls.ui.screen.build_current_room()
-        cls.ui.screen.blit()
+        cls.ui.screen.update_current_room()
 
 
     

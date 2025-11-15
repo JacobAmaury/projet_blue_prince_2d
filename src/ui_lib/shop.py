@@ -3,7 +3,7 @@ import pygame
 from .image import ImageSimple
 from .event_handler import EventHandler
 from .window import Screen
-from .grids import Consumable_row
+from .grids import Consumable_grid
 
 
 class Shop(Screen):
@@ -24,25 +24,14 @@ class Shop(Screen):
         #import images from loadscreen
         self.bg_image = Screen.shop
         self.coin_image = ImageSimple(Screen.consumable_imgs['coin'])
-        self.update()
+        self.build()
+        self.blit()
 
     def build(self):
-        self.size = self.window.size
         w, h = self.size
         #back ground image
         self.bg_image.smoothscale((w, h))
         self.bg_image.position = (0,0)
-        Consumable_row.set_grid(w,h)
-        #scale all consumable images
-        for id,consumable_row in enumerate(self.consumable_rows):
-            consumable_row.scale_image()
-            consumable_row.image.position = Consumable_row.get_position_img(id)
-        #font
-        self.font_cpt = pygame.font.Font(None, int(0.045*h) )
-        #consumable cpt 
-        inventory_consumables = self.player.inventory.consumables
-        for consumable_row in self.consumable_rows:
-            consumable_row.render_txt(self.font_cpt,str(inventory_consumables[consumable_row.name]))
         ###
         #Title
         title_font = pygame.font.SysFont('Arial', int(0.07*h) )
@@ -92,11 +81,9 @@ class Shop(Screen):
         #back ground image
         self.bg_image.blit(buffer)
         #consumable images
-        for consumable_row in self.consumable_rows:
-            consumable_row.image.blit(buffer)
+        self.consumable_grid.blit_images(buffer)
         #consumable cpt 
-        for id,consumable_row in enumerate(self.consumable_rows):
-            self.buffer.blit(consumable_row.txt, Consumable_row.get_position_txt(id))
+        self.consumable_grid.blit_text(buffer)
         ###
         #titles
         self.buffer.blit(self.title,self.title_position)
@@ -143,3 +130,13 @@ class Shop(Screen):
             event_listener()
             pygame.display.flip()
         return self.selected
+    
+    def update(self):
+        self.size = self.window.size
+        w, h = self.size
+        Consumable_grid.set_grid(w,h)
+        #scale all consumable images
+        self.consumable_grid.scale_images()
+        #consumable cpt 
+        self.consumable_grid.build_text(self.player)
+        return super().update()

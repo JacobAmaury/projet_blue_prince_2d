@@ -73,7 +73,6 @@ class SelectRoom(Screen):
         return self.room_choice
 
     def build(self):
-        self.size = self.window.size
         W, H = self.size
         Y_ROOMS = self.Y_ROOMS ; X_ROOMS = self.X_ROOMS ; X_STEP = self.X_STEP
         SIZE_ROOM = self.SIZE_ROOM
@@ -138,8 +137,7 @@ class SelectRoom(Screen):
             self.rect = pygame.Rect(W * 0.87, H * 0.2, int(W * 0.04), int(H * 0.04 * 16/9))
         pygame.draw.rect(buffer, (255, 255, 255), self.rect, width=4)
     
+
     def update(self):
         self.mainscreen.build()
-        self.build()
-        self.blit()
-
+        return super().update()
