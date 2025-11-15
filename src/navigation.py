@@ -67,7 +67,7 @@ class Nav :
         cls.ui.show_mainScreen(cls.player, NavHandler)  # creates and blits main_screen with data of player
         cls.inventory, cls.map = cls.player.inventory, cls.player.map
 
-        cls.three_rooms = [[[[]for r in range(4)] for y in range(9)] for x in range(5)]  #x, y, rooms[0, 1, 2]
+        cls.three_rooms = [[[[]for r in range(4)] for y in range(9)] for x in range(5)]  #x, y, r, [Room0, Room1, Room2]
         cls.pool = cls.map.init_pool()
         cls.proba_pool = cls.map.update_proba_pool()
 
@@ -162,7 +162,6 @@ class Nav :
         front = (r+2) % 4 #Change the rotation to the front of the room
         cls.map.rooms[next_x][next_y].doors[front] = -1 #set to opened
         
-        # print(new_room_name)
         Effect().apply_effect(new_room.name)
 
         # remove room from the pool_room
@@ -249,7 +248,7 @@ class Nav :
 
         door_can_be_opened = cls.door_level_check(cls.map.rooms[x][y].doors[r])
         if door_can_be_opened: 
-            #unlock door # -> open_door
+            #unlock door
             cls.map.rooms[x][y].doors[r] = -1    #set to opened
 
             if next_x == 2 and next_y == 8:
@@ -257,13 +256,11 @@ class Nav :
                 return
 
             cls.player.move(x,y,r)  #acctualise door_status on ui
-            # print("Inventaire salle", cls.map.rooms_inventory[x][y])
             
             if cls.map.room_exists(next_x, next_y):
                 next_room_has_a_door = cls.map.rooms[next_x][next_y].doors[(r+2)%4] != 0
                 if next_room_has_a_door :
                     cls.map.rooms[next_x][next_y].doors[(r+2)%4] = -1 #set to opened
-                    # r = (r+2) % 4 #Change the player rotation when entering a room
                     cls.inventory.change_consumable('steps', -1)
                     if cls.inventory.consumables['steps'] <= 0:
                         cls.game_over()

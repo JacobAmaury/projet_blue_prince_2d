@@ -44,7 +44,6 @@ class Room :
         self.data = database.rooms[name]
         self.doors = Map.rot_doors(self.data['doors'][:], rotation)  #copy by value if room has multiple instances
         self.message = None # displayed msg : invite player to press Enter for shop, explore,...
-        #self.inventory ?
         self.dig = False
         self.opened_coffer = False
     
@@ -116,11 +115,6 @@ class Map :
     def init_pool(self):
         #add one time every rooms
         self.pool = [name for name in database.rooms.keys()]
-
-        # #add more green room
-        # self.pool.extend([name for name, data in database.rooms.items() if data['color'] == 'green'])
-        # #add more orange room
-        # self.pool.extend([name for name, data in database.rooms.items() if data['color'] == 'orange'])
 
         return self.pool
 
