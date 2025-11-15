@@ -186,9 +186,9 @@ class Map :
                 "dice": 10,
                 "Shovel": 2,
                 "Lockpick_Kit": 2,
-                'Lucky_Rabbits_Foot': 200,
+                'Lucky_Rabbits_Foot': 2,
                 "Power_Hammer": 2,
-                "coffer": 5
+                "coffer": 1
             }
             
             for name, weight in rarity_weights.items():

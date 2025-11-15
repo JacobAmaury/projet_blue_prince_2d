@@ -473,7 +473,11 @@ class Nav :
             if loot == "apple":
                 cls.inventory.change_consumable("steps", 2 * amount)
 
+        room.message = ""
+        cls.ui.screen.update_current_room()
+        
         cls.ui.screen.print(f"You found {amount} {loot} inside the coffer !")
+        
 
 
 
