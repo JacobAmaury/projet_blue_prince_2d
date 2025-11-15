@@ -23,7 +23,7 @@ class Player :
 
 class Inventory:
     def __init__(self):
-        self.consumables = {'steps': 7, 'coin': 0, 'gem': 4, 'key': 0, 'dice': 4}
+        self.consumables = {'steps': 70, 'coin': 0, 'gem': 2, 'key': 0, 'dice': 0}
         self.permanents = []    #sets display order
 
     def change_consumable(self,name,increment):

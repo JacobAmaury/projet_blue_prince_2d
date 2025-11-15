@@ -1,5 +1,6 @@
 import pygame
 from .event_handler import EventHandler
+from abc import ABC, abstractmethod
 
 class Window :
     WINDOW_RATIO = (16,9)
@@ -40,7 +41,7 @@ class Window :
         return (W,H)
     
 
-class Screen :  #abstract
+class Screen(ABC) :  #abstract
     window = None #set by window
     FONT_SIZE = 0.035
     TXT_POSITION = (0.5,0.875)    #center_position
@@ -64,8 +65,11 @@ class Screen :  #abstract
         self.build()
         self.blit()
 
+    @abstractmethod
     def buid(self):
         pass
+    
+    @abstractmethod
     def blit(self):
         pass
 

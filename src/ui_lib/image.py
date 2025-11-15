@@ -1,14 +1,15 @@
 import pygame
+from abc import ABC, abstractmethod
 
-class Image:    #abstract
+class Image(ABC):    #abstract
     #constructors
     def __init__(self,loaded_image) : 
         self.loaded = loaded_image
 
     #methods
+    @abstractmethod
     def scale(self,size):    #abstract
         pass
-    #def blit abstract ?
 
     #static
     @staticmethod
