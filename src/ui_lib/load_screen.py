@@ -17,9 +17,10 @@ class LoadScreen(Screen) :
         #show window (was Hidden)
         self.window.show_window()
         self.update()
+        ##flip
+        pygame.display.flip()
 
-
-    def update(self):
+    def build(self):
         buffer = self.window.buffer
         ##build_load_screen
         W,H = self.window.size
@@ -30,6 +31,8 @@ class LoadScreen(Screen) :
         self.logo_image.smoothscale((W//3, H//3))
         self.logo_image.position = (W//3 - self.logo_image.scaled.get_width()//2, H//20)
 
+    def blit(self):
+        buffer = self.window.buffer
         ##blit_load_screen
         #images
         self.bg_image.blit(buffer)
@@ -37,8 +40,6 @@ class LoadScreen(Screen) :
         #text (build and blit)
         self.print("Loading game ...")
         
-        ##flip
-        pygame.display.flip()
 
 
 

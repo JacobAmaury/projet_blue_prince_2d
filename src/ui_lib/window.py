@@ -66,9 +66,9 @@ class Screen(ABC) :  #abstract
         self.blit()
 
     @abstractmethod
-    def buid(self):
+    def build(self):
         pass
-    
+
     @abstractmethod
     def blit(self):
         pass
