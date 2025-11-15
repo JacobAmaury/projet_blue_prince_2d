@@ -457,7 +457,9 @@ class Nav :
             ("dice", 1),
             ("apple", 1),
             ("Shovel", 1),
-            ("Lockpick_Kit", 1)
+            ("Lockpick_Kit", 1),
+            ("Power_Hammer", 1),
+            ('Lucky_Rabbits_Foot', 1)
         ]
 
         loot, amount = random.choice(loot_table)

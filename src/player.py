@@ -85,6 +85,7 @@ class Map :
             "apple":0,
             "Shovel": 0,
             "Power_Hammer": 0,
+            'Lucky_Rabbits_Foot': 0,
             "Lockpick_Kit": 0,
             "coffer" : 0
         } for y in range(9)] for x in range(5)]  #x, y, database_element
@@ -142,10 +143,11 @@ class Map :
 
     def item_randmon_room(self, room_name, x, y):
         """ add random items in rooms_inventory """
-
+        from navigation import Nav
         self.effect_6 = False #modified in navigatio.py and in the class effect
+        if (
+            (self.effect_6 and database.rooms[room_name]['color'] == 'green') or ("Lucky_Rabbits_Foot" in Nav.inventory.permanents)):
 
-        if (self.effect_6) and (database.rooms[room_name]['color'] == 'green'):
             item_pool_green = [0]*400
             rarity_weights_green = {
                 "coin": 40,
@@ -155,21 +157,22 @@ class Map :
                 "dice": 20,
                 "Shovel": 10,
                 "Lockpick_Kit": 10,
+                'Lucky_Rabbits_Foot': 0,
                 "Power_Hammer": 10,
                 "coffer":5
             }
             
-            for name, weight in rarity_weights.items():
+            for name, weight in rarity_weights_green.items():
                 item_pool_green.extend([name] * weight)
             
             for _ in range(4):
-                rand_index = rd.randint(0,len(item_pool)-1)
+                rand_index = rd.randint(0,len(item_pool_green)-1)
                 act_item = item_pool_green[rand_index]
 
                 if act_item in ["Shovel", "Lockpick_Kit"] and self.rooms_inventory[x][y][act_item] > 0:
                     continue
 
-                if item_pool[rand_index] != 0:
+                if item_pool_green[rand_index] != 0:
                     self.rooms_inventory[x][y][act_item] += 1
             
 
@@ -183,6 +186,7 @@ class Map :
                 "dice": 10,
                 "Shovel": 2,
                 "Lockpick_Kit": 2,
+                'Lucky_Rabbits_Foot': 200,
                 "Power_Hammer": 2,
                 "coffer": 5
             }
