@@ -23,6 +23,7 @@ others = ['apple', 'banana', 'cake', 'coffer', 'locker', 'meal', 'sandwich', 'so
 
              8- set the gen number                         done and debug
              9- divide by 2 step num                       done and debug
+             10- add rooms to the pool
 
 
 """
@@ -346,7 +347,15 @@ rooms = {
         
     # 'Parlor':'blue',
     # 'Planetarium':'blue',
-    # 'PumpRoom':'blue',
+    'PumpRoom':{        
+        'color': 'blue', 
+        'steps': 0, 
+        'coin': 0,
+        'gem': 0, 
+        'key': 0,
+        'rarity': -1, 
+        'doors': [1,0,0,1],
+        'effect': 0},
     # 'Room46':'blue',
     # 'Room8':'blue',
     # 'Rotunda':'blue',
@@ -386,7 +395,16 @@ rooms = {
         
     # 'Study':'blue',
     # 'TheKennel':'blue',
-    # 'ThePool':'blue',
+    'ThePool':{        
+        'color': 'blue', 
+        'steps': 0, 
+        'coin': 0,
+        'gem': -1, 
+        'key': 0,
+        'rarity': 1, 
+        'doors': [1,1,0,1],
+        'effect': 10},
+
     # 'ThroneRoom':'blue',
     # 'Tomb':'blue',
     # 'Toolshed':'blue',

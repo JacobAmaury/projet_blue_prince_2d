@@ -525,6 +525,8 @@ class Effect:
             self.set_gem_number_8(room_name)
         elif act_effect == 9:
             self.divide_steps_by_2_9(room_name)
+        elif act_effect ==10:
+            self.draft_new_rooms_10(room_name)
             
         
 
@@ -547,6 +549,9 @@ class Effect:
             for i in database.rooms:
                 if database.rooms[i]['color'] == 'green' and database.rooms[i]['rarity'] > 0:
                     database.rooms[i]['rarity'] -= 1
+                    
+        Nav.proba_pool = Nav.map.update_proba_pool()
+        
         
 
 
@@ -621,5 +626,9 @@ class Effect:
                         act_item = item_pools[rand_index]
                         if act_item != 0:
                             Nav.player.map.rooms_inventory[x][y][act_item] += 1
+
+    def draft_new_rooms_10(self, room_name):
+        database.rooms["PumpRoom"]['rarity'] += 3
+        Nav.proba_pool = Nav.map.update_proba_pool()
         
 
