@@ -43,6 +43,10 @@ class NavHandler(EventHandler):
             Nav.open_coffer(x, y)
             return
     
+    @staticmethod
+    def explore():
+        Nav.open_current_room_explore()
+    
 
         
 class Nav :
@@ -306,6 +310,12 @@ class Nav :
         else:
             for name, nb, category in items:
                 cls.take_item(x, y, name, nb, category)
+
+    @classmethod
+    def open_current_room_explore(cls):
+        x, y, _ = cls.player.position
+        cls.open_explore_menu(x, y)
+
 
 
     @classmethod

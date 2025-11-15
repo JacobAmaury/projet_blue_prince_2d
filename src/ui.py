@@ -107,6 +107,9 @@ class UI :
                     event_handler.left()
                 elif event_key == pygame.K_d or event_key == pygame.K_RIGHT:
                     event_handler.right()
+                elif event_key == pygame.K_i:
+                    event_handler.explore()
+
 
 
 
