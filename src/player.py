@@ -146,7 +146,7 @@ class Map :
             "Lockpick_Kit": 2,
             'Lucky_Rabbits_Foot': 2,
             "Power_Hammer": 2,
-            "Metal_Detector":200,
+            "Metal_Detector":2,
             "coffer": 1
         }
         rarity_weights_green = {
@@ -159,7 +159,7 @@ class Map :
             "Lockpick_Kit": 10,
             'Lucky_Rabbits_Foot': 0,
             "Power_Hammer": 10,
-            "Metal_Detector":200,
+            "Metal_Detector":10,
             "coffer":5
         }
         
@@ -168,10 +168,13 @@ class Map :
             rarity_weights["coin"] = 40
             rarity_weights["Shovel"] = 4
             rarity_weights["Lockpick_Kit"] = 4
+            rarity_weights["Metal_Detector"] = 0
             rarity_weights_green["key"] = 50
             rarity_weights_green["coin"] = 50
             rarity_weights_green["Shovel"] = 15
             rarity_weights_green["Lockpick_Kit"] = 15
+            rarity_weights_green["Metal_Detector"] = 0
+
             
         self.effect_6 = False #modified in navigatio.py and in the class effect
 

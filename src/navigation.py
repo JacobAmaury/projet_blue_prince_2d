@@ -4,7 +4,6 @@ from player import Room
 import random
 import database
 import player
-import random as rd
 
 class NavHandler(EventHandler):
     @staticmethod
@@ -459,7 +458,6 @@ class Nav :
             
         cls.map.rooms_inventory[x][y]["coffer"] = 0  
 
-        import random
         loot_table = [
             ("gem", 2),
             ("coin", 3),
@@ -583,7 +581,7 @@ class Effect:
                         continue
                     if database.rooms[Nav.map.rooms[x][y].name]['color'] == 'green': #verify if the room[x,y] is green
                         
-                        rand_index = rd.randint(0,len(apple_pool)-1) 
+                        rand_index = random.randint(0,len(apple_pool)-1) 
                         act_item = apple_pool[rand_index] 
 
                         if act_item != 0: 
@@ -599,7 +597,7 @@ class Effect:
                         continue
                     if database.rooms[Nav.map.rooms[x][y].name]['color'] == 'green': #verify if the room[x,y] is green
                         
-                        rand_index = rd.randint(0,len(gem_pool)-1) 
+                        rand_index = random.randint(0,len(gem_pool)-1) 
                         act_item = gem_pool[rand_index] 
 
                         if act_item != 0: 
@@ -622,7 +620,7 @@ class Effect:
             for x in range(5):
                 if Nav.player.map.rooms_inventory[x][y]:
                     for i in range(4):
-                        rand_index = rd.randint(0,len(item_pools)-1)
+                        rand_index = random.randint(0,len(item_pools)-1)
                         act_item = item_pools[rand_index]
                         if act_item != 0:
                             Nav.player.map.rooms_inventory[x][y][act_item] += 1
