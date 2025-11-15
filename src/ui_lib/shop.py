@@ -1,3 +1,11 @@
+"""UI shop screen: displays products and handles selection/purchase UI.
+
+This module provides the `Shop` screen class used by the main UI to
+present available consumable products to the player. The screen renders
+product names, prices and a coin icon, and exposes `select()` to run a
+simple menu loop that returns the selected index (or -1 if cancelled).
+"""
+
 import pygame
 
 from .image import ImageSimple
@@ -7,7 +15,31 @@ from .grids import Consumable_grid
 
 
 class Shop(Screen):
+    """Screen used to show and choose products in the in-game shop.
+
+    Displays a vertical list of purchasable items with their prices marked
+    by coin icons. The player navigates (up/down) to select an item and
+    confirms with enter. 
     
+    Layout constants (all as ratios of window width/height):
+        H1 (float): Vertical position of Shop screen header.
+        X1 (float): Horizontal position of product names.
+        X2 (float): Horizontal position of prices/coins.
+        H2 (float): Vertical position of first product row.
+        STEP (float): Vertical spacing between product rows.
+        SIZE_COIN (float): Size of coin icon (ratio of height).
+        X_COIN_OFFSET (float): Horizontal offset of coin from price text.
+    
+    Attributes:
+        items (list): List of (name, price) tuples shown in the shop.
+        len (int): Number of products (<= 9).
+        player: Reference to the current player.
+        selected (int): Currently highlighted product index.
+        bg_image (ImageSimple): Background image wrapper.
+        coin_image (ImageSimple): Coin icon image.
+        consumable_grid (Consumable_grid): Grid helper for left-side inventory.
+    """
+
     H1 = 0.2 ; X1 = 0.2 ; X2 = 0.62
     H2 = 0.3 ; STEP = 0.06
     WHITE = (255, 255, 255) ; BLUE = (50,150,255) ; YELLOW = (255, 255, 0)
@@ -15,29 +47,45 @@ class Shop(Screen):
     X_COIN_OFFSET = 0.014
 
     def __init__(self, items):
+        """Create a Shop screen showing up to 9 products.
+
+        Args:
+            items (iterable): sequence of (name, price) pairs to display.
+        
+        Returns:
+            None
+        """
         Screen.__init__(self)
         items = items[:9]
         self.items = items
         self.len = len(items)
         self.player = self.window.ui.player
         self.selected = 0
-        #import images from loadscreen
+        # import images from loadscreen
         self.bg_image = Screen.shop
         self.coin_image = ImageSimple(Screen.consumable_imgs['coin'])
         self.update()
 
     def build(self):
+        """Prepare rendering surfaces and scale images for the current window.
+
+        This method is called when the screen needs to layout itself (for
+        example after a window resize). It sets up fonts, scales the
+        background and coin images, and prepares the consumable grid.
+        
+        Returns:
+            None
+        """
         self.size = self.window.size
         w, h = self.size
-        #back ground image
+        # back ground image
         self.bg_image.smoothscale((w, h))
         self.bg_image.position = (0,0)
-        #consumables
+        # consumables
         Consumable_grid.set_grid(w,h)
         self.consumable_grid.scale_images()
         self.consumable_grid.build_text(self.player)
-        ###
-        #Title
+        # Title
         title_font = pygame.font.SysFont('Arial', int(0.07*h) )
         title = title_font.render('Welcome to the shop', True, self.YELLOW)
         self.title = title
@@ -51,14 +99,23 @@ class Shop(Screen):
         self.price_title = title2_font.render('Price', True, WHITE)
         self.price_title_pos = (X2*w, H*h)
         self.product_font = pygame.font.SysFont('Arial', int(0.05*h) )
-        #coin
+        # coin
         size = self.SIZE_COIN
         self.coin_image.scale((size*h, size*h))
 
     def update_products(self):
+        """Render product name/price surfaces into `self.txt_products` and
+        blit them to the internal buffer.
+
+        The method updates highlight color based on the current
+        `self.selected` index and draws the coin icon beside prices.
+        
+        Returns:
+            None
+        """
         w, h = self.size
         selected = self.selected; BLUE = self.BLUE; WHITE = self.WHITE
-        #build rows
+        # build rows
         product_font = self.product_font
         self.txt_products = []
         for id,(name,price) in enumerate(self.items):
@@ -66,7 +123,7 @@ class Shop(Screen):
             else: color = BLUE
             self.txt_products.append((product_font.render(name,True, color),
                                       product_font.render(str(price),True, color)))
-        #blit rows
+        # blit rows
         H = self.H2 ;  STEP = self.STEP ; X1 = self.X1 ; X2 = self.X2 ; x_coin_of = self.X_COIN_OFFSET
         of_x1 = self.product_title.get_width()/2 ; of_x2 = self.price_title.get_width()/2
         for id,txt_product in enumerate(self.txt_products):
@@ -80,26 +137,41 @@ class Shop(Screen):
 
 
     def blit(self):
+        """Draw the full shop screen into the internal buffer.
+
+        This composes background, consumable images and text, titles and
+        the product list by delegating row rendering to
+        `update_products()`.
+        
+        Returns:
+            None
+        """
         w, h = self.size
         buffer = self.buffer
-        #back ground image
+        # back ground image
         self.bg_image.blit(buffer)
-        #consumable images
+        # consumable images
         self.consumable_grid.blit_images(buffer)
-        #consumable cpt 
+        # consumable cpt 
         self.consumable_grid.blit_text(buffer)
-        ###
-        #titles
+        # titles
         self.buffer.blit(self.title,self.title_position)
         self.buffer.blit(self.product_title,self.product_title_pos)
         self.buffer.blit(self.price_title,self.price_title_pos)
         self.update_products()
 
     def select(self):
+        """Run the shop menu loop and return the selected product index.
+
+        The loop sets a temporary `MenuHandler` subclass of
+        `EventHandler` to process navigation keys (up/down/enter/escape).
+        It returns the selected index or -1 if the menu was cancelled.
+
+        Returns:
+            int: selected product index, or -1 if cancelled.
         """
-        Returns the rank, -1 if cancelled
-        """ 
-        # Why not just return index ?
+        # Inner handler maps keys to menu actions. It uses the enclosing
+        # instance's attributes (`self.selected`, `self.running`).
         class MenuHandler(EventHandler):
             @staticmethod
             def escape() : 
@@ -115,13 +187,13 @@ class Shop(Screen):
                 self.blit()
             @staticmethod
             def enter() : 
-                self.running = False  #close menu with selection
-            ##optionnal handlers : not in the game specifications (easier debugg), can be removed later
+                self.running = False  # close menu with selection
+            # optional handlers: convenience for debugging; can be removed
             @staticmethod
             def space():
                 MenuHandler.enter()
             @staticmethod
-            #cancel if go back or up
+            # cancel if go left/right
             def right():
                 MenuHandler.escape()
             def left():

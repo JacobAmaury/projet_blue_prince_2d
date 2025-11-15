@@ -1,10 +1,40 @@
+"""Room selection menu for the player to choose a room to enter.
+
+This module provides the SelectRoom class which displays a menu of three
+available rooms with their properties (gem cost, rotation) and allows the
+player to select one, or reroll the selection using a dice (if available).
+"""
+
 import pygame
 
 from .image import ImageSimple, ImageReapeated
 from .event_handler import EventHandler
 from .window import Screen
 
+
 class SelectRoom(Screen):
+    """Display a room selection menu with three rooms and reroll option.
+    
+    Overlays the main screen with a darkened background and displays three
+    available rooms to choose from. Each room shows its name, gem cost,
+    and rotation. The fourth selection option (index 3) is a reroll button
+    that uses dice from inventory.
+    
+    Layout constants (all as ratios of window width/height):
+        X_ROOMS (float): Horizontal starting position of rooms.
+        Y_ROOMS (float): Vertical starting position of rooms.
+        X_STEP (float): Horizontal spacing between room displays.
+        X_OFF_GEM (float): Horizontal offset for gem cost relative to room.
+        Y_OFF_GEM (float): Vertical offset for gem cost relative to room.
+        SIZE_GEM (float): Size of gem icon.
+        SIZE_ROOM (float): Room image scale.
+    
+    Attributes:
+        rooms (list): List of three Room objects to display.
+        room_choice (int): Currently selected choice index (0-3).
+        room_images (list): Cached ImageSimple instances for each room.
+        dice_count (int): Number of dice in player inventory.
+    """
     room_images = [None]*3
     X_ROOMS = 0.309     #ratio of W
     Y_ROOMS = 0.173     #ratio of H
@@ -14,7 +44,15 @@ class SelectRoom(Screen):
     SIZE_GEM = 0.035 #ratio of W
     SIZE_ROOM = 0.173
 
-    def __init__(self,rooms):
+    def __init__(self, rooms):
+        """Initialize the room selection menu with the given rooms.
+        
+        Args:
+            rooms (list): List of three Room objects to display for selection.
+        
+        Returns:
+            None
+        """
         Screen.__init__(self)
         self.mainscreen = self.window.ui.screen
         self.rooms = rooms
@@ -26,9 +64,17 @@ class SelectRoom(Screen):
         self.update()
 
     def select(self):
+        """Display the room selection menu and handle user navigation and selection.
+
+        Handles left/right navigation between 3 rooms and a reroll option (4 choices),
+        enter to select, and spacebar as an alternative select. Escape or up/down
+        cancel the menu. If the player selects the reroll option (index 3) but has
+        no dice, a message is displayed and the menu remains open.
+
+        Returns:
+            int: Room index (0-2) for selected room, -1 if cancelled (escape),
+                 or 3 if reroll selected (requires at least 1 dice).
         """
-        Returns the rank of the selected room, -1 if cancelled, 3 if reroll
-        """ 
         # Why not just return index ?
         class MenuHandler(EventHandler):
             @staticmethod
@@ -73,6 +119,13 @@ class SelectRoom(Screen):
         return self.room_choice
 
     def build(self):
+        """Build and scale all visual elements for the room selection menu.
+        
+        Prepares room images, gem cost overlays, dark filter, and dice display.
+        
+        Returns:
+            None
+        """
         self.mainscreen.build()
         self.size = self.window.size
         W, H = self.size
@@ -115,6 +168,14 @@ class SelectRoom(Screen):
 
     
     def blit(self):
+        """Render the room selection menu overlay to the buffer.
+        
+        Draws main screen, dark overlay, room images with gem costs, dice display,
+        and a white selection border around the currently selected item.
+        
+        Returns:
+            None
+        """
         W, H = self.size
         Y_ROOMS = self.Y_ROOMS ; X_ROOMS = self.X_ROOMS ; X_STEP = self.X_STEP
         buffer = self.buffer

@@ -1,3 +1,11 @@
+"""Explore screen: display available items and allow selection.
+
+This module defines the `Explore` screen which shows a horizontal
+selection of items (consumables, permanents or others) along with
+their counts. It reuses the shared `Consumable_grid` for the left-side
+inventory display and provides a simple menu loop via `select()`.
+"""
+
 import pygame
 
 from .image import ImageSimple
@@ -7,7 +15,31 @@ from .grids import Consumable_grid
 
 
 class Explore(Screen):
+
+    """Screen to browse and select items found during exploration.
+
+    Displays a horizontal selection of items (consumables, permanents or others)
+    along with their counts, allowing the player to select individual items
+    or take all remaining items.
     
+    Layout constants (all as ratios of window width/height):
+        H (float): Vertical position of items display.
+        STEP (float): Horizontal spacing between items.
+        SIZE (float): Item image scale (ratio of height).
+        TXT_OFFSET (tuple): Offset of count text from item image.
+        SIZE_TXT (float): Count text size relative to height.
+        PRINT_TXT_POSITION (tuple): Center position for overlay messages.
+    
+    Attributes:
+        items (list): List of (name, count, category) tuples shown.
+        length (int): Number of items (<= 6).
+        images (list): ImageSimple instances for each item.
+        counts (list): Item counts displayed under each item.
+        selected (int): Currently highlighted item index.
+        bg_image (ImageSimple): Background for the room.
+        consumable_grid (Consumable_grid): Grid helper for left-side inventory.
+    """
+
     H = 0.8 ; STEP = 0.15
     BLUE = (50,150,255)
     SIZE = 0.1 #w ratio
@@ -17,6 +49,16 @@ class Explore(Screen):
     PRINT_TXT_POSITION = (.5, .1)
 
     def __init__(self, items, color):
+        """Initialize the Explore screen.
+
+        Args:
+            items (iterable): sequence of (name, count, category) triples.
+            color (str): key used to pick a background image from
+                `Screen.bg_color_images`.
+        
+        Returns:
+            None
+        """
         Screen.__init__(self)
         items = items[:6]
         self.items = items
@@ -24,7 +66,7 @@ class Explore(Screen):
         length = self.length
         self.player = self.window.ui.player
         self.selected = 0
-        #import images from loadscreen
+        # import images from loadscreen
         self.bg_image = Screen.bg_color_images[color]
         self.images = [None]*length
         self.counts = [None]*length
@@ -38,17 +80,25 @@ class Explore(Screen):
         self.update()
 
     def build(self):
+        """Layout and scale images/fonts according to current window size.
+
+        This method should be called when the window size changes so that
+        all images and font sizes are recalculated to match the new
+        resolution.
+        
+        Returns:
+            None
+        """
         self.size = self.window.size
         w, h = self.size
-        #back ground image
+        # back ground image
         self.bg_image.smoothscale((w, h))
         self.bg_image.position = (0,0)
-        #consumables
+        # consumables
         Consumable_grid.set_grid(w,h)
         self.consumable_grid.scale_images()
         self.consumable_grid.build_text(self.player)
-        ###
-        #items
+        # items
         self.count_font = pygame.font.SysFont('Arial', int(self.SIZE_TXT*h) )
         txt_positions = self.txt_positions
         off_x, off_y = self.TXT_OFFSET
@@ -66,20 +116,28 @@ class Explore(Screen):
 
 
     def blit(self):
+        """Draw the explore screen into the buffer.
+
+        Composes the background, the left-side consumable grid and the
+        horizontal item selector with counts. The selected item is
+        highlighted using `BLUE`.
+        
+        Returns:
+            None
+        """
         buffer = self.buffer
-        #back ground image
+        # back ground image
         self.bg_image.blit(buffer)
-        #consumable images
+        # consumable images
         self.consumable_grid.blit_images(buffer)
-        #consumable cpt 
+        # consumable cpt 
         self.consumable_grid.blit_text(buffer)
-        ###
+        # selector
         selected = self.selected
         buffer = self.buffer
-        #build selector
         txt_positions = self.txt_positions
         counts = self.counts ; white = self.WHITE ; blue = self.BLUE
-        #blit rows
+        # blit rows
         for id,image in enumerate(self.images):
             image.blit(buffer)
             color = white if selected != id else blue
@@ -87,6 +145,11 @@ class Explore(Screen):
 
 
     def print(self,msg):
+        """Overlay a centered message on the screen and flip the display.
+
+        Args:
+            msg (str): text to render and show temporarily.
+        """
         txt = self.font.render(msg, True, (255, 255, 255))
         X, Y = self.PRINT_TXT_POSITION ; w, h = self.size ; txt_w, txt_h = txt.get_size()
         position = (X*w - txt_w/2, Y*h + txt_h/2 )
@@ -94,9 +157,18 @@ class Explore(Screen):
         pygame.display.flip()
 
     def select(self):
+        """Run the explore menu loop and return a selection.
+
+        Runs a navigation menu that allows the player to select one of the
+        available items using left/right keys, take all using spacebar, or
+        cancel using escape. The method assigns a temporary `MenuHandler`
+        subclass to `self.event_handler` and enters a loop that polls
+        `event_listener()` until the menu exits.
+
+        Returns:
+            int: Index of selected item (0 to len-1), len(items) for 'take all'
+                 (spacebar), or -1 if cancelled (escape).
         """
-        Returns the rank, -1 if cancelled
-        """ 
         # Why not just return index ?
         class MenuHandler(EventHandler):
             @staticmethod
@@ -113,15 +185,15 @@ class Explore(Screen):
                 self.blit()
             @staticmethod
             def enter() : 
-                self.running = False  #close menu with selection
-            ##optionnal handlers : not in the game specifications (easier debugg), can be removed later
+                self.running = False  # close menu with selection
+            ## optional handlers : convenience for debugging
             @staticmethod
             def space():
                 # take all
                 self.running=False
                 self.selected = self.length
             @staticmethod
-            #cancel if go back or up
+            # cancel if go down or up
             def up():
                 MenuHandler.escape()
             def down():
