@@ -65,6 +65,8 @@ The goal was to recreate a basic version of the game. We managed to implement a 
 | **ESC**           | Cancel / Quit           |
 | **I**             | Explore current room    |
 
+## Items description
+
 | Item                    | Image                                                                             | Description                                                                                                                                 |
 | ----------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Shovel**              | <img src="images/items/permanents/Shovel_White_Icon.png" width="64"/>             | Allows digging in **green rooms**, giving random loot (coins, gems, fruits…).                                                               |
@@ -96,5 +98,6 @@ Image resources:
 
 
 For educational and non-commercial use only.
+
 
 
