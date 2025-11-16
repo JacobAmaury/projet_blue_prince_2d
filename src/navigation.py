@@ -264,6 +264,12 @@ class Nav :
                     
                     if cls.map.rooms[next_x][next_y].name == 'Ballroom':
                         Effect().apply_effect(cls.map.rooms[next_x][next_y].name)
+                    if cls.map.rooms[next_x][next_y].name == 'Chapel':
+                        cls.inventory.change_consumable('coin', -1)
+                    if cls.map.rooms[next_x][next_y].name == 'Bedroom':
+                        cls.inventory.change_consumable('steps', 2)
+                    if cls.map.rooms[next_x][next_y].name == 'Gymnasium':
+                        cls.inventory.change_consumable('steps', -1)
 
                     cls.map.rooms[next_x][next_y].doors[(r+2)%4] = -1 #set to opened
                     cls.inventory.change_consumable('steps', -1)
