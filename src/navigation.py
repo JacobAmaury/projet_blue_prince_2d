@@ -506,8 +506,11 @@ class Nav :
 
 
 class Effect:
+    """Class to handle room effects when a room is placed on the map."""
 
     def apply_effect(self, room_name):
+        """Apply the effect of the room based on its effect ID."""
+
         act_effect = database.rooms[room_name]['effect']
 
         if act_effect in (1, 4):
@@ -610,7 +613,7 @@ class Effect:
 
 
     def spread_items_2_and_3(self, item_to_spread, room_name):
-
+        """spread coins or keys in all rooms on the map depending on the room name"""
         item_pools = [0]*50
         rarity_weights = {
             'coin': 20,
