@@ -174,7 +174,7 @@ class Map :
                 rand_index = rd.randint(0,len(item_pool_green)-1)
                 act_item = item_pool_green[rand_index]
 
-                if act_item in ["Shovel", "Lockpick_Kit"] and self.rooms_inventory[x][y][act_item] > 0:
+                if act_item in ["Shovel", "Lockpick_Kit", "Lucky_Rabbits_Foot", "Power_Hammer","Metal_Detector"] and self.rooms_inventory[x][y][act_item] > 0: 
                     continue
 
                 if item_pool_green[rand_index] != 0:
@@ -191,7 +191,7 @@ class Map :
                 rand_index = rd.randint(0,len(item_pool)-1)
                 act_item = item_pool[rand_index]
 
-                if act_item in ["Shovel", "Lockpick_Kit"] and self.rooms_inventory[x][y][act_item] > 0:
+                if act_item in ["Shovel", "Lockpick_Kit", "Lucky_Rabbits_Foot", "Power_Hammer","Metal_Detector"] and self.rooms_inventory[x][y][act_item] > 0:
                     continue
 
                 if item_pool[rand_index] != 0:
