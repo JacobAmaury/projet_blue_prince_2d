@@ -132,13 +132,13 @@ class Map :
             "apple": 15,
             'banana':5,
             "dice": 10,
-            "Shovel": 100,
-            "Lockpick_Kit": 100,
-            'Lucky_Rabbits_Foot': 100,
-            "Power_Hammer": 100,
-            "Metal_Detector":100,
-            'Coupon_Book': 100,
-            'fall_it_a_day':100,
+            "Shovel": 2,
+            "Lockpick_Kit": 2,
+            'Lucky_Rabbits_Foot': 2,
+            "Power_Hammer": 2,
+            "Metal_Detector":2,
+            'Coupon_Book': 2,
+            'fall_it_a_day':2,
             "coffer": 1
         }
         rarity_weights_green = {
