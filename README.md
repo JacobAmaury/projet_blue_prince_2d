@@ -33,7 +33,7 @@ The goal was to recreate a basic version of the game. We managed to implement a 
 ## Install
 1. Clone the repository
     ```sh
-    git clone url_de_mon_projet.git
+    git clone https://github.com/JacobAmaury/projet_blue_prince_2d.git
     ```
 2. Create a virtual environment
     ```sh
@@ -69,7 +69,9 @@ The goal was to recreate a basic version of the game. We managed to implement a 
 ## Authors
 
 THOLIN Florian
+
 JACOB Amaury
+
 MALARVIJY Sharaine
 
 ## Credentials
@@ -82,3 +84,5 @@ Image resources:
 
 
 For educational and non-commercial use only.
+
+
