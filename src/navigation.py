@@ -626,7 +626,7 @@ class Effect:
 
 
     def divide_steps_by_2_9(self, room_name):
-        if room_name == 'Library' or 'WeightRoom':
+        if room_name == 'WeightRoom':
             Nav.player.inventory.consumables['steps'] //= 2
 
 
