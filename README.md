@@ -69,7 +69,9 @@ The goal was to recreate a basic version of the game. We managed to implement a 
 ## Authors
 
 THOLIN Florian
+
 JACOB Amaury
+
 MALARVIJY Sharaine
 
 ## Credentials
@@ -82,3 +84,4 @@ Image resources:
 
 
 For educational and non-commercial use only.
+
