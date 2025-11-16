@@ -107,7 +107,8 @@ class Explore(Screen):
         width = step*self.length
         x = x_center - width/2
         for id,image in enumerate(self.images):
-            image.scale((SIZE*h, SIZE*h))
+            iw, ih = image.loaded.get_size()
+            image.scale((SIZE*h*iw/ih, SIZE*h)) #keep base image ratio
             xi = x + step*(id) + step/2
             wi = image.scaled.get_width()
             xi_c = xi-wi/2 ; yi = H*h

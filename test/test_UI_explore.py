@@ -23,7 +23,7 @@ while True:
     t += clock.get_time()
     if t > 1000:
         choix = UI.explore([("coin",1,'consumable'),("meal",2,'other'), ('Shovel',1,'permanent'),
-                            ("coin",1,'consumable'),("meal",2,'other'), ('Shovel',1,'permanent'),
+                            ("Power_Hammer",1,'permanent'),('Coupon_Book',2,'permanent'), ('fall_it_a_day',1,'permanent'),
                             ("coin",1,'consumable'),("meal",2,'other'), ('Shovel',1,'permanent'),
                             ("coin",1,'consumable'),("meal",2,'other'), ('Shovel',1,'permanent')],
                             'blue', 'testing ... testing ... testing ...')

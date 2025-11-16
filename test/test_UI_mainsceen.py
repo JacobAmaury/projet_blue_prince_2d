@@ -30,6 +30,8 @@ while True:
         nav.inventory.add_permanent("Lucky_Rabbits_Foot")
         nav.inventory.add_permanent("Power_Hammer")
         nav.inventory.add_permanent("Metal_Detector")
+        nav.inventory.add_permanent('Coupon_Book')
+        nav.inventory.add_permanent('fall_it_a_day')
         nav.map.add_room(Room("Passageway",2),(0, 0))
         room = Room("MusicRoom",r) ; room.message = "my room's message"
         nav.map.add_room(room,(x, y))   #add room (will fill the map)
