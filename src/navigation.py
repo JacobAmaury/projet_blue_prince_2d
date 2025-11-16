@@ -350,8 +350,14 @@ class Nav :
         if category == "consumable":
             inv.change_consumable(name, nb)
         elif category == "permanent":
+
             for i in range(nb):
                 inv.add_permanent(name)
+            
+            if name == "fall_it_a_day":
+                cls.reset_map_preserve_inventory()
+                return  
+
         elif category == "other":
             if name == "apple":
                 inv.change_consumable('steps', 2)
@@ -493,7 +499,8 @@ class Nav :
             ("Shovel", 1),
             ("Lockpick_Kit", 1),
             ("Power_Hammer", 1),
-            ('Lucky_Rabbits_Foot', 1)
+            ('Lucky_Rabbits_Foot', 1),
+            ("fall_it_a_day", 1)
         ]
 
         loot, amount = random.choice(loot_table)
@@ -515,6 +522,35 @@ class Nav :
         cls.ui.screen.print(f"You found {amount} {loot} inside the coffer !")
         
 
+    @classmethod
+    def reset_map_preserve_inventory(cls):
+        """
+        Reset the entire map, keeping only:
+        - player's consumables
+        - player's permanents
+        - all database.rooms modifications (rarity, effects)
+        """
+        
+        saved_inventory = cls.inventory  
+        cls.map = player.Map()
+
+        cls.pool = cls.map.init_pool()
+        cls.proba_pool = cls.map.update_proba_pool()
+        cls.three_rooms = [[[[] for r in range(4)] for y in range(9)] for x in range(5)]
+
+        # Reset player position to start
+        cls.player.position = (2, 0, 0)
+        cls.player.map = cls.map
+        cls.player.current_room = cls.map.rooms[2][0]
+        cls.player.door_status = cls.map.rooms[2][0].doors[0]
+
+        # Keep inventory
+        cls.player.inventory = saved_inventory
+
+        # Refresh UI
+        cls.ui.show_mainScreen(cls.player, NavHandler)
+        cls.check_room_actions(2, 0)
+        cls.ui.screen.update()
 
 
 

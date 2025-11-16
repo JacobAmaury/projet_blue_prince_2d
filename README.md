@@ -65,6 +65,18 @@ The goal was to recreate a basic version of the game. We managed to implement a 
 | **ESC**           | Cancel / Quit           |
 | **I**             | Explore current room    |
 
+| Item                    | Image                                                                             | Description                                                                                                                                 |
+| ----------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Shovel**              | <img src="images/items/permanents/Shovel_White_Icon.png" width="64"/>             | Allows digging in **green rooms**, giving random loot (coins, gems, fruits…).                                                               |
+| **Lockpick Kit**        | <img src="images/items/permanents/Lockpick_Kit_White_Icon.png" width="64"/>       | Automatically opens **level-1 locked doors** without spending a key.                                                                        |
+| **Lucky Rabbit’s Foot** | <img src="images/items/permanents/Lucky_Rabbits_Foot_White_Icon.png" width="64"/> | Greatly improves item luck in rooms (better loot chances).                                                                                  |
+| **Metal Detector**      | <img src="images/items/permanents/Metal_Detector_White_Icon.png" width="64"/>     | Increases the chance to find **keys / coins** and other valuables in rooms.                                                                 |
+| **Power Hammer**        | <img src="images/items/permanents/Power_Hammer_White_Icon.png" width="64"/>       | Allows opening **coffers and lockers** *without consuming a key*.                                                                           |
+| **Fall it a day**       | <img src="images/items/permanents/fall_it_a_day_White_Icon.png" width="64"/>      | Resets the entire map and sends the player back to the **EntranceHall**, while keeping the full inventory and all triggered global effects. |
+| **Coupon_Book**       | <img src="images/items/permanents/Coupon_Book_White_Icon.png" width="64"/>      | The Coupon Book saves one Gold on any purchase made from any Shop
+
+
+
 
 ## Authors
 

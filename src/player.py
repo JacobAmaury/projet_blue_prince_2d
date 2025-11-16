@@ -71,6 +71,7 @@ class Map :
             "Lockpick_Kit": 0,
             "Metal_Detector":0,
             'Coupon_Book':0,
+            'fall_it_a_day':0,
             "coffer" : 0
         } for y in range(9)] for x in range(5)]  #x, y, database_element
 
@@ -131,12 +132,13 @@ class Map :
             "apple": 15,
             'banana':5,
             "dice": 10,
-            "Shovel": 2,
-            "Lockpick_Kit": 2,
-            'Lucky_Rabbits_Foot': 2,
-            "Power_Hammer": 2,
-            "Metal_Detector":2,
-            'Coupon_Book':2,
+            "Shovel": 100,
+            "Lockpick_Kit": 100,
+            'Lucky_Rabbits_Foot': 100,
+            "Power_Hammer": 100,
+            "Metal_Detector":100,
+            'Coupon_Book': 100,
+            'fall_it_a_day':100,
             "coffer": 1
         }
         rarity_weights_green = {
@@ -152,6 +154,7 @@ class Map :
             "Power_Hammer": 10,
             "Metal_Detector":10,
             'Coupon_Book':10,
+            'fall_it_a_day':10,
             "coffer":5
         }
         
