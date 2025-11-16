@@ -70,6 +70,7 @@ class Map :
             'Lucky_Rabbits_Foot': 0,
             "Lockpick_Kit": 0,
             "Metal_Detector":0,
+            'Coupon_Book':0,
             "coffer" : 0
         } for y in range(9)] for x in range(5)]  #x, y, database_element
 
@@ -135,6 +136,7 @@ class Map :
             'Lucky_Rabbits_Foot': 2,
             "Power_Hammer": 2,
             "Metal_Detector":2,
+            'Coupon_Book':2,
             "coffer": 1
         }
         rarity_weights_green = {
@@ -149,6 +151,7 @@ class Map :
             'Lucky_Rabbits_Foot': 0,
             "Power_Hammer": 10,
             "Metal_Detector":10,
+            'Coupon_Book':10,
             "coffer":5
         }
         

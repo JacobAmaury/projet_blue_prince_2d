@@ -425,6 +425,9 @@ class Nav :
         # buy
         cls.inventory.change_consumable("coin", -price)
 
+        if 'Coupon_Book' in cls.inventory.permanents:
+            cls.inventory.change_consumable("coin", 1)
+
         # add to inventory
         if name in database.consumables:
             cls.inventory.change_consumable(name, 1)

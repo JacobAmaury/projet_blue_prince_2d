@@ -1,7 +1,7 @@
 #names used for images loading in Display
 
 consumables = ['steps', 'coin', 'gem', 'key', 'dice'] #sets the order on screen
-permanents = ['Shovel','Lockpick_Kit','Lucky_Rabbits_Foot','Metal_Detector','Power_Hammer']
+permanents = ['Shovel','Lockpick_Kit','Lucky_Rabbits_Foot','Metal_Detector','Power_Hammer', 'Coupon_Book']
 others = ['apple', 'banana', 'cake', 'coffer', 'locker', 'meal', 'sandwich', 'soil']
 
 #|-2-|
