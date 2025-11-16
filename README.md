@@ -45,7 +45,10 @@ The goal was to recreate a basic version of the game. We managed to implement a 
     ```sh
     pip install -r requirements.txt
     ```
-
+    if it doesn't work you may try
+    ```sh
+    pip install pygame-ce
+    ```
 4. Launch the game
     ```sh
     python blueprince.py
