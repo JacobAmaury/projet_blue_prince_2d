@@ -325,7 +325,7 @@ class Map :
             list[int]: updated list with door blocked if wall from a room near the location
             and block the door of the room near the location
         """
-        # Neighboring rooms ordered as [up, left, right, down]
+        # Neighboring rooms ordered as [down, right, up, left]
         near_rooms = [
             [x, y - 1],    # down
             [x + 1, y],   # right

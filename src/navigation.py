@@ -171,12 +171,12 @@ class Nav :
 
         #move the player and check if he lost
         cls.player.move(next_x, next_y, r)
-        cls.check_room_actions(next_x, next_y)
-        cls.open_explore_menu(next_x, next_y)
         cls.inventory.change_consumable('steps', -1)
         if cls.inventory.consumables['steps'] <= 0:
             cls.game_over()
 
+        cls.check_room_actions(next_x, next_y)
+        cls.open_explore_menu(next_x, next_y)
 
     @classmethod
     def door_level_check(cls, door):
@@ -230,8 +230,8 @@ class Nav :
         """
         Handles player movement and room entry logic.
 
-        Moves the player forward if possible or triggers room selection when 
-        entering an unexplored area.
+        Opens doors if possible, updates player position, consumes steps/dice,
+        triggers room actions, and handles unexplored rooms or game win/over conditions.
         """
         #(0,0,0) : (left,bottom,0°), rot:(0:0°,1:90°,2:180°,3:-90°)
         x, y, r = cls.player.position
