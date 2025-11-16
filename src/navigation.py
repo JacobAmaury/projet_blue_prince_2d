@@ -152,7 +152,8 @@ class Nav :
 
         #Block doors leading to a wall and level up the doors of the new room
         new_room.doors = cls.map.block_door(new_room.doors, next_x, next_y)
-        new_room.doors = cls.map.level_up_door(new_room.doors, next_y)
+        if new_room.name != 'Corridor':
+            new_room.doors = cls.map.level_up_door(new_room.doors, next_y)
 
         #create room with items and add doors to map 
         cls.map.add_room(new_room, next_position)
@@ -255,16 +256,20 @@ class Nav :
                 cls.game_won()
                 return
 
-            cls.player.move(x,y,r)  #acctualise door_status on ui
+            cls.player.move(x,y,r)  #actualise door_status on ui
             
             if cls.map.room_exists(next_x, next_y):
                 next_room_has_a_door = cls.map.rooms[next_x][next_y].doors[(r+2)%4] != 0
                 if next_room_has_a_door :
+                    
+                    if cls.map.rooms[next_x][next_y].name == 'Ballroom':
+                        Effect().apply_effect(cls.map.rooms[next_x][next_y].name)
+
                     cls.map.rooms[next_x][next_y].doors[(r+2)%4] = -1 #set to opened
                     cls.inventory.change_consumable('steps', -1)
                     if cls.inventory.consumables['steps'] <= 0:
                         cls.game_over()
-                        return
+                        return                    
                     cls.player.move(next_x, next_y, r)
                     cls.check_room_actions(next_x, next_y)
                     cls.open_explore_menu(next_x, next_y)
