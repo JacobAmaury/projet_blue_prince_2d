@@ -349,6 +349,9 @@ class Nav :
         elif category == "other":
             if name == "apple":
                 inv.change_consumable('steps', 2)
+            elif name == "banana":
+                inv.change_consumable('steps', 3)
+
 
 
         cls.map.rooms_inventory[x][y][name] = 0
@@ -438,6 +441,7 @@ class Nav :
             ("gem", 1),
             ("key", 1),
             ("apple", 1),
+            ("banana", 1),
             ("nothing", 0)
         ]
 
@@ -452,6 +456,8 @@ class Nav :
         else:
             if loot == "apple":
                 cls.inventory.change_consumable("steps", 2) 
+            elif loot == "banana":
+                cls.inventory.change_consumable("steps", 3)
 
         cls.ui.screen.print(f"You found {amount} {loot} !")
 
@@ -474,6 +480,7 @@ class Nav :
             ("key", 1),
             ("dice", 1),
             ("apple", 1),
+            ("banana", 1),
             ("Shovel", 1),
             ("Lockpick_Kit", 1),
             ("Power_Hammer", 1),
@@ -490,6 +497,8 @@ class Nav :
         else:
             if loot == "apple":
                 cls.inventory.change_consumable("steps", 2 * amount)
+            elif loot == "banana":
+                cls.inventory.change_consumable("steps", 3 * amount)
 
         room.message = ""
         cls.ui.screen.update_current_room()
@@ -599,6 +608,7 @@ class Effect:
 
                         if act_item != 0: 
                             Nav.player.map.rooms_inventory[x][y]['apple'] += 1
+
             
         
         if room_name == 'Patio':
